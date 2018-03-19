@@ -7,8 +7,8 @@ CREATE TABLE tbl_ResourceCost (
 	Practice varchar(200) not null,
 	Skill varchar(200) not null,
 	Competency varchar(200) not null,
-	OnsiteCost decimal not null,
-	OffsiteCost decimal not null,
+	OnsiteCost decimal(10,2) not null,
+	OffsiteCost decimal(10,2) not null,
 	CreatedDate datetime not null,
 	CreatedBy varchar(200) not null,
 	IsActive boolean not null,
@@ -20,8 +20,8 @@ CREATE TABLE tbl_ResourceCost (
 	Practice varchar(200) not null,
 	Skill varchar(200) not null,
 	Competency varchar(200) not null,
-	OnsiteCost decimal not null,
-	OffsiteCost decimal not null,
+	OnsiteCost decimal(10,2) not null,
+	OffsiteCost decimal(10,2) not null,
 	CreatedDate datetime not null,
 	CreatedBy varchar(200) not null,
 	ModifiedDate datetime not null,
@@ -29,3 +29,15 @@ CREATE TABLE tbl_ResourceCost (
 	IsActive boolean not null,
     primary key (HistoryId)
  );
+ 
+  CREATE TABLE tbl_GM_Defaults (
+	Id int not null auto_increment,
+	Contengency int not null,
+	HoursInDay decimal(10,2) not null,
+	DaysInWeek decimal(10,2) not null,
+	DaysInMonth decimal(10,2) not null,
+	WeeksInMonth decimal(10,2) not null,
+    primary key (Id)
+ );
+ 
+ INSERT INTO tbl_GM_Defaults (Contengency, HoursInDay ,DaysInWeek, DaysInMonth, WeeksInMonth) VALUES ('15','8.75','5','21','4.2');
