@@ -30,7 +30,7 @@ namespace HM.GM.DAL.Repository
                     cmd.CommandType = CommandType.Text;
                     var reader = cmd.ExecuteReader();
 
-                    while(reader.Read())
+                    while (reader.Read())
                     {
                         var detail = new ResourceCostDetail();
 
@@ -45,38 +45,65 @@ namespace HM.GM.DAL.Repository
 
                         resourceCostDetailList.Add(detail); ;
                     }
-                }               
+                }
             }
             return resourceCostDetailList;
         }
 
         public void InsertResourceCostDetails(List<ResourceCostDetail> resourceCostDetails)
         {
-            StringBuilder sCommand = new StringBuilder("INSERT INTO tbl_ResourceCost (Practice, Skill ,Competency, OnsiteCost, OffsiteCost, CreatedDate, CreatedBy, IsActive ) VALUES ");
             var connectionString = _configuration.GetConnectionString("DefaultConnection");
             using (var connection = new MySqlConnection(connectionString))
             {
-                List<string> Rows = new List<string>();
-                foreach (var resourceCostDetail in resourceCostDetails)
-                {
-                    Rows.Add(string.Format("('{0}','{1}','{2}','{3}','{4}','{5}','{6}', {7})",
-                                MySqlHelper.EscapeString(resourceCostDetail.Practice.ToUpper()),
-                                MySqlHelper.EscapeString(resourceCostDetail.Skill.ToUpper()),
-                                MySqlHelper.EscapeString(resourceCostDetail.Competency.ToUpper()),
-                                resourceCostDetail.OnsiteCost,
-                                resourceCostDetail.OffsiteCost,
-                                String.Format("{0:s}", resourceCostDetail.CreatedDate),
-                                MySqlHelper.EscapeString(resourceCostDetail.CreatedBy.ToUpper()),
-                                resourceCostDetail.IsActive
-                    ));
-                }
-                sCommand.Append(string.Join(",", Rows));
-                sCommand.Append(";");
                 connection.Open();
-                using (var cmd = new MySqlCommand(sCommand.ToString(), connection))
+                var transaction = connection.BeginTransaction();
+                try
                 {
-                    cmd.CommandType = CommandType.Text;
-                    cmd.ExecuteNonQuery();
+
+                    //*************************//
+                    //  Update History Table   //
+                    //*************************//
+                    string sp = "SP_UpdateResourceCostHistory";
+                    var sp_cmd = new MySqlCommand(sp, connection);
+                    sp_cmd.CommandType = CommandType.StoredProcedure;
+                    sp_cmd.Parameters.AddWithValue("@UpdatedBy", resourceCostDetails[0].CreatedBy);
+                    sp_cmd.ExecuteNonQuery();
+
+                    //*********************************************//
+                    //  Insert new record in resource cost table   //
+                    //********************************************//
+                    var sCommand = new StringBuilder("INSERT INTO tbl_ResourceCost (Practice, Skill ,Competency, OnsiteCost, OffsiteCost, CreatedDate, CreatedBy, IsActive ) VALUES ");
+                    List<string> Rows = new List<string>();
+                    foreach (var resourceCostDetail in resourceCostDetails)
+                    {
+                        Rows.Add(string.Format("('{0}','{1}','{2}','{3}','{4}','{5}','{6}', {7})",
+                                    MySqlHelper.EscapeString(resourceCostDetail.Practice.ToUpper()),
+                                    MySqlHelper.EscapeString(resourceCostDetail.Skill.ToUpper()),
+                                    MySqlHelper.EscapeString(resourceCostDetail.Competency.ToUpper()),
+                                    resourceCostDetail.OnsiteCost,
+                                    resourceCostDetail.OffsiteCost,
+                                    String.Format("{0:s}", resourceCostDetail.CreatedDate),
+                                    MySqlHelper.EscapeString(resourceCostDetail.CreatedBy.ToUpper()),
+                                    resourceCostDetail.IsActive
+                        ));
+                    }
+                    sCommand.Append(string.Join(",", Rows));
+                    sCommand.Append(";");
+                    using (var cmd = new MySqlCommand(sCommand.ToString(), connection))
+                    {
+                        cmd.CommandType = CommandType.Text;
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    transaction.Commit();
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                }
+                finally
+                {
+                    connection.Close();
                 }
             }
         }
