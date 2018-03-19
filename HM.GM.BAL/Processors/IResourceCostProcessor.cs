@@ -5,7 +5,7 @@ namespace HM.GM.BAL.Processors
 {
     public interface IResourceCostProcessor
     {
-        void InsertResourceCostDetails(List<ResourceCostDetail> practiceCostDetailList);
+        void InsertResourceCostDetails(List<ResourceCostDetail> resourceCostDetailList);
 
         List<ResourceCostDetail> GetResourceCostDetails();
     }

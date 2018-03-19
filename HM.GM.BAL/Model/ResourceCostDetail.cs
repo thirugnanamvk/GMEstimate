@@ -11,9 +11,9 @@ namespace HM.GM.BAL.Model
 
         public string Competency { get; set; }
 
-        public float OnsiteCost { get; set; }
+        public decimal OnsiteCost { get; set; }
 
-        public float OffsiteCost { get; set; }
+        public decimal OffsiteCost { get; set; }
 
         public DateTime CreatedDate { get; set; } = DateTime.Now;
 

@@ -11,24 +11,24 @@ namespace HM.GM.Controllers
     [Route("api/[controller]")]
     public class GMEstimationController : Controller
     {
-        private readonly IResourceCostProcessor _practiceCostProcessor;
+        private readonly IResourceCostProcessor _resourceCostProcessor;
 
-        public GMEstimationController(IResourceCostProcessor practiceCostProcessor)
+        public GMEstimationController(IResourceCostProcessor resourceCostProcessor)
         {
-            _practiceCostProcessor = practiceCostProcessor;
+            _resourceCostProcessor = resourceCostProcessor;
         }
 
         [HttpGet]
         public List<ResourceCostDetail> Get()
         {
-            return _practiceCostProcessor.GetResourceCostDetails();
+            return _resourceCostProcessor.GetResourceCostDetails();
         }
 
 
         [HttpPost]
         public void Post([FromBody]List<ResourceCostDetail> costDetails)
         {
-            _practiceCostProcessor.InsertResourceCostDetails(costDetails);
+            _resourceCostProcessor.InsertResourceCostDetails(costDetails);
         }
     }
 }

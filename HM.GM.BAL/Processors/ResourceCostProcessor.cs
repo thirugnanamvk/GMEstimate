@@ -8,22 +8,22 @@ namespace HM.GM.BAL.Processors
 {
     public class ResourceCostProcessor : IResourceCostProcessor
     {
-        private IResourceCostRepository _practiceCostRepository;
-        public ResourceCostProcessor(IResourceCostRepository practiceCostRepository)
+        private IResourceCostRepository _resourceCostRepository;
+        public ResourceCostProcessor(IResourceCostRepository resourceCostRepository)
         {
-            _practiceCostRepository = practiceCostRepository;
+            _resourceCostRepository = resourceCostRepository;
         }
 
         public List<BALModel.ResourceCostDetail> GetResourceCostDetails()
         {
-            var practiceCostDetils = _practiceCostRepository.GetResourceCostDetails();
-            return Mapper.Map<List<BALModel.ResourceCostDetail>>(practiceCostDetils);
+            var resourceCostDetils = _resourceCostRepository.GetResourceCostDetails();
+            return Mapper.Map<List<BALModel.ResourceCostDetail>>(resourceCostDetils);
         }
 
-        public void InsertResourceCostDetails(List<BALModel.ResourceCostDetail> practiceCostDetailList)
+        public void InsertResourceCostDetails(List<BALModel.ResourceCostDetail> resourceCostDetailList)
         {
-            var dalModel = Mapper.Map<List<DALModel.ResourceCostDetail>>(practiceCostDetailList);
-            _practiceCostRepository.InsertResourceCostDetails(dalModel);
+            var dalModel = Mapper.Map<List<DALModel.ResourceCostDetail>>(resourceCostDetailList);
+            _resourceCostRepository.InsertResourceCostDetails(dalModel);
         }
     }
 }

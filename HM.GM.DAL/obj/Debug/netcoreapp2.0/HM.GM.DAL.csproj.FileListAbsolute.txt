@@ -1,8 +1,0 @@
-E:\Projects\HMGM\HMGM\HM.GM.DAL\bin\Debug\netcoreapp2.0\HM.GM.DAL.deps.json
-E:\Projects\HMGM\HMGM\HM.GM.DAL\bin\Debug\netcoreapp2.0\HM.GM.DAL.dll
-E:\Projects\HMGM\HMGM\HM.GM.DAL\bin\Debug\netcoreapp2.0\HM.GM.DAL.pdb
-E:\Projects\HMGM\HMGM\HM.GM.DAL\obj\Debug\netcoreapp2.0\HM.GM.DAL.csproj.CoreCompileInputs.cache
-E:\Projects\HMGM\HMGM\HM.GM.DAL\obj\Debug\netcoreapp2.0\HM.GM.DAL.AssemblyInfoInputs.cache
-E:\Projects\HMGM\HMGM\HM.GM.DAL\obj\Debug\netcoreapp2.0\HM.GM.DAL.AssemblyInfo.cs
-E:\Projects\HMGM\HMGM\HM.GM.DAL\obj\Debug\netcoreapp2.0\HM.GM.DAL.dll
-E:\Projects\HMGM\HMGM\HM.GM.DAL\obj\Debug\netcoreapp2.0\HM.GM.DAL.pdb
