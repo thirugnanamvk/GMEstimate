@@ -9,6 +9,7 @@ namespace HM.GM.BAL.Processors
     public class ResourceCostProcessor : IResourceCostProcessor
     {
         private IResourceCostRepository _resourceCostRepository;
+
         public ResourceCostProcessor(IResourceCostRepository resourceCostRepository)
         {
             _resourceCostRepository = resourceCostRepository;
@@ -29,11 +30,7 @@ namespace HM.GM.BAL.Processors
         public BALModel.GMDefaults GetGMDefaults()
         {
             var gMDefaultsDAL = _resourceCostRepository.GetGMDefaults();
-            var gmDefaultsBAL =  Mapper.Map<BALModel.GMDefaults>(gMDefaultsDAL);
-
-            //TODO: Fetch latest value to dollar to INR using service
-            gmDefaultsBAL.DollarInINR = 65;
-            return gmDefaultsBAL;
+            return Mapper.Map<BALModel.GMDefaults>(gMDefaultsDAL);
         }
     }
 }

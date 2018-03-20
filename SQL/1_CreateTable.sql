@@ -38,8 +38,9 @@ CREATE TABLE tbl_ResourceCost (
 	DaysInWeek decimal(10,2) not null,
 	DaysInMonth decimal(10,2) not null,
 	WeeksInMonth decimal(10,2) not null,
+	DollarValueInINR decimal(10,2) not null,
 	IsActive boolean not null,
     primary key (Id)
  );
  
- INSERT INTO tbl_GM_Defaults (Contengency, HoursInDay ,DaysInWeek, DaysInMonth, WeeksInMonth, IsActive) VALUES ('15','8.75','5','21','4.2', True);
+ INSERT INTO tbl_GM_Defaults (Contengency, HoursInDay ,DaysInWeek, DaysInMonth, WeeksInMonth, DollarValueInINR, IsActive) VALUES ('15','8.75','5','21','4.2','65', True);

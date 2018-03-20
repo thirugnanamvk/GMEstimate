@@ -13,7 +13,7 @@ namespace HM.GM.BAL.Model
 
         public double WeeksInMonth { get; set; }
 
-        public double DollarInINR { get; set; }
+        public double DollarValueInINR { get; set; }
 
         public bool IsActive { get; set; }
 

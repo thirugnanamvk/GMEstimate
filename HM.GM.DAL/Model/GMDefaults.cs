@@ -15,5 +15,6 @@ namespace HM.GM.DAL.Model
 
         public bool IsActive { get; set; }
 
+        public double DollarValueInINR { get; set; }
     }
 }

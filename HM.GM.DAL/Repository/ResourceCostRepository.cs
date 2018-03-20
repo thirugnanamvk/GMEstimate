@@ -110,7 +110,7 @@ namespace HM.GM.DAL.Repository
 
         public GMDefaults GetGMDefaults()
         {
-            var query = "Select Contengency, DaysInMonth ,DaysInWeek, HoursInDay, WeeksInMonth, IsActive from tbl_GM_Defaults";
+            var query = "Select Contengency, DaysInMonth ,DaysInWeek, HoursInDay, WeeksInMonth, DollarValueInINR, IsActive from tbl_GM_Defaults";
             var connectionString = _configuration.GetConnectionString("DefaultConnection");
             var gMDefaults=new GMDefaults();
             using (var connection = new MySqlConnection(connectionString))
@@ -130,9 +130,9 @@ namespace HM.GM.DAL.Repository
                         gMDefaults.DaysInWeek = Convert.ToDouble(reader["DaysInWeek"]);
                         gMDefaults.HoursInDay = Convert.ToDouble(reader["HoursInDay"]);
                         gMDefaults.WeeksInMonth = Convert.ToDouble(reader["WeeksInMonth"]);
+                        gMDefaults.DollarValueInINR = Convert.ToDouble(reader["DollarValueInINR"]);
                         gMDefaults.IsActive = Convert.ToBoolean(reader["IsActive"]);
                     }
-
                 }
             }
             return gMDefaults;
