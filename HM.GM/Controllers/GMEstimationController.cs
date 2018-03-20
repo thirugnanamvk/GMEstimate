@@ -24,6 +24,13 @@ namespace HM.GM.Controllers
             return _resourceCostProcessor.GetResourceCostDetails();
         }
 
+        [HttpGet]
+        [Route("GMDefaults")]
+        public GMDefaults GetGMDefaults()
+        {
+            return _resourceCostProcessor.GetGMDefaults();
+        }
+
 
         [HttpPost]
         public void Post([FromBody]List<ResourceCostDetail> costDetails)

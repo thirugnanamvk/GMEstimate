@@ -8,5 +8,8 @@ namespace HM.GM.BAL.Processors
         void InsertResourceCostDetails(List<ResourceCostDetail> resourceCostDetailList);
 
         List<ResourceCostDetail> GetResourceCostDetails();
+
+        GMDefaults GetGMDefaults();
+
     }
 }

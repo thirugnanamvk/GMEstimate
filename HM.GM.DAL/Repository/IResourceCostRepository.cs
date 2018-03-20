@@ -8,5 +8,7 @@ namespace HM.GM.DAL.Repository
         void InsertResourceCostDetails(List<ResourceCostDetail> resourceCostDetailList);
 
         List<ResourceCostDetail> GetResourceCostDetails();
+
+        GMDefaults GetGMDefaults();
     }
 }

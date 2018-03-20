@@ -12,7 +12,10 @@ namespace HM.GM
     {
         public static void CreateMapping()
         {
-            Mapper.Initialize(cfg => { cfg.CreateMap<BALModel.ResourceCostDetail, DALModel.ResourceCostDetail>(); });
+            Mapper.Initialize(cfg => {
+                cfg.CreateMap<BALModel.ResourceCostDetail, DALModel.ResourceCostDetail>();
+                cfg.CreateMap<BALModel.GMDefaults, DALModel.GMDefaults>();
+            });
         }
     }
 }

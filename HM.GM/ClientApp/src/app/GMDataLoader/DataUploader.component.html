@@ -1,0 +1,17 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+    <div>
+        <p> Chhose your file to upload the data</p>
+        <input type="file" style="display: inline-block;" (change)="incomingfile($event)" placeholder="Upload file" accept=".xlsx">
+        <button type="button" class="btn btn-info" (click)="Upload()">Upload</button>
+    </div>
+    <div>
+        <ng2-smart-table [settings]="settings" [source]="gridData"></ng2-smart-table>
+    </div>
+</body>
+</html>

@@ -38,8 +38,8 @@ namespace HM.GM.DAL.Repository
                         detail.CreatedBy = Convert.ToString(reader["CreatedBy"]);
                         detail.CreatedDate = Convert.ToDateTime(reader["CreatedDate"]);
                         detail.IsActive = Convert.ToBoolean(reader["IsActive"]);
-                        detail.OffsiteCost = Convert.ToDecimal(reader["OffsiteCost"]);
-                        detail.OnsiteCost = Convert.ToDecimal(reader["OnsiteCost"]);
+                        detail.OffsiteCost = Convert.ToDouble(reader["OffsiteCost"]);
+                        detail.OnsiteCost = Convert.ToDouble(reader["OnsiteCost"]);
                         detail.Practice = Convert.ToString(reader["Practice"]);
                         detail.Skill = Convert.ToString(reader["Skill"]);
 
@@ -106,6 +106,36 @@ namespace HM.GM.DAL.Repository
                     connection.Close();
                 }
             }
+        }
+
+        public GMDefaults GetGMDefaults()
+        {
+            var query = "Select Contengency, DaysInMonth ,DaysInWeek, HoursInDay, WeeksInMonth, IsActive from tbl_GM_Defaults";
+            var connectionString = _configuration.GetConnectionString("DefaultConnection");
+            var gMDefaults=new GMDefaults();
+            using (var connection = new MySqlConnection(connectionString))
+            {
+                using (var cmd = new MySqlCommand(query, connection))
+                {
+                    connection.Open();
+                    cmd.CommandType = CommandType.Text;
+                    var reader = cmd.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        gMDefaults = new GMDefaults();
+
+                        gMDefaults.Contengency = Convert.ToDouble(reader["Contengency"]);
+                        gMDefaults.DaysInMonth = Convert.ToDouble(reader["DaysInMonth"]);
+                        gMDefaults.DaysInWeek = Convert.ToDouble(reader["DaysInWeek"]);
+                        gMDefaults.HoursInDay = Convert.ToDouble(reader["HoursInDay"]);
+                        gMDefaults.WeeksInMonth = Convert.ToDouble(reader["WeeksInMonth"]);
+                        gMDefaults.IsActive = Convert.ToBoolean(reader["IsActive"]);
+                    }
+
+                }
+            }
+            return gMDefaults;
         }
     }
 }

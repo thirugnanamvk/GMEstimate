@@ -25,5 +25,15 @@ namespace HM.GM.BAL.Processors
             var dalModel = Mapper.Map<List<DALModel.ResourceCostDetail>>(resourceCostDetailList);
             _resourceCostRepository.InsertResourceCostDetails(dalModel);
         }
+
+        public BALModel.GMDefaults GetGMDefaults()
+        {
+            var gMDefaultsDAL = _resourceCostRepository.GetGMDefaults();
+            var gmDefaultsBAL =  Mapper.Map<BALModel.GMDefaults>(gMDefaultsDAL);
+
+            //TODO: Fetch latest value to dollar to INR using service
+            gmDefaultsBAL.DollarInINR = 65;
+            return gmDefaultsBAL;
+        }
     }
 }
