@@ -1,7 +1,8 @@
-﻿import { Component } from '@angular/core';
+import { Component } from '@angular/core';
 import * as XLSX from 'ts-xlsx';
 import { BehaviorSubject } from 'rxjs';
-import { Ng2SmartTableModule } from 'ng2-smart-table';
+import { Ng2SmartTableModule, LocalDataSource } from 'ng2-smart-table';
+import { ResourceCostDetail } from '../Model/ResourceCostDetail';
 
 
 @Component({
@@ -9,15 +10,15 @@ import { Ng2SmartTableModule } from 'ng2-smart-table';
     templateUrl: './dataUploader.component.html'
 })
 export class DataUploaderComponent {
-    arrayBuffer: any;
-   public  gridData: any [][];
+  arrayBuffer: any;
+  gridData: Array<ResourceCostDetail>;
     file: File;
 
     settings = {
 
         actions: false,
         columns: {
-            actions: 'false',
+            
             id: {
                 title: 'Pratice'
             },
@@ -35,6 +36,13 @@ export class DataUploaderComponent {
             }
         }
     };
+
+  source: LocalDataSource;
+
+  constructor() {
+    debugger;
+    this.source = new LocalDataSource(this.gridData);
+  }
 
     
 
@@ -55,17 +63,11 @@ incomingfile(event: any)
             }
             var bstr = arr.join("");
             var workbook = XLSX.read(bstr, {type:"binary"});
-            var first_sheet_name = workbook.SheetNames[0];
-            var worksheet = workbook.Sheets['Cost Sheet Data - Master'];
-            //for (var i = 0; i != worksheet.; ++i) {
-            //    for (var j = 0; j != worksheet.length; ++j) {
-            //        this.gridData[i][j] = worksheet[i][j];
-            //    }
-            //}
-           // var json = XLSX.utils.sheet_to_json(worksheet, { raw: true });
-            this.gridData = XLSX.utils.sheet_to_json(worksheet, { raw: true });
+          var worksheet = workbook.Sheets['Cost Sheet Data - Master'];
+
+          this.gridData = XLSX.utils.sheet_to_json(worksheet);
            
-            console.log(this.gridData);
+         
         }
      fileReader.readAsArrayBuffer(this.file);
 

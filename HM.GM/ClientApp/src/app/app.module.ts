@@ -10,6 +10,7 @@ import { HomeComponent } from './home/home.component';
 import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { DataUploaderComponent } from './GMDataLoader/dataUploader.component';
+import { GMCalculatorComponent } from './gm-calculator/gm-calculator.component';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 
 @NgModule({
@@ -19,7 +20,8 @@ import { Ng2SmartTableModule } from 'ng2-smart-table';
     HomeComponent,
     CounterComponent,
     DataUploaderComponent,
-    FetchDataComponent
+    FetchDataComponent,
+    GMCalculatorComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -30,7 +32,8 @@ import { Ng2SmartTableModule } from 'ng2-smart-table';
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
-      { path: 'dataUploader', component: DataUploaderComponent }, 
+      { path: 'dataUploader', component: DataUploaderComponent },
+      { path: 'gm-calculator', component: GMCalculatorComponent}
     ])
   ],
   providers: [],
