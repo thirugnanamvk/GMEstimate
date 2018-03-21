@@ -14,8 +14,5 @@ namespace HM.GM.BAL.Model
         public double WeeksPerMonth { get; set; }
 
         public double DollarValueInINR { get; set; }
-
-        public bool IsActive { get; set; }
-
     }
 }

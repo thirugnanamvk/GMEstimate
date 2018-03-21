@@ -40,9 +40,9 @@ namespace HM.GM.Controllers
 
         [HttpPost]
         [Route("calculateGM")]
-        public List<GMCalculationParams> CalculateGM([FromBody]List<GMCalculationParams> gmParamsList)
+        public GMInput CalculateGM([FromBody]GMInput gmInput)
         {
-            return _resourceCostProcessor.CalculateGM(gmParamsList);
+            return _resourceCostProcessor.CalculateGM(gmInput);
         }
     }
 }

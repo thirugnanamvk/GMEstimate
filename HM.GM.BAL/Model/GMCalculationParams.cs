@@ -26,6 +26,5 @@ namespace HM.GM.BAL.Model
         public double TotalBilling { get; set; }
 
         public double TotalGMInPercentage { get; set; }
-
     }
 }
