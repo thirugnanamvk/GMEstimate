@@ -13,7 +13,7 @@ namespace HM.GM.BAL.Model
 
         public double OnsiteCost { get; set; }
 
-        public double OffsiteCost { get; set; }
+        public double OffshoreCost { get; set; }
 
         public DateTime CreatedDate { get; set; } = DateTime.Now;
 

@@ -19,7 +19,7 @@ namespace HM.GM.DAL.Repository
 
         public List<ResourceCostDetail> GetResourceDetails()
         {
-            var query = "Select Practice, Skill ,Competency, OnsiteCost, OffsiteCost, CreatedDate, CreatedBy, IsActive from tbl_ResourceCost";
+            var query = "Select Practice, Skill ,Competency, CreatedDate, CreatedBy, IsActive from tbl_ResourceCost";
             var connectionString = _configuration.GetConnectionString("DefaultConnection");
             var resourceCostDetailList = new List<ResourceCostDetail>();
             using (var connection = new MySqlConnection(connectionString))
@@ -38,8 +38,6 @@ namespace HM.GM.DAL.Repository
                         detail.CreatedBy = Convert.ToString(reader["CreatedBy"]);
                         detail.CreatedDate = Convert.ToDateTime(reader["CreatedDate"]);
                         detail.IsActive = Convert.ToBoolean(reader["IsActive"]);
-                        detail.OffsiteCost = Convert.ToDouble(reader["OffsiteCost"]);
-                        detail.OnsiteCost = Convert.ToDouble(reader["OnsiteCost"]);
                         detail.Practice = Convert.ToString(reader["Practice"]);
                         detail.Skill = Convert.ToString(reader["Skill"]);
 
@@ -72,7 +70,7 @@ namespace HM.GM.DAL.Repository
                     //*********************************************//
                     //  Insert new record in resource cost table   //
                     //********************************************//
-                    var sCommand = new StringBuilder("INSERT INTO tbl_ResourceCost (Practice, Skill ,Competency, OnsiteCost, OffsiteCost, CreatedDate, CreatedBy, IsActive ) VALUES ");
+                    var sCommand = new StringBuilder("INSERT INTO tbl_ResourceCost (Practice, Skill ,Competency, OnsiteCost, OffshoreCost, CreatedDate, CreatedBy, IsActive ) VALUES ");
                     List<string> Rows = new List<string>();
                     foreach (var resourceCostDetail in resourceCostDetails)
                     {
@@ -81,7 +79,7 @@ namespace HM.GM.DAL.Repository
                                     MySqlHelper.EscapeString(resourceCostDetail.Skill.ToUpper()),
                                     MySqlHelper.EscapeString(resourceCostDetail.Competency.ToUpper()),
                                     resourceCostDetail.OnsiteCost,
-                                    resourceCostDetail.OffsiteCost,
+                                    resourceCostDetail.OffshoreCost,
                                     String.Format("{0:s}", resourceCostDetail.CreatedDate),
                                     MySqlHelper.EscapeString(resourceCostDetail.CreatedBy.ToUpper()),
                                     resourceCostDetail.IsActive
@@ -140,7 +138,7 @@ namespace HM.GM.DAL.Repository
 
         public ResourceCostDetail GetCostForResource(string location, string practice, string skill, string competency)
         {
-            var query = "Select Practice, Skill ,Competency, OnsiteCost, OffsiteCost, CreatedDate, CreatedBy, IsActive from tbl_ResourceCost" +
+            var query = "Select Practice, Skill ,Competency, OnsiteCost, OffshoreCost, CreatedDate, CreatedBy, IsActive from tbl_ResourceCost" +
                 " Where Practice = @Practice AND Skill = @Skill AND  Competency = @Competency ";
             var connectionString = _configuration.GetConnectionString("DefaultConnection");
             var detail = new ResourceCostDetail();
@@ -163,7 +161,7 @@ namespace HM.GM.DAL.Repository
                         detail.CreatedBy = Convert.ToString(reader["CreatedBy"]);
                         detail.CreatedDate = Convert.ToDateTime(reader["CreatedDate"]);
                         detail.IsActive = Convert.ToBoolean(reader["IsActive"]);
-                        detail.OffsiteCost = Convert.ToDouble(reader["OffsiteCost"]);
+                        detail.OffshoreCost = Convert.ToDouble(reader["OffshoreCost"]);
                         detail.OnsiteCost = Convert.ToDouble(reader["OnsiteCost"]);
                         detail.Practice = Convert.ToString(reader["Practice"]);
                         detail.Skill = Convert.ToString(reader["Skill"]);
