@@ -7,7 +7,7 @@
         <span class='icon-bar'></span>
         <span class='icon-bar'></span>
       </button>
-      <a class='navbar-brand' [routerLink]='["/"]'>HM.GM</a>
+      <a class='navbar-brand' [routerLink]='["/"]'>GM Calculator</a>
     </div>
     <div class='clearfix'></div>
     <div class='navbar-collapse collapse' [ngClass]='{ "in": isExpanded }'>
@@ -17,24 +17,14 @@
             <span class='glyphicon glyphicon-home'></span> Home
           </a>
         </li>
-        <li [routerLinkActive]='["link-active"]'>
-          <a [routerLink]='["/counter"]' (click)='collapse()'>
-            <span class='glyphicon glyphicon-education'></span> Counter
-          </a>
-        </li>
-        <li [routerLinkActive]='["link-active"]'>
-          <a [routerLink]='["/fetch-data"]' (click)='collapse()'>
-            <span class='glyphicon glyphicon-th-list'></span> Fetch data
-          </a>
-        </li>
         <li [routerLinkActive]="['link-active']">
           <a [routerLink]="['/dataUploader']">
-            <span class='glyphicon glyphicon-th-list'></span> Data Uploader
+            <span class='glyphicon glyphicon-upload'></span>Upload Resource Cost
           </a>
         </li>
         <li [routerLinkActive]="['link-active']">
           <a [routerLink]="['/gm-calculator']">
-            <span class='glyphicon glyphicon-th-list'></span> GM Calculator
+            <span class='glyphicon glyphicon-hourglass'></span> Calculate GM
           </a>
         </li>
       </ul>
