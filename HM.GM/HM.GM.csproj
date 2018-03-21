@@ -31,8 +31,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\src\app\app-service\index.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\HM.GM.BAL\HM.GM.BAL.csproj" />
     <ProjectReference Include="..\HM.GM.DAL\HM.GM.DAL.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\src\app\app-service\index.ts" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

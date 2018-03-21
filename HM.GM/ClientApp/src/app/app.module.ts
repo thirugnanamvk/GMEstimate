@@ -3,14 +3,13 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
-
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
 import { DataUploaderComponent } from './GMDataLoader/dataUploader.component';
-import { GMCalculatorComponent } from './gm-calculator/gm-calculator.component';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
-import { Uploadservice } from './app-service/upload-data.service';
+import { Uploadservice, GmdefaultsService } from './app-service';
+import { GMdefaultComponent } from './GMDefaults/gmdefault.component'
 
 @NgModule({
   declarations: [
@@ -18,7 +17,7 @@ import { Uploadservice } from './app-service/upload-data.service';
     NavMenuComponent,
     HomeComponent,
     DataUploaderComponent,
-    GMCalculatorComponent
+    GMdefaultComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -28,11 +27,12 @@ import { Uploadservice } from './app-service/upload-data.service';
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'dataUploader', component: DataUploaderComponent },
-      { path: 'gm-calculator', component: GMCalculatorComponent}
+      { path: 'gmdefault', component: GMdefaultComponent }
     ])
   ],
   providers: [
-    Uploadservice
+    Uploadservice,
+    GmdefaultsService
   ],
   bootstrap: [AppComponent]
 })

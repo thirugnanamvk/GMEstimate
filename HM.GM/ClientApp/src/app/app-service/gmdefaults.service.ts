@@ -2,29 +2,30 @@ import { Injectable } from '@angular/core';
  import {Http, Response} from "@angular/http";
  import {Observable} from "rxjs/Observable";
  import "rxjs/Rx";
- import { GMDefaults } from "../Model/GMDefaults";
+import { GMDefaultModelVM } from "../Model/GMDefaultModelVM";
+import { GMDefaultModel } from "../Model/GMDefaultModel";
+
 @Injectable()
-export class GmdefaultsService {
-    private _postsURL = "http://localhost:5000/api/GMDefaults";
+export class GmdefaultsService {  
+  private _postsURL = "api/GMEstimation/GMDefaults";
 
     constructor(private http: Http) {
     }
     
-    getPosts(): Observable<GMDefaults[]> {
+  getPosts(): Observable<GMDefaultModelVM[]> {
          return this.http
              .get(this._postsURL)
              .map((response: Response) => {
-                 return <GMDefaults[]>response.json();
+               return <GMDefaultModelVM[]>response.json();
              })
              .catch(this.handleError);
      }
      
-     public getBillRate() : Observable<GMDefaults[]> {
+  public getBillRate(): Observable<GMDefaultModel> {
         return this.http
           .get(this._postsURL)
           .map(response => {
-            const rates = response.json();
-            return rates.map((GMDefaults) => new GMDefaults(rates));
+            return new GMDefaultModel(response.json());
           })
           .catch(this.handleError);
      }
