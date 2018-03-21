@@ -17,7 +17,7 @@ namespace HM.GM.DAL.Repository
             _configuration = configuration;
         }
 
-        public List<ResourceCostDetail> GetResourceCostDetails()
+        public List<ResourceCostDetail> GetResourceDetails()
         {
             var query = "Select Practice, Skill ,Competency, OnsiteCost, OffsiteCost, CreatedDate, CreatedBy, IsActive from tbl_ResourceCost";
             var connectionString = _configuration.GetConnectionString("DefaultConnection");
@@ -126,16 +126,51 @@ namespace HM.GM.DAL.Repository
                         gMDefaults = new GMDefaults();
 
                         gMDefaults.Contengency = Convert.ToDouble(reader["Contengency"]);
-                        gMDefaults.DaysInMonth = Convert.ToDouble(reader["DaysInMonth"]);
-                        gMDefaults.DaysInWeek = Convert.ToDouble(reader["DaysInWeek"]);
-                        gMDefaults.HoursInDay = Convert.ToDouble(reader["HoursInDay"]);
-                        gMDefaults.WeeksInMonth = Convert.ToDouble(reader["WeeksInMonth"]);
+                        gMDefaults.DaysPerMonth = Convert.ToDouble(reader["DaysInMonth"]);
+                        gMDefaults.DaysPerWeek = Convert.ToDouble(reader["DaysInWeek"]);
+                        gMDefaults.HoursPerDay = Convert.ToDouble(reader["HoursInDay"]);
+                        gMDefaults.WeeksPerMonth = Convert.ToDouble(reader["WeeksInMonth"]);
                         gMDefaults.DollarValueInINR = Convert.ToDouble(reader["DollarValueInINR"]);
                         gMDefaults.IsActive = Convert.ToBoolean(reader["IsActive"]);
                     }
                 }
             }
             return gMDefaults;
+        }
+
+        public ResourceCostDetail GetCostForResource(string location, string practice, string skill, string competency)
+        {
+            var query = "Select Practice, Skill ,Competency, OnsiteCost, OffsiteCost, CreatedDate, CreatedBy, IsActive from tbl_ResourceCost" +
+                " Where Practice = @Practice AND Skill = @Skill AND  Competency = @Competency ";
+            var connectionString = _configuration.GetConnectionString("DefaultConnection");
+            var detail = new ResourceCostDetail();
+            using (var connection = new MySqlConnection(connectionString))
+            {
+                using (var cmd = new MySqlCommand(query, connection))
+                {
+                    connection.Open();
+                    cmd.CommandType = CommandType.Text;
+                    cmd.Parameters.AddRange(new MySqlParameter[] {
+                        new MySqlParameter{ ParameterName = "@Practice", Value = practice.ToUpper()},
+                        new MySqlParameter{ ParameterName = "@Skill", Value = skill.ToUpper()},
+                        new MySqlParameter{ ParameterName = "@Competency", Value = competency.ToUpper()},
+
+                    });
+                    var reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        detail.Competency = Convert.ToString(reader["Competency"]);
+                        detail.CreatedBy = Convert.ToString(reader["CreatedBy"]);
+                        detail.CreatedDate = Convert.ToDateTime(reader["CreatedDate"]);
+                        detail.IsActive = Convert.ToBoolean(reader["IsActive"]);
+                        detail.OffsiteCost = Convert.ToDouble(reader["OffsiteCost"]);
+                        detail.OnsiteCost = Convert.ToDouble(reader["OnsiteCost"]);
+                        detail.Practice = Convert.ToString(reader["Practice"]);
+                        detail.Skill = Convert.ToString(reader["Skill"]);
+                    }
+                }
+            }
+            return detail;
         }
     }
 }

@@ -37,5 +37,12 @@ namespace HM.GM.Controllers
         {
             _resourceCostProcessor.InsertResourceCostDetails(costDetails);
         }
+
+        [HttpPost]
+        [Route("calculateGM")]
+        public List<GMCalculationParams> CalculateGM([FromBody]List<GMCalculationParams> gmParamsList)
+        {
+            return _resourceCostProcessor.CalculateGM(gmParamsList);
+        }
     }
 }

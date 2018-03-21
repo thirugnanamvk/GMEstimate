@@ -7,8 +7,10 @@ namespace HM.GM.DAL.Repository
     {
         void InsertResourceCostDetails(List<ResourceCostDetail> resourceCostDetailList);
 
-        List<ResourceCostDetail> GetResourceCostDetails();
+        List<ResourceCostDetail> GetResourceDetails();
 
         GMDefaults GetGMDefaults();
+
+        ResourceCostDetail GetCostForResource(string location, string practice, string skill, string competency);
     }
 }
