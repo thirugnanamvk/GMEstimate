@@ -11,5 +11,7 @@ namespace HM.GM.BAL.Processors
 
         GMDefaults GetGMDefaults();
 
+        List<GMCalculationParams> CalculateGM(List<GMCalculationParams> gmCalculationParamsList);
+
     }
 }

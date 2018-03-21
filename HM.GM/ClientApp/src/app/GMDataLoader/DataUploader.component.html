@@ -1,21 +1,29 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8" />
-    <title></title>
+  <meta charset="utf-8" />
+  <title></title>
 </head>
 <body>
-    <div>
-        <p> Chhose your file to upload the data</p>
+  <div class="container-fluid" style="padding:2%">
+    <div class="row">
+      <div class="col-xs-12 col-sm-5 col-md-4">
         <input type="file" style="display: inline-block;" (change)="incomingfile($event)" placeholder="Upload file" accept=".xlsx">
-        <button type="button" class="btn btn-info" (click)="Upload()">Upload</button>
+      </div>
+      <div class="col-xs-12 col-sm-5 col-md-3">
+        <button type="button" class="btn btn-success" (click)="Upload()">Upload</button>
+      </div>
     </div>
-
-    <div>
-        <ng2-smart-table [settings]="settings" [source]="gridData"></ng2-smart-table>
+    <div class="row">
+      <div class="col-xs-12" style="padding:2% 0 2% 0">
+        <ng2-smart-table [settings]="settings" [source]="gridData" class="col-xs-12"></ng2-smart-table>
+      </div>
     </div>
-    <div>
-      <button type="button" class="btn btn-info" (click)="Save()">Save</button>
+    <div class="row">
+      <div class="col-xs-12">
+        <button type="button" class="btn btn-success" (click)="Save()">Save</button>
+      </div>
     </div>
+  </div>
 </body>
 </html>

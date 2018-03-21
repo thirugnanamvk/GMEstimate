@@ -15,8 +15,5 @@ export class Uploadservice {
     return new Promise((resolve, reject) => {
       this.http.post(this.url, data).subscribe(res => { resolve(res) });
     })
-    
-  }		
-
-  
+  }	  
 }
