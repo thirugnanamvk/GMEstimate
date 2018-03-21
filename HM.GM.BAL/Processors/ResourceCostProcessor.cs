@@ -34,24 +34,30 @@ namespace HM.GM.BAL.Processors
             return Mapper.Map<BALModel.GMDefaults>(gMDefaultsDAL);
         }
 
-        public List<BALModel.GMCalculationParams> CalculateGM(List<BALModel.GMCalculationParams> gmCalculationParamsList)
+        public BALModel.GMInput CalculateGM(BALModel.GMInput gmInput)
         {
-            var gmDefaults = _resourceCostRepository.GetGMDefaults();
-
-            foreach (var param in gmCalculationParamsList)
+            if (gmInput.GMCalculationParams != null && gmInput.GMDefaults != null)
             {
-                var monthlyRate = param.RatePerHour * gmDefaults.DaysPerMonth * gmDefaults.HoursPerDay;
-                var costDetails = _resourceCostRepository.GetCostForResource(param.Location, param.Practice, param.Skill, param.Competency);
-                var costPerHour = param.Location.Equals("ONSITE", StringComparison.InvariantCultureIgnoreCase) ? costDetails.OnsiteCost : costDetails.OffshoreCost;
-                var costPerMonth = costPerHour * gmDefaults.DaysPerMonth * gmDefaults.HoursPerDay;
-                var monthsActualLoading = (param.WeeksActualLoading * gmDefaults.DaysPerWeek / gmDefaults.DaysPerMonth);
-                var weeksWithContengency = param.WeeksActualLoading + (param.WeeksActualLoading * (gmDefaults.Contengency / 100));
-                param.MonthLoadingWithContengency = (param.WeeksActualLoading * gmDefaults.DaysPerWeek / gmDefaults.DaysPerMonth) + (param.WeeksActualLoading * gmDefaults.DaysPerWeek / gmDefaults.DaysPerMonth) * (gmDefaults.Contengency / 100);
-                param.TotalBilling = (param.MonthLoadingWithContengency * monthlyRate) + param.OnsitePerdim;
-                var totalCost = (costPerMonth * param.MonthLoadingWithContengency) + param.OnsiteCost;
-                param.TotalGMInPercentage = ((param.TotalBilling - totalCost) / param.TotalBilling) * 100;
+                var gmDefaults = gmInput.GMDefaults;
+                foreach (var param in gmInput.GMCalculationParams)
+                {
+                    var monthlyRate = param.RatePerHour * gmDefaults.DaysPerMonth * gmDefaults.HoursPerDay;
+                    var costDetails = _resourceCostRepository.GetCostForResource(param.Location, param.Practice, param.Skill, param.Competency);
+                    var costPerHour = param.Location.Equals("ONSITE", StringComparison.InvariantCultureIgnoreCase) ? costDetails.OnsiteCost : costDetails.OffshoreCost;
+                    var costPerMonth = costPerHour * gmDefaults.DaysPerMonth * gmDefaults.HoursPerDay;
+                    var monthsActualLoading = (param.WeeksActualLoading * gmDefaults.DaysPerWeek / gmDefaults.DaysPerMonth);
+                    var weeksWithContengency = param.WeeksActualLoading + (param.WeeksActualLoading * (gmDefaults.Contengency / 100));
+                    param.MonthLoadingWithContengency = (param.WeeksActualLoading * gmDefaults.DaysPerWeek / gmDefaults.DaysPerMonth) + (param.WeeksActualLoading * gmDefaults.DaysPerWeek / gmDefaults.DaysPerMonth) * (gmDefaults.Contengency / 100);
+                    param.TotalBilling = (param.MonthLoadingWithContengency * monthlyRate) + param.OnsitePerdim;
+                    var totalCost = (costPerMonth * param.MonthLoadingWithContengency) + param.OnsiteCost;
+                    param.TotalGMInPercentage = ((param.TotalBilling - totalCost) / param.TotalBilling) * 100;
+                }
             }
-            return gmCalculationParamsList;
+            else
+            {
+                throw new Exception("Please provide correct inputs for GM calculation.");
+            }
+            return gmInput;
         }
     }
 }
