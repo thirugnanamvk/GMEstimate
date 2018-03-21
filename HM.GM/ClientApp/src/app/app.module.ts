@@ -10,9 +10,10 @@ import { HomeComponent } from './home/home.component';
 import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { DataUploaderComponent } from './GMDataLoader/dataUploader.component';
-import { GMCalculatorComponent } from './gm-calculator/gm-calculator.component';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { Uploadservice } from './app-service/upload-data.service';
+import { GmdefaultsService } from './app-service/gmdefaults.service';
+import { GMdefaultComponent } from './GMDefaults/gmdefault.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,7 @@ import { Uploadservice } from './app-service/upload-data.service';
     CounterComponent,
     DataUploaderComponent,
     FetchDataComponent,
-    GMCalculatorComponent
+    GMdefaultComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -34,11 +35,12 @@ import { Uploadservice } from './app-service/upload-data.service';
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
       { path: 'dataUploader', component: DataUploaderComponent },
-      { path: 'gm-calculator', component: GMCalculatorComponent}
+      
     ])
   ],
   providers: [
-    Uploadservice
+    Uploadservice,
+    GmdefaultsService
   ],
   bootstrap: [AppComponent]
 })

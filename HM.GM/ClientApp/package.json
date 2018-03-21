@@ -24,14 +24,14 @@
     "@angular/platform-server": "^5.2.0",
     "@angular/router": "^5.2.0",
     "@nguniversal/module-map-ngfactory-loader": "^5.0.0-beta.5",
+    "@types/xlsx": "0.0.36",
     "aspnet-prerendering": "^3.0.1",
     "bootstrap": "^3.3.7",
     "core-js": "^2.4.1",
-    "rxjs": "^5.5.6",
-    "zone.js": "^0.8.19",
-    "@types/xlsx": "0.0.36",
     "ng2-smart-table": "^1.2.2",
-    "ts-xlsx": "0.0.11"
+    "rxjs": "^5.5.6",
+    "ts-xlsx": "0.0.11",
+    "zone.js": "^0.8.19"
   },
   "devDependencies": {
     "@angular/cli": "~1.7.0",
