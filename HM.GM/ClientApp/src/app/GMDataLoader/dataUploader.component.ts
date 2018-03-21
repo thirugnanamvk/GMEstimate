@@ -3,7 +3,8 @@ import * as XLSX from 'ts-xlsx';
 import { BehaviorSubject } from 'rxjs';
 import { Ng2SmartTableModule, LocalDataSource } from 'ng2-smart-table';
 import { ResourceCostDetail } from '../Model/ResourceCostDetail';
-
+import { HttpClient } from '@angular/common/http';
+import { Uploadservice } from '../app-service/upload-data.service'
 
 @Component({
     selector: 'dataUploader',
@@ -19,32 +20,32 @@ export class DataUploaderComponent {
         actions: false,
         columns: {
             
-            id: {
+          Pratice: {
                 title: 'Pratice'
             },
-            Pratice: {
-                title: 'Specific Skillset'
+          SpecificSkillset: {
+                title: 'SpecificSkillset'
             },
             Competency: {
                 title: 'Competency'
             },
-            Onsite: {
-                title: 'USD/Hr(Onsite)'
+          USDHrOnsite: {
+                title: 'USDHrOnsite'
             },
-            Offshore: {
-                title: 'USD/Hr(Offshore)'
+          USDHrOffshore: {
+                title: 'USDHrOffshore'
             }
         }
     };
 
   source: LocalDataSource;
 
-  constructor() {
+  constructor(private http: HttpClient, private _uploadservice: Uploadservice) {
     debugger;
     this.source = new LocalDataSource(this.gridData);
   }
 
-    
+ 
 
 incomingfile(event: any) 
   {
@@ -74,5 +75,8 @@ incomingfile(event: any)
      
     }
 
+  Save() {
+   this._uploadservice.UploadData(this.gridData);
+  }
     
 }

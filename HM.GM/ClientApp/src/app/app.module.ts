@@ -12,6 +12,7 @@ import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { DataUploaderComponent } from './GMDataLoader/dataUploader.component';
 import { GMCalculatorComponent } from './gm-calculator/gm-calculator.component';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
+import { Uploadservice } from './app-service/upload-data.service';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,9 @@ import { Ng2SmartTableModule } from 'ng2-smart-table';
       { path: 'gm-calculator', component: GMCalculatorComponent}
     ])
   ],
-  providers: [],
+  providers: [
+    Uploadservice
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
