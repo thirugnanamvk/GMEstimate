@@ -11,7 +11,7 @@
         <input type="file" style="display: inline-block;" id="btnuploadfile" (change)="incomingfile($event)" placeholder="Upload file" accept=".xlsx">
       </div>
       <div class="col-xs-12 col-sm-5 col-md-3">
-        <button type="button" class="btn btn-success" (click)="Upload()">Upload</button>
+        <button type="button" class="btn btn-success" (click)="Upload()">Import</button>
       </div>
     </div>
     <div class="row">
@@ -21,7 +21,7 @@
     </div>
     <div class="row">
       <div class="col-xs-12">
-        <button type="button" class="btn btn-success" (click)="Save()" [disabled]="!isdisabled">Save</button>
+        <button type="button" class="btn btn-success" (click)="Save()" [disabled]="!isdisabled">Upload</button>
       </div>
     </div>
   </div>

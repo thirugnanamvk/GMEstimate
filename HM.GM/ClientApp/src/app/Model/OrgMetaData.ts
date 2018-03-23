@@ -1,5 +1,5 @@
 export class OrgMetaData {
-  skills: string[];
-  competencies: string[];
-  practices: string[];
+  Skills: string[];
+  Competencies: string[];
+  Practices: string[];
 }

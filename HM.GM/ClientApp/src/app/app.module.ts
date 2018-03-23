@@ -28,7 +28,7 @@ import { GmcalculatorComponent } from './gmcalculator/gmcalculator.component';
     FormsModule,
     Ng2SmartTableModule,
     RouterModule.forRoot([
-      { path: '', component: GmcalculatorComponent, pathMatch: 'full' },
+      { path: 'gmcalculator', component: GmcalculatorComponent, pathMatch: 'full' },
       { path: 'dataUploader', component: DataUploaderComponent },
       //{ path: 'gmcalculator', component: GmcalculatorComponent }
     ])

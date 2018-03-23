@@ -9,10 +9,11 @@ body {
   color:white;
 }
 .sub-container{
-  padding:0 25% 0 25%;
+  padding:0 70% 0 0;
 }
-.gmtable{
-  overflow-x:auto;
+.gmtable {
+  /*overflow-x: auto;*/
+  border: solid 1px #dcdcdc;
 }
 
 
@@ -54,4 +55,10 @@ td,th {
   font-size: .875em;
   margin: 0;
   padding: 0.5em 1em;
+}
+
+
+
+.completer-input {
+  height: 35px;
 }

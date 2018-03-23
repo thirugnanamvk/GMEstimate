@@ -17,7 +17,7 @@ import { NgModule } from '@angular/core';
 })
 export class GMdefaultComponent implements OnInit {
   title = 'app';
-
+  excelData: any = [{}];
   settings = {
     delete: {
       confirmDelete: true,
@@ -95,43 +95,67 @@ export class GMdefaultComponent implements OnInit {
       },
       PercentageLoading: {
         title: '% Loading',
-        filter: false
+        filter: false,
+        defaultValue: "0",
+        type: "number",
       },
       RatePerHour: {
         title: 'Rate Card/Hr',
-        filter: false
+        filter: false,
+        defaultValue: "0",
+        type: "number",
       },
       WeeksActualLoading: {
         title: 'Weeks (Actual loading)',
-        filter: false
+        filter: false,
+        defaultValue: "0",
+        type: "number",
       },
       MonthLoadingWithContengency: {
         title: "Months Loading + Contengency",
-        filter: false
+        filter: false,
+        defaultValue: "0",
+        type: "number",
       },
       TotalBilling: {
         title: "Total Billing",
-        filter: false
+        editable: false,
+        addable: false,
+        filter: false,
+        defaultValue: "0",
+        type: "number",
       },
       OnsiteCost: {
         title: "Onsite Cost",
-        filter: false
+        defaultValue: "0",
+        filter: false,
+        type: "number",
       },
       OnsitePerdim: {
-          title: "Onsite Perdim",
-          filter: false
-        },
-      
+        title: "Onsite Perdim",
+        editable: false,
+        addable: false,
+        filter: false,
+        show: false,
+        defaultValue: "0",
+        type: "number",
+      },
+
       TotalGMInPercentage: {
         title: "Total GM%",
         editable: false,
         addable: false,
-        filter: false
+        filter: false,
+        defaultValue: "0",
+        type: "number",
       },
     }
   };
   public gmdefaults: GMDefaultModel;
   source: LocalDataSource;
+  public TotalGMPercentage: number = 0
+  public TotalBilling: number = 0
+  public TotalOnSiteCost: number = 0
   public gmMasterData: ResourceCostDetail[];
   public orgmetadata: OrgMetaData;
   public complete: boolean = false;
@@ -159,13 +183,13 @@ export class GMdefaultComponent implements OnInit {
       (defaults) => {
         this.orgmetadata = defaults;
         if (this.orgmetadata) {
-          this.orgmetadata.competencies.forEach((item) => { // competencies
+          this.orgmetadata.Competencies.forEach((item) => { // competencies
             this.settings.columns.Competency.editor.config.completer.data.push({ name: item });
           });
-          this.orgmetadata.skills.forEach((item) => { // skills
+          this.orgmetadata.Skills.forEach((item) => { // skills
             this.settings.columns.Skill.editor.config.completer.data.push({ name: item });
           });
-          this.orgmetadata.practices.forEach((item) => { // Practice
+          this.orgmetadata.Practices.forEach((item) => { // Practice
             this.settings.columns.Practice.editor.config.completer.data.push({ name: item });
           });
           this.complete = true;
@@ -196,13 +220,38 @@ export class GMdefaultComponent implements OnInit {
         parseFloat(this.gridData[i].WeeksActualLoading.toString()), 0, parseFloat(this.gridData[i].OnsiteCost.toString()),
         parseFloat(this.gridData[i].MonthLoadingWithContengency.toString()), 0,
         0));
-    }      
+    }
     this.service.UploadData(objList, this.gmdefaults).subscribe(
       (defaults) => {
         var data = defaults;
+        this.excelData = data.GMCalculationParams;
         this.gridData = data.GMCalculationParams;
+        for (var i = 0; i < this.gridData.length; i++) {
+          this.TotalGMPercentage = this.TotalGMPercentage + this.gridData[i].TotalGMInPercentage;
+          this.TotalBilling = this.TotalBilling + this.gridData[i].TotalBilling;
+          this.TotalOnSiteCost = this.TotalOnSiteCost + this.gridData[i].OnsiteCost;
+          this.gridData[i].TotalBilling = parseFloat(this.gridData[i].TotalBilling).toFixed(2);
+          this.gridData[i].MonthLoadingWithContengency = parseFloat(this.gridData[i].MonthLoadingWithContengency).toFixed(2);
+          this.gridData[i].OnsiteCost = parseFloat(this.gridData[i].OnsiteCost).toFixed(2);
+          this.gridData[i].TotalGMInPercentage = parseFloat(this.gridData[i].TotalGMInPercentage).toFixed(0);
+        }
+        this.TotalGMPercentage = this.TotalGMPercentage / this.gridData.length ;
         this.source = new LocalDataSource(data.GMCalculationParams);
       }
     );
+
+  }
+
+  public tableToExcel(table: any, name: any) {
+    var uri = 'data:application/vnd.ms-excel;base64,'
+      , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
+      , base64 = function (s) { return window.btoa(unescape(encodeURIComponent(s))) }
+      , format = function (s, c) { return s.replace(/{(\w+)}/g, function (m, p) { return c[p]; }) }
+    if (!table.nodeType) table = document.getElementById(table)
+    var ctx = { worksheet: name || 'Worksheet', table: table.innerHTML }
+    window.location.href = uri + base64(format(template, ctx))
+  }
+  public rowKeys(row: any): Array<string> {
+    return Object.keys(row);
   }
 }
