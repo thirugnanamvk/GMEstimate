@@ -59,5 +59,12 @@ namespace HM.GM.BAL.Processors
             }
             return gmInput;
         }
+
+        public BALModel.OrganizationMetadata GetOrganizationMetadata()
+        {
+            var orgMetadata = _resourceCostRepository.GetOrganizationMetadata();
+            return Mapper.Map<BALModel.OrganizationMetadata>(orgMetadata);
+        }
+
     }
 }

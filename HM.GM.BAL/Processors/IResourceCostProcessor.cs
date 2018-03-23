@@ -12,5 +12,7 @@ namespace HM.GM.BAL.Processors
         GMDefaults GetGMDefaults();
 
         GMInput CalculateGM(GMInput gMInput);
+
+        OrganizationMetadata GetOrganizationMetadata();
     }
 }

@@ -32,6 +32,8 @@
 
   <ItemGroup>
     <None Remove="ClientApp\src\app\app-service\index.ts" />
+    <None Remove="ClientApp\src\app\Component\index.ts" />
+    <None Remove="ClientApp\src\app\Model\index.ts" />
   </ItemGroup>
 
   <ItemGroup>
@@ -41,6 +43,8 @@
 
   <ItemGroup>
     <TypeScriptCompile Include="ClientApp\src\app\app-service\index.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\Component\index.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\Model\index.ts" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

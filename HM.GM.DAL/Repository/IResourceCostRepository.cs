@@ -12,5 +12,7 @@ namespace HM.GM.DAL.Repository
         GMDefaults GetGMDefaults();
 
         ResourceCostDetail GetCostForResource(string location, string practice, string skill, string competency);
+
+        OrganizationMetadata GetOrganizationMetadata();
     }
 }

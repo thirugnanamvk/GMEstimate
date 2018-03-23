@@ -12,18 +12,18 @@
     <div class='clearfix'></div>
     <div class='navbar-collapse collapse' [ngClass]='{ "in": isExpanded }'>
       <ul class='nav navbar-nav'>
-        <li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
+        <!--<li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
           <a [routerLink]='["/"]' (click)='collapse()'>
             <span class='glyphicon glyphicon-home'></span> Home
           </a>
-        </li>
+        </li>-->
         <li [routerLinkActive]="['link-active']">
           <a [routerLink]="['/dataUploader']">
             <span class='glyphicon glyphicon-upload'></span>Upload Resource Cost
           </a>
         </li>
         <li [routerLinkActive]="['link-active']">
-          <a [routerLink]="['/gmdefault']">
+          <a [routerLink]="['/gmcalculator']">
             <span class='glyphicon glyphicon-upload'></span>Calculate GM
           </a>
         </li>

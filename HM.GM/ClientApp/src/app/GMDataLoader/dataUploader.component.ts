@@ -13,6 +13,7 @@ import { Uploadservice } from '../app-service/upload-data.service'
 })
 export class DataUploaderComponent {
   arrayBuffer: any;
+  public isdisabled: boolean = false;
   gridData: ResourceCostDetailVM[];
   file: File;
 
@@ -43,6 +44,7 @@ export class DataUploaderComponent {
 
   constructor(private http: HttpClient, private _uploadservice: Uploadservice) {
     this.source = new LocalDataSource(this.gridData);
+    
   }
 
   incomingfile(event: any) {
@@ -50,6 +52,7 @@ export class DataUploaderComponent {
   }
 
   Upload() {
+    this.isdisabled = true;
     let fileReader = new FileReader();
     fileReader.onload = (e) => {
       this.arrayBuffer = fileReader.result;
@@ -70,10 +73,11 @@ export class DataUploaderComponent {
 
   Save() {
     var objList = new Array<ResourceCostDetail>();
-    for (var i = 0; i < this.gridData.length; i++)
-    {
+    for (var i = 0; i < this.gridData.length; i++) {
       objList.push(new ResourceCostDetail(this.gridData[i]));
     }
     this._uploadservice.UploadData(objList);
+    
+    this.isdisabled = false;
   }
 }

@@ -110,7 +110,7 @@ namespace HM.GM.DAL.Repository
         {
             var query = "Select Contengency, DaysInMonth ,DaysInWeek, HoursInDay, WeeksInMonth, DollarValueInINR, IsActive from tbl_GM_Defaults";
             var connectionString = _configuration.GetConnectionString("DefaultConnection");
-            var gMDefaults=new GMDefaults();
+            var gMDefaults = new GMDefaults();
             using (var connection = new MySqlConnection(connectionString))
             {
                 using (var cmd = new MySqlCommand(query, connection))
@@ -170,5 +170,85 @@ namespace HM.GM.DAL.Repository
             }
             return detail;
         }
+
+        public OrganizationMetadata GetOrganizationMetadata()
+        {
+            return new OrganizationMetadata
+            {
+                Competencies = GetAllCompetency(),
+                Practices = GetAllPractice(),
+                Skills = GetAllSkills(),
+            };
+        }
+
+        private List<string> GetAllSkills()
+        {
+            var query = "Select DISTINCT Skill from tbl_ResourceCost";
+            var connectionString = _configuration.GetConnectionString("DefaultConnection");
+            var skillList = new List<string>();
+            using (var connection = new MySqlConnection(connectionString))
+            {
+                using (var cmd = new MySqlCommand(query, connection))
+                {
+                    connection.Open();
+                    cmd.CommandType = CommandType.Text;
+                    var reader = cmd.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        var detail = new ResourceCostDetail();
+                        skillList.Add(Convert.ToString(reader["Skill"])); ;
+                    }
+                }
+            }
+            return skillList;
+        }
+
+        private List<string> GetAllCompetency()
+        {
+            var query = "Select DISTINCT Competency from tbl_ResourceCost";
+            var connectionString = _configuration.GetConnectionString("DefaultConnection");
+            var competencyList = new List<string>();
+            using (var connection = new MySqlConnection(connectionString))
+            {
+                using (var cmd = new MySqlCommand(query, connection))
+                {
+                    connection.Open();
+                    cmd.CommandType = CommandType.Text;
+                    var reader = cmd.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        var detail = new ResourceCostDetail();
+                        competencyList.Add(Convert.ToString(reader["Competency"])); ;
+                    }
+                }
+            }
+            return competencyList;
+        }
+
+        private List<string> GetAllPractice()
+        {
+            var query = "Select DISTINCT Practice from tbl_ResourceCost";
+            var connectionString = _configuration.GetConnectionString("DefaultConnection");
+            var practiceList = new List<string>();
+            using (var connection = new MySqlConnection(connectionString))
+            {
+                using (var cmd = new MySqlCommand(query, connection))
+                {
+                    connection.Open();
+                    cmd.CommandType = CommandType.Text;
+                    var reader = cmd.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        var detail = new ResourceCostDetail();
+                        practiceList.Add(Convert.ToString(reader["Practice"])); ;
+                    }
+                }
+            }
+            return practiceList;
+        }
+
     }
 }

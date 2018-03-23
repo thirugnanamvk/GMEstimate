@@ -9,7 +9,9 @@ import { HomeComponent } from './home/home.component';
 import { DataUploaderComponent } from './GMDataLoader/dataUploader.component';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { Uploadservice, GmdefaultsService } from './app-service';
-import { GMdefaultComponent } from './GMDefaults/gmdefault.component'
+import { GMdefaultComponent } from './Component';
+import { GmcalculatorComponent } from './gmcalculator/gmcalculator.component';
+
 
 @NgModule({
   declarations: [
@@ -17,7 +19,8 @@ import { GMdefaultComponent } from './GMDefaults/gmdefault.component'
     NavMenuComponent,
     HomeComponent,
     DataUploaderComponent,
-    GMdefaultComponent
+    GMdefaultComponent,
+    GmcalculatorComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -25,9 +28,9 @@ import { GMdefaultComponent } from './GMDefaults/gmdefault.component'
     FormsModule,
     Ng2SmartTableModule,
     RouterModule.forRoot([
-      { path: '', component: HomeComponent, pathMatch: 'full' },
+      { path: '', component: GmcalculatorComponent, pathMatch: 'full' },
       { path: 'dataUploader', component: DataUploaderComponent },
-      { path: 'gmdefault', component: GMdefaultComponent }
+      //{ path: 'gmcalculator', component: GmcalculatorComponent }
     ])
   ],
   providers: [

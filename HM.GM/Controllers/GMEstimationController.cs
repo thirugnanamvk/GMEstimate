@@ -44,5 +44,13 @@ namespace HM.GM.Controllers
         {
             return _resourceCostProcessor.CalculateGM(gmInput);
         }
+
+        [HttpGet]
+        [Route("orgMetadata")]
+        public OrganizationMetadata GetOrganizationMetadata()
+        {
+            return _resourceCostProcessor.GetOrganizationMetadata();
+        }
+
     }
 }
