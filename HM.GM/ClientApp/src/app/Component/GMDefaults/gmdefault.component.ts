@@ -210,6 +210,11 @@ export class GMdefaultComponent implements OnInit {
     console.log("Form Submitted!");
 
   };
+
+  private financial(x: number): number {
+    return parseInt(Number.parseFloat(x.toString()).toFixed(2));
+  }
+
   public Save() {
     var localdata = new LocalDataSource(this.gridData);
     var objList = new Array<GMCalculationParams>();
@@ -230,12 +235,13 @@ export class GMdefaultComponent implements OnInit {
           this.TotalGMPercentage = this.TotalGMPercentage + this.gridData[i].TotalGMInPercentage;
           this.TotalBilling = this.TotalBilling + this.gridData[i].TotalBilling;
           this.TotalOnSiteCost = this.TotalOnSiteCost + this.gridData[i].OnsiteCost;
-          this.gridData[i].TotalBilling = parseFloat(this.gridData[i].TotalBilling).toFixed(2);
-          this.gridData[i].MonthLoadingWithContengency = parseFloat(this.gridData[i].MonthLoadingWithContengency).toFixed(2);
-          this.gridData[i].OnsiteCost = parseFloat(this.gridData[i].OnsiteCost).toFixed(2);
-          this.gridData[i].TotalGMInPercentage = parseFloat(this.gridData[i].TotalGMInPercentage).toFixed(0);
+
+          this.gridData[i].TotalBilling = this.financial(this.gridData[i].TotalBilling); //parseFloat(this.gridData[i].TotalBilling.toString()).toFixed(2);
+          this.gridData[i].MonthLoadingWithContengency = this.financial(this.gridData[i].MonthLoadingWithContengency);
+          this.gridData[i].OnsiteCost = this.financial(this.gridData[i].OnsiteCost);
+          this.gridData[i].TotalGMInPercentage = this.financial(this.gridData[i].TotalGMInPercentage);
         }
-        this.TotalGMPercentage = this.TotalGMPercentage / this.gridData.length ;
+        this.TotalGMPercentage = this.TotalGMPercentage / this.gridData.length;
         this.source = new LocalDataSource(data.GMCalculationParams);
       }
     );
@@ -243,13 +249,13 @@ export class GMdefaultComponent implements OnInit {
   }
 
   public tableToExcel(table: any, name: any) {
-    var uri = 'data:application/vnd.ms-excel;base64,'
-      , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
-      , base64 = function (s) { return window.btoa(unescape(encodeURIComponent(s))) }
-      , format = function (s, c) { return s.replace(/{(\w+)}/g, function (m, p) { return c[p]; }) }
-    if (!table.nodeType) table = document.getElementById(table)
-    var ctx = { worksheet: name || 'Worksheet', table: table.innerHTML }
-    window.location.href = uri + base64(format(template, ctx))
+    //var uri = 'data:application/vnd.ms-excel;base64,'
+    //  , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
+    //  , base64 = function (s) { return window.btoa(unescape(encodeURIComponent(s))) }
+    //  , format = function (s, c) { return s.replace(/{(\w+)}/g, function (m, p) { return c[p]; }) }
+    //if (!table.nodeType) table = document.getElementById(table)
+    //var ctx = { worksheet: name || 'Worksheet', table: table.innerHTML }
+    //window.location.href = uri + base64(format(template, ctx))
   }
   public rowKeys(row: any): Array<string> {
     return Object.keys(row);
