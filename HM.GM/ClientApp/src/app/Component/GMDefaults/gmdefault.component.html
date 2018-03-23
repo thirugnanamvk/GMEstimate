@@ -1,6 +1,6 @@
 
 <div class="container">
-  <div class="row">
+  <!--<div class="row">
     <div class="gmtable">
       <ng2-smart-table [settings]="settings" [source]="gridData" *ngIf="complete;" (mode)="external" (create)="onCreateConfirm($event)"></ng2-smart-table>
       <div class="row">
@@ -10,8 +10,56 @@
         <div class="col-md-1"><span class="text-center">{{TotalGMPercentage | number : '1.2-2'}}</span></div>
       </div>
     </div>
+  </div>-->
+  <div class="row">
+    <div style="padding-bottom: 20px">
+      <button type="button" class="btn btn-success" (click)="addFieldValue(i)">Add Row</button>
+    </div>
+    <table class="table table-responsive">
+      <thead>
+        <tr>
+          <th>Location<span class="text-danger">*</span></th>
+          <th>Practice<span class="text-danger">*</span></th>
+          <th>Skill<span class="text-danger">*</span></th>
+          <th>Competency<span class="text-danger">*</span></th>
+          <th>% Loading<span class="text-danger">*</span></th>
+          <th>Rate Card/Hr<span class="text-danger">*</span></th>
+          <th>Weeks(Actual Loading)<span class="text-danger">*</span></th>
+          <!--<th>OnsitePerdim</th>-->
+          <th>Month Loading + Contengency</th>
+          <th>Total Billing</th>
+          <th>Onsite Cost</th>
+          <th>Total GM%</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let field of gridData; let i = index">
+          <td><input (keyup)="validate()" [(ngModel)]="field.Location" class="form-control" type="text" auto-complete [source]="location" name="{{field.Location}}" /></td>
+          <td><input (keyup)="validate()" [(ngModel)]="field.Practice" class="form-control" type="text" auto-complete [source]="orgmetadata.Practices" name="{{field.Practice}}" /></td>
+          <td><input (keyup)="validate()" [(ngModel)]="field.Skill" class="form-control" type="text" auto-complete [source]="orgmetadata.Skills" name="{{field.Skill}}" /> </td>
+          <td><input (keyup)="validate()" [(ngModel)]="field.Competency" class="form-control" type="text" auto-complete [source]="orgmetadata.Competencies" name="{{field.Competency}}" /> </td>
+          <td><input (keyup)="validate()" [(ngModel)]="field.PercentageLoading" class="form-control" max="100" min="0" type="number" name="{{field.PercentageLoading}}" /> </td>
+          <td><input (keyup)="validate()" [(ngModel)]="field.RatePerHour" class="form-control" type="number" min="0" name="{{field.RatePerHour}}" /> </td>
+          <td><input (keyup)="validate()" [(ngModel)]="field.WeeksActualLoading" class="form-control" min="0" type="number" name="{{field.WeeksActualLoading}}" /> </td>
+          <!--<td><input [(ngModel)]="field.OnsitePerdim" class="form-control" type="number" name="{{field.OnsitePerdim}}" disabled="false" /> </td>-->
+          <td><input [(ngModel)]="field.MonthLoadingWithContengency" class="form-control" min="0" type="number" name="{{field.MonthLoadingWithContengency}}" disabled="false" /> </td>
+          <td><input [(ngModel)]="field.TotalBilling" class="form-control" type="number" min="0" name="{{field.TotalBilling}}" disabled="false" /> </td>
+          <td><input [(ngModel)]="field.OnsiteCost" class="form-control" type="number" min="0" name="{{field.OnsiteCost}}" /> </td>
+          <td><input [(ngModel)]="field.TotalGMInPercentage" class="form-control" min="0" type="number" name="{{field.TotalGMInPercentage}}" disabled="false" /> </td>
+          <td><button type ="button"  class="btn btn-danger" (click)="deleteFieldValue(i)"><span class ="glyphicon glyphicon-trash"></span></button>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="8"></td>
+          <td><span class="text-right">{{TotalBilling | number : '1.2-2'}}</span></td>
+          <td><span class="text-right">{{TotalOnSiteCost | number : '1.2-2'}}</span></td>
+          <td><span class="text-right">{{TotalGMPercentage | number : '1.2-2'}}</span></td>
+          <td></td>
+        </tr>
+      <tbody>
+    </table>
   </div>
-  <div>&nbsp;</div>
   <div class="sub-container">
     <div class="row">
       <form #f="ngForm" (ngSubmit)="onDefaultSubmit()">
@@ -66,8 +114,8 @@
     </div>
   </div>
   <div class="row">
-    <button type="button" class="btn btn-success" (click)="Save()">Calculate GM</button>
-    <button type="button" class="btn btn-info" (click)="tableToExcel('gridTable', 'GM Table')">Export To Excel</button>
+    <button type="button" class="btn btn-success" [disabled]="savedisabled" (click)="Save()"><span class ="glyphicon glyphicon-hourglass"></span>Calculate GM</button>
+    <button type="button" class="btn btn-info" [disabled]="!enableExport" (click)="tableToExcel('gridTable', 'GM Table')"><span class ="glyphicon glyphicon-download-alt"></span> Export To Excel</button>
   </div>
   <div class="row" id="gridTable" [hidden]="true">
     <table>

@@ -183,7 +183,7 @@ namespace HM.GM.DAL.Repository
 
         private List<string> GetAllSkills()
         {
-            var query = "Select DISTINCT Skill from tbl_ResourceCost";
+            var query = "Select DISTINCT Skill from tbl_ResourceCost order by Skill";
             var connectionString = _configuration.GetConnectionString("DefaultConnection");
             var skillList = new List<string>();
             using (var connection = new MySqlConnection(connectionString))
@@ -206,7 +206,7 @@ namespace HM.GM.DAL.Repository
 
         private List<string> GetAllCompetency()
         {
-            var query = "Select DISTINCT Competency from tbl_ResourceCost";
+            var query = "Select DISTINCT Competency from tbl_ResourceCost order by Competency";
             var connectionString = _configuration.GetConnectionString("DefaultConnection");
             var competencyList = new List<string>();
             using (var connection = new MySqlConnection(connectionString))
@@ -229,7 +229,7 @@ namespace HM.GM.DAL.Repository
 
         private List<string> GetAllPractice()
         {
-            var query = "Select DISTINCT Practice from tbl_ResourceCost";
+            var query = "Select DISTINCT Practice from tbl_ResourceCost order by Practice";
             var connectionString = _configuration.GetConnectionString("DefaultConnection");
             var practiceList = new List<string>();
             using (var connection = new MySqlConnection(connectionString))

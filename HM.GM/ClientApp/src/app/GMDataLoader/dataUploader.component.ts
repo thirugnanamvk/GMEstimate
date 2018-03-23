@@ -5,7 +5,7 @@ import { Ng2SmartTableModule, LocalDataSource } from 'ng2-smart-table';
 import { ResourceCostDetailVM } from '../Model/ResourceCostDetailVM';
 import { ResourceCostDetail } from '../Model/ResourceCostDetail';
 import { HttpClient } from '@angular/common/http';
-import { Uploadservice } from '../app-service/upload-data.service'
+import { Uploadservice, AlertService } from '../app-service';
 
 @Component({
   selector: 'dataUploader',
@@ -42,11 +42,15 @@ export class DataUploaderComponent {
 
   source: LocalDataSource;
 
-  constructor(private http: HttpClient, private _uploadservice: Uploadservice) {
+  constructor(private http: HttpClient, private _uploadservice: Uploadservice, private alertService: AlertService) {
     this.source = new LocalDataSource(this.gridData);
-    
   }
-
+  success(trp: string) {
+    this.alertService.success(trp);
+  }
+  error(trp: string) {
+    this.alertService.error(trp);
+  }
   incomingfile(event: any) {
     this.file = event.target.files[0];
   }
@@ -77,7 +81,8 @@ export class DataUploaderComponent {
       objList.push(new ResourceCostDetail(this.gridData[i]));
     }
     this._uploadservice.UploadData(objList);
-    
     this.isdisabled = false;
+    alert("Data Uploaded Successfully");
+    this.alertService.success("Data Uploaded Successfully");
   }
 }

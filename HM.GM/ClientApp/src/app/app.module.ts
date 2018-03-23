@@ -1,17 +1,18 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
+
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
 import { DataUploaderComponent } from './GMDataLoader/dataUploader.component';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
-import { Uploadservice, GmdefaultsService } from './app-service';
-import { GMdefaultComponent } from './Component';
+import { Uploadservice, GmdefaultsService, AlertService } from './app-service';
+import { GMdefaultComponent ,AlertComponent } from './Component';
 import { GmcalculatorComponent } from './gmcalculator/gmcalculator.component';
-
+import { NguiAutoCompleteModule } from '@ngui/auto-complete';
 
 @NgModule({
   declarations: [
@@ -20,12 +21,15 @@ import { GmcalculatorComponent } from './gmcalculator/gmcalculator.component';
     HomeComponent,
     DataUploaderComponent,
     GMdefaultComponent,
-    GmcalculatorComponent
+    GmcalculatorComponent,
+    AlertComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
+    NguiAutoCompleteModule,
     FormsModule,
+    ReactiveFormsModule,
     Ng2SmartTableModule,
     RouterModule.forRoot([
       { path: 'gmcalculator', component: GmcalculatorComponent, pathMatch: 'full' },
@@ -35,7 +39,8 @@ import { GmcalculatorComponent } from './gmcalculator/gmcalculator.component';
   ],
   providers: [
     Uploadservice,
-    GmdefaultsService
+    GmdefaultsService,
+    AlertService
   ],
   bootstrap: [AppComponent]
 })

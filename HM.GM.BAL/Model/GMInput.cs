@@ -9,5 +9,7 @@ namespace HM.GM.BAL.Model
         public List<GMCalculationParams> GMCalculationParams { get; set; }
 
         public GMDefaults GMDefaults { get; set; }
+
+        public string ErrorMessage { get; set; }
     }
 }
