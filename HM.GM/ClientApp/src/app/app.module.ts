@@ -13,6 +13,9 @@ import { Uploadservice, GmdefaultsService, AlertService } from './app-service';
 import { GMdefaultComponent ,AlertComponent } from './Component';
 import { GmcalculatorComponent } from './gmcalculator/gmcalculator.component';
 import { NguiAutoCompleteModule } from '@ngui/auto-complete';
+import { ToastModule } from 'ng2-toastr/ng2-toastr';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
 
 @NgModule({
   declarations: [
@@ -31,6 +34,9 @@ import { NguiAutoCompleteModule } from '@ngui/auto-complete';
     FormsModule,
     ReactiveFormsModule,
     Ng2SmartTableModule,
+    BrowserAnimationsModule,
+    ToastModule.forRoot(),
+    Ng4LoadingSpinnerModule.forRoot(),
     RouterModule.forRoot([
       { path: 'gmcalculator', component: GmcalculatorComponent, pathMatch: 'full' },
       { path: 'dataUploader', component: DataUploaderComponent },
