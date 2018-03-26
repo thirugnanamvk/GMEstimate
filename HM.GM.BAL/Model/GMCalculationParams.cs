@@ -11,20 +11,22 @@ namespace HM.GM.BAL.Model
 
         public string Competency { get; set; }
 
-        public int PercentageLoading { get; set; }
+        public double PercentageLoading { get; set; }
 
         public double RatePerHour { get; set; }
 
-        public int WeeksActualLoading { get; set; }
+        public double WeeksActualLoading { get; set; }
 
-        public int OnsitePerdim { get; set; }
+        public double OnsitePerdim { get; set; }
 
-        public int OnsiteCost { get; set; }
+        public double OnsiteCost { get; set; }
 
         public double MonthLoadingWithContengency { get; set; }
 
         public double TotalBilling { get; set; }
 
         public double TotalGMInPercentage { get; set; }
+
+        public double TotalCost { get; set; }
     }
 }

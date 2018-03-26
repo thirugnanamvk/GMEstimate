@@ -27,4 +27,5 @@ export class GMCalculationParams {
   MonthLoadingWithContengency: number;
   TotalBilling: number;
   TotalGMInPercentage: number;
+  TotalCost: number;
 }

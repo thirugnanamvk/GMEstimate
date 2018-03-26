@@ -2,7 +2,6 @@ import { Component, ViewContainerRef  } from '@angular/core';
 import * as XLSX from 'ts-xlsx';
 import { BehaviorSubject } from 'rxjs';
 import { Ng2SmartTableModule, LocalDataSource } from 'ng2-smart-table';
-import { ResourceCostDetailVM } from '../Model/ResourceCostDetailVM';
 import { ResourceCostDetail } from '../Model/ResourceCostDetail';
 import { HttpClient } from '@angular/common/http';
 import { Uploadservice, AlertService } from '../app-service';
@@ -17,7 +16,7 @@ import { error } from 'protractor';
 export class DataUploaderComponent {
   arrayBuffer: any;
   public isdisabled: boolean = false;
-  gridData: ResourceCostDetailVM[];
+  gridData: ResourceCostDetail[];
   file: File;
 
   settings = {
@@ -28,16 +27,16 @@ export class DataUploaderComponent {
       Practice: {
         title: 'Practice'
       },
-      Skillset: {
+      Skill: {
         title: 'Skillset'
       },
       Competency: {
         title: 'Competency'
       },
-      OnsitePerHour: {
+      OnsiteCost: {
         title: 'USDHrOnsite'
       },
-      OffshorePerHour: {
+      OffshoreCost: {
         title: 'USDHrOffshore'
       }
     }
@@ -87,7 +86,7 @@ export class DataUploaderComponent {
     this.spinnerService.show();
     var objList = new Array<ResourceCostDetail>();
     for (var i = 0; i < this.gridData.length; i++) {
-      objList.push(new ResourceCostDetail(this.gridData[i]));
+      objList.push(this.gridData[i]);
     }
     this._uploadservice
       .UploadData(objList)

@@ -6,14 +6,14 @@ import { GMDefaultModel, ResourceCostDetail, OrgMetaData, GMCalculationParams, G
 
 @Injectable()
 export class GmdefaultsService {
-  private _postsURL = "api/GMEstimation";
+  private _url = "api/GMEstimation";
 
   constructor(private http: Http) {
   }
 
   getGMDefaults(): Observable<GMDefaultModel> {
     return this.http
-      .get(this._postsURL + "/GMDefaults")
+      .get(this._url + "/GMDefaults")
       .map((response: Response) => {
         return <GMDefaultModel>response.json();
       })
@@ -21,7 +21,7 @@ export class GmdefaultsService {
   }
   getResourceCostDetails(): Observable<ResourceCostDetail[]> {
     return this.http
-      .get(this._postsURL + "/GetResourceCostDetails")
+      .get(this._url )
       .map((response: Response) => {
         return <GMDefaultModel[]>response.json();
       })
@@ -30,7 +30,7 @@ export class GmdefaultsService {
 
   getOrgMetaData(): Observable<OrgMetaData> {
     return this.http
-      .get(this._postsURL + "/orgMetadata")
+      .get(this._url + "/orgMetadata")
       .map((response: Response) => {
         return <OrgMetaData>response.json();
       })
@@ -47,7 +47,7 @@ export class GmdefaultsService {
     //  this.http.post(this._postsURL + "/calculateGM", inputdata).subscribe(res => { resolve(res) })
     //});
     return this.http
-      .post(this._postsURL + "/calculateGM", inputdata).map((response: Response) => { return <GMInput>response.json(); }).catch(this.handleError);
+      .post(this._url + "/calculateGM", inputdata).map((response: Response) => { return <GMInput>response.json(); }).catch(this.handleError);
   }
 
   private handleError(error: Response) {

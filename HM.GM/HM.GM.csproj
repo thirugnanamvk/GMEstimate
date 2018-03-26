@@ -46,12 +46,10 @@
     <None Remove="ClientApp\src\app\Model\GenericList.ts" />
     <None Remove="ClientApp\src\app\Model\GMCalculationParams.ts" />
     <None Remove="ClientApp\src\app\Model\GMDefaultModel.ts" />
-    <None Remove="ClientApp\src\app\Model\GMDefaultModelVM.ts" />
     <None Remove="ClientApp\src\app\Model\GMInput.ts" />
     <None Remove="ClientApp\src\app\Model\index.ts" />
     <None Remove="ClientApp\src\app\Model\OrgMetaData.ts" />
     <None Remove="ClientApp\src\app\Model\ResourceCostDetail.ts" />
-    <None Remove="ClientApp\src\app\Model\ResourceCostDetailVM.ts" />
     <None Remove="ClientApp\src\app\Model\ResourceCostModel.ts" />
     <None Remove="ClientApp\src\app\nav-menu\nav-menu.component.ts" />
     <None Remove="ClientApp\src\environments\environment.prod.ts" />
@@ -88,12 +86,10 @@
     <TypeScriptCompile Include="ClientApp\src\app\Model\GenericList.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\Model\GMCalculationParams.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\Model\GMDefaultModel.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\Model\GMDefaultModelVM.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\Model\GMInput.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\Model\index.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\Model\OrgMetaData.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\Model\ResourceCostDetail.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\Model\ResourceCostDetailVM.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\Model\ResourceCostModel.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\nav-menu\nav-menu.component.ts" />
     <TypeScriptCompile Include="ClientApp\src\environments\environment.prod.ts" />

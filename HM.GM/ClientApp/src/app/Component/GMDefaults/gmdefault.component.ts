@@ -21,6 +21,7 @@ export class GMdefaultComponent implements OnInit {
   public TotalGMPercentage: number = 0
   public TotalBilling: number = 0
   public TotalOnSiteCost: number = 0
+  public TotalCost: number = 0;
   public gmMasterData: ResourceCostDetail[];
   public orgmetadata: OrgMetaData;
   public complete: boolean = false;
@@ -49,7 +50,6 @@ export class GMdefaultComponent implements OnInit {
       .subscribe(
       (defaults) => {
         this.gmdefaults = defaults;
-        //const data = defaults;
       }
       );
     this.service
@@ -60,9 +60,11 @@ export class GMdefaultComponent implements OnInit {
       }
       );
   }
+
   public validate(): boolean {
     for (var i = 0; i < this.gridData.length; i++) {
-      if ((this.gridData[i].Location == null || this.gridData[i].Location.trim() == '') || this.gridData[i].Practice == null || this.gridData[i].Skill == null || this.gridData[i].Competency == null || this.gridData[i].PercentageLoading <= 0 || this.gridData[i].RatePerHour <= 0 || this.gridData[i].WeeksActualLoading <= 0) {
+      if (( this.gridData[i].Location == null || this.gridData[i].Location.trim() == '') || this.gridData[i].Practice == null || this.gridData[i].Skill == null ||
+            this.gridData[i].Competency == null || this.gridData[i].PercentageLoading <= 0 || this.gridData[i].RatePerHour < 0 || this.gridData[i].WeeksActualLoading <= 0) {
         this.savedisabled = true;
         return false;
       }
@@ -116,11 +118,20 @@ export class GMdefaultComponent implements OnInit {
     this.TotalGMPercentage = 0;
     this.TotalBilling = 0;
     this.TotalOnSiteCost = 0;
+    this.TotalCost = 0;
     for (var i = 0; i < this.gridData.length; i++) {
       this.TotalGMPercentage = this.TotalGMPercentage + this.gridData[i].TotalGMInPercentage;
       this.TotalBilling = this.TotalBilling + this.gridData[i].TotalBilling;
       this.TotalOnSiteCost = this.TotalOnSiteCost + this.gridData[i].OnsiteCost;
+      this.TotalCost = this.TotalCost + this.gridData[i].TotalCost;
     }
-    this.TotalGMPercentage = this.TotalGMPercentage / this.gridData.length;
+    this.TotalGMPercentage = ((this.TotalBilling - this.TotalCost) / this.TotalBilling)*100;
   }
+
+  public clearall() {
+    this.newAttribute = new GMCalculationParams("", "", "", "", undefined, undefined, undefined, undefined, 0, 0, undefined, undefined);
+    this.gridData = [];
+    this.calculateTotal();
+    this.enableExport = false;
+  } 
 }

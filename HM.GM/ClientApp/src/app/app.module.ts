@@ -40,7 +40,7 @@ import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
     RouterModule.forRoot([
       { path: 'gmcalculator', component: GmcalculatorComponent, pathMatch: 'full' },
       { path: 'dataUploader', component: DataUploaderComponent },
-      //{ path: 'gmcalculator', component: GmcalculatorComponent }
+      { path: '', component: GmcalculatorComponent }
     ])
   ],
   providers: [

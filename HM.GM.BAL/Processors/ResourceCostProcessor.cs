@@ -51,9 +51,10 @@ namespace HM.GM.BAL.Processors
                         var weeksWithContengency = param.WeeksActualLoading + (param.WeeksActualLoading * (gmDefaults.Contengency / 100));
                         param.MonthLoadingWithContengency = (param.WeeksActualLoading * gmDefaults.DaysPerWeek / gmDefaults.DaysPerMonth) + (param.WeeksActualLoading * gmDefaults.DaysPerWeek / gmDefaults.DaysPerMonth) * (gmDefaults.Contengency / 100);
                         param.TotalBilling = Math.Round((param.MonthLoadingWithContengency * monthlyRate) + param.OnsitePerdim, 2);
-                        var totalCost = (costPerMonth * param.MonthLoadingWithContengency) + param.OnsiteCost;
-                        param.TotalGMInPercentage = Math.Round(((param.TotalBilling - totalCost) / param.TotalBilling) * 100, 2);
+                        param.TotalCost = (costPerMonth * param.MonthLoadingWithContengency) + param.OnsiteCost;
+                        param.TotalGMInPercentage = Math.Round(((param.TotalBilling - param.TotalCost) / param.TotalBilling) * 100, 2);
                         gmInput.ErrorMessage = "";
+                        param.MonthLoadingWithContengency = Math.Round(param.MonthLoadingWithContengency,2);
                     }
                     else
                     {
