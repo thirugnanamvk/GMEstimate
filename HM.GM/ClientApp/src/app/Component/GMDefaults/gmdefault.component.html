@@ -15,7 +15,9 @@
   <div class="row">
     <div>
       <button type="button" class="btn btn-success pull-left" (click)="addFieldValue(i)">Add Row</button>
-      <button type="button" class="btn btn-info pull-right" [disabled]="!enableExport" (click)="tableToExcel('gridTable', 'GM Table')"><i class ="glyphicon glyphicon-refresh"></i> Export To Excel</button>
+      <button type="button" class="btn btn-success pull-right" [disabled]="savedisabled" (click)="Save()"><i class ="glyphicon glyphicon-hourglass"></i>Calculate GM</button>
+      <button type="button" class="btn btn-danger pull-right" [disabled]="!enableExport" (click)="clearall()"><i class ="glyphicon glyphicon-refresh"></i> Reset</button>
+      <button type="button" class="btn btn-info pull-right" [disabled]="!enableExport" (click)="tableToExcel('gridTable', 'defaultTable', 'GM Table')"><i class ="glyphicon glyphicon-refresh"></i> Export To Excel</button>
     </div>
     <br />
     <br />
@@ -46,10 +48,9 @@
           <td><input (keyup)="validate()" [(ngModel)]="field.Practice" class="form-control" type="text" auto-complete [source]="orgmetadata.Practices" name="{{field.Practice}}" /></td>
           <td><input (keyup)="validate()" [(ngModel)]="field.Skill" class="form-control" type="text" auto-complete [source]="orgmetadata.Skills" name="{{field.Skill}}" /> </td>
           <td><input (keyup)="validate()" [(ngModel)]="field.Competency" class="form-control" type="text" auto-complete [source]="orgmetadata.Competencies" name="{{field.Competency}}" /> </td>
-          <td><input (keyup)="validate()" [(ngModel)]="field.PercentageLoading" class="form-control" max="100" min="0" type="number" name="{{field.PercentageLoading}}" /> </td>
-          <td><input (keyup)="validate()" [(ngModel)]="field.RatePerHour" class="form-control" type="number" min="0" name="{{field.RatePerHour}}" /> </td>
-          <td><input (keyup)="validate()" [(ngModel)]="field.WeeksActualLoading" class="form-control" min="0" type="number" name="{{field.WeeksActualLoading}}" /> </td>
-          <!--<td><input [(ngModel)]="field.OnsitePerdim" class="form-control" type="number" name="{{field.OnsitePerdim}}" disabled="false" /> </td>-->
+          <td><input (keyup)="validate()" (click)="validate()" [(ngModel)]="field.PercentageLoading" class="form-control" max="100" min="0" type="number" name="{{field.PercentageLoading}}" /> </td>
+          <td><input (keyup)="validate()" (click)="validate()" [(ngModel)]="field.RatePerHour" class="form-control" type="number" min="0" name="{{field.RatePerHour}}" /> </td>
+          <td><input (keyup)="validate()" (click)="validate()" [(ngModel)]="field.WeeksActualLoading" class="form-control" min="0" type="number" name="{{field.WeeksActualLoading}}" /> </td>
           <td><input [(ngModel)]="field.MonthLoadingWithContengency" class="form-control" min="0" type="number" name="{{field.MonthLoadingWithContengency}}" disabled="false" /> </td>
           <td><input [(ngModel)]="field.TotalBilling" class="form-control" type="number" min="0" name="{{field.TotalBilling}}" disabled="false" /> </td>
           <td><input [(ngModel)]="field.OnsiteCost" class="form-control" type="number" min="0" name="{{field.OnsiteCost}}" /> </td>
@@ -59,7 +60,7 @@
           <td colspan="9"></td>
           <td><span class="text-right font-size-12">{{TotalBilling | number : '1.2-2'}}</span></td>
           <td><span class="text-right font-size-12">{{TotalOnSiteCost | number : '1.2-2'}}</span></td>
-          <td><span class="text-right font-size-12" [ngClass]="TotalGMPercentage < 60 ? 'label label-danger' : 'label label-success'" >{{TotalGMPercentage | number : '1.2-2'}}</span></td>
+          <td><span class="text-right font-size-12" [ngClass]="TotalGMPercentage < 60 ? 'label label-danger' : 'label label-success'">{{TotalGMPercentage | number : '1.2-2'}}</span></td>
         </tr>
       <tbody>
     </table>
@@ -113,20 +114,90 @@
       </form>
     </div>
   </div>
-  <div class="row">
-    <button type="button" class="btn btn-success" [disabled]="savedisabled" (click)="Save()"><i class ="glyphicon glyphicon-hourglass"></i>Calculate GM</button>
-    <button type="button" class="btn btn-danger" [disabled]="!enableExport" (click)="clearall()"><i class ="glyphicon glyphicon-refresh"></i> Reset</button>
-  </div>
+
   <div class="row" id="gridTable" [hidden]="true">
-    <table>
+    <table class="table table-responsive" style="border:solid  .5pt #000">
       <thead>
-        <tr>
-          <th *ngFor="let head of rowKeys(excelData[0])">{{head}}</th>
+        <tr style="background:#eee; border:solid  .5pt #000">
+          <th>Location<span class="text-danger">*</span></th>
+          <th>Practice<span class="text-danger">*</span></th>
+          <th>Skill<span class="text-danger">*</span></th>
+          <th>Competency<span class="text-danger">*</span></th>
+          <th>% Loading<span class="text-danger">*</span></th>
+          <th>Rate Card/Hr<span class="text-danger">*</span></th>
+          <th>Weeks(Actual Loading)<span class="text-danger">*</span></th>
+          <th>Month Loading + Contengency</th>
+          <th>Total Billing</th>
+          <th>Onsite Cost</th>
+          <th>Total GM%</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let row of excelData">
-          <td *ngFor="let data of rowKeys(row)">{{row[data]}}</td>
+        <tr style="border:solid  .5pt #000" *ngFor="let field of gridData; let i = index">
+          <td>{{field.Location}}</td>
+          <td>{{field.Practice}}</td>
+          <td>{{field.Skill}}</td>
+          <td>{{field.Competency}}</td>
+          <td>{{field.PercentageLoading}}</td>
+          <td>{{field.RatePerHour}}</td>
+          <td>{{field.WeeksActualLoading}}</td>
+          <td>{{field.MonthLoadingWithContengency}}</td>
+          <td>{{field.TotalBilling}}</td>
+          <td>{{field.OnsiteCost}}</td>
+          <td>{{field.TotalGMInPercentage}}</td>
+        </tr>
+        <tr><td colspan="11">&nbsp;</td></tr>
+        <tr>
+          <td colspan="8"></td>
+          <td style="border:solid  .5pt #000; background:#000; color:white;"><span>{{TotalBilling | number : '1.2-2'}}</span></td>
+          <td style="border:solid  .5pt #000; background:#000; color:white;"><span>{{TotalOnSiteCost | number : '1.2-2'}}</span></td>
+          <td style="border:solid  .5pt #000; background:#000; color:white;"><span>{{TotalGMPercentage | number : '1.2-2'}}%</span></td>
+        </tr>
+      <tbody>
+    </table>
+    <div>&nbsp;</div>
+    <table class="table" style="border:solid  .5pt #000">
+      <thead>
+        <tr style="background:#000; color:white;font-weight:bold;">
+          <th colspan="2"><b>Avergae Billing Rate</b></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="text-left">Contengency</td>
+          <td class="text-center">
+            {{gmdefaults.Contengency}}
+          </td>
+        </tr>
+        <tr>
+          <td class="text-left">Number of hours per day</td>
+          <td class="text-center">
+            {{gmdefaults.HoursPerDay}}
+          </td>
+        </tr>
+        <tr>
+          <td class="text-left">Number of days in a week </td>
+          <td class="text-center">
+            {{gmdefaults.DaysPerWeek}}
+          </td>
+        </tr>
+        <tr>
+          <td class="text-left">Number of days per month</td>
+          <td class="text-center">
+            {{gmdefaults.DaysPerMonth}}
+          </td>
+        </tr>
+        <tr>
+          <td class="text-left">Number of weeks per month</td>
+          <td class="text-center">
+            {{gmdefaults.WeeksPerMonth}}
+          </td>
+        </tr>
+        <tr>
+          <td class="text-left">$ Converstion to INR</td>
+          <td class="text-center">
+            {{gmdefaults.DollarValueInINR}}
+          </td>
         </tr>
       </tbody>
     </table>

@@ -63,13 +63,16 @@ export class GMdefaultComponent implements OnInit {
 
   public validate(): boolean {
     for (var i = 0; i < this.gridData.length; i++) {
-      if (( this.gridData[i].Location == null || this.gridData[i].Location.trim() == '') || this.gridData[i].Practice == null || this.gridData[i].Skill == null ||
-            this.gridData[i].Competency == null || this.gridData[i].PercentageLoading <= 0 || this.gridData[i].RatePerHour < 0 || this.gridData[i].WeeksActualLoading <= 0) {
-        this.savedisabled = true;
+      if ((this.gridData[i].Location) && this.gridData[i].Practice && this.gridData[i].Skill &&
+        this.gridData[i].Competency
+        && (this.gridData[i].PercentageLoading && this.gridData[i].PercentageLoading > 0)
+        && (this.gridData[i].RatePerHour && this.gridData[i].RatePerHour >= 0)
+        && (this.gridData[i].WeeksActualLoading && this.gridData[i].WeeksActualLoading >= 0)) {
+        this.savedisabled = false;
         return false;
       }
     }
-    this.savedisabled = false;
+    this.savedisabled = true;
   }
 
   public Save() {
@@ -133,5 +136,6 @@ export class GMdefaultComponent implements OnInit {
     this.gridData = [];
     this.calculateTotal();
     this.enableExport = false;
+    this.savedisabled = true;
   } 
 }

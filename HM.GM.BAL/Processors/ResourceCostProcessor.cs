@@ -59,6 +59,7 @@ namespace HM.GM.BAL.Processors
                     else
                     {
                         gmInput.ErrorMessage = $"No resource avaliable in {param.Practice} with {param.Skill} skill of {param.Competency} Competency";
+                        break;
                     }
                 }
             }
