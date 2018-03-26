@@ -6,6 +6,7 @@ import { GmdefaultsService } from '../../app-service';
 import { GMDefaultModel, ResourceCostDetail, OrgMetaData, ResourceCostModel, GMCalculationParams } from "../../Model";
 import { NgModule } from '@angular/core';
 declare function unescape(s: string): string;
+import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 
 @Component({
   selector: 'app-gmdefault',
@@ -27,7 +28,7 @@ export class GMdefaultComponent implements OnInit {
   public gridData: Array<GMCalculationParams> = [];
   public location = ["OnSite", "OffShore"];
   public savedisabled: boolean = true;
-  constructor(protected service: GmdefaultsService) {
+  constructor(protected service: GmdefaultsService, protected _spinner: Ng4LoadingSpinnerService) {
     this.gridData = [];
   }
   public newAttribute: GMCalculationParams = new GMCalculationParams("", "", "", "", undefined, undefined, undefined, undefined, 0, 0, undefined, undefined );
@@ -71,6 +72,7 @@ export class GMdefaultComponent implements OnInit {
   }
 
   public Save() {
+    this._spinner.show();
     var localdata = new LocalDataSource(this.gridData);
     var objList = new Array<GMCalculationParams>();
     for (var i = 0; i < this.gridData.length; i++) {
@@ -89,10 +91,12 @@ export class GMdefaultComponent implements OnInit {
           this.gridData = data.GMCalculationParams;
           this.calculateTotal();
           this.enableExport = true;
+          this._spinner.hide();
         }
         else {
           alert(data.ErrorMessage);
           this.savedisabled = true;
+          this._spinner.hide();
         }
       }
     );
@@ -100,6 +104,7 @@ export class GMdefaultComponent implements OnInit {
   }
 
   public tableToExcel(table: any, name: any) {
+    this._spinner.show();
     var uri = 'data:application/vnd.ms-excel;base64,'
       , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
       , base64 = function (s) { return window.btoa(unescape(encodeURIComponent(s))) }
@@ -107,12 +112,14 @@ export class GMdefaultComponent implements OnInit {
     if (!table.nodeType) table = document.getElementById(table)
     var ctx = { worksheet: name || 'Worksheet', table: table.innerHTML }
     window.location.href = uri + base64(format(template, ctx))
+    this._spinner.hide();
   }
   public rowKeys(row: any): Array<string> {
     return Object.keys(row);
   }
 
   private calculateTotal() {
+    this._spinner.show();
     this.TotalGMPercentage = 0;
     this.TotalBilling = 0;
     this.TotalOnSiteCost = 0;
@@ -122,5 +129,6 @@ export class GMdefaultComponent implements OnInit {
       this.TotalOnSiteCost = this.TotalOnSiteCost + this.gridData[i].OnsiteCost;
     }
     this.TotalGMPercentage = this.TotalGMPercentage / this.gridData.length;
+    this._spinner.hide();
   }
 }
