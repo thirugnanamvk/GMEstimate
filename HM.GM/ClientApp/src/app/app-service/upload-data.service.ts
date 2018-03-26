@@ -10,7 +10,7 @@ export class Uploadservice {
   constructor(private http: Http) { }
 
   UploadData(data: Array<ResourceCostDetail>): Observable<any> {
-    return this.http.post(this.url, data).map((response: Response) => { return response.json(); }).catch(this.handleError);
+    return this.http.post(this.url, data).map((response: Response) => { return response; }).catch(this.handleError);
   }
 
   private handleError(error: Response) {

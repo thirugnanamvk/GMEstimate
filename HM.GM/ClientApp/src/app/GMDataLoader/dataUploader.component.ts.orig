@@ -32,19 +32,27 @@ export class DataUploaderComponent  {
       Competency: {
         title: 'Competency'
       },
+<<<<<<< HEAD
       OnsiteCost: {
+        title: 'USDHrOnsite'
+      },
+      OffshoreCost: {
+        title: 'USDHrOffshore'
+=======
+      OnsitePerHour: {
         title: 'USDHrOnsite',
         valuePrepareFunction: function (c, r) {
           if (!c) return 0;
           else return c;
         }
       },
-      OffshoreCost: {
+      OffshorePerHour: {
         title: 'USDHrOffshore',
         valuePrepareFunction: function (c, r) {
           if (!c) return 0;
           else return c;
         }
+>>>>>>> notification_changes
       }
     }
   };
