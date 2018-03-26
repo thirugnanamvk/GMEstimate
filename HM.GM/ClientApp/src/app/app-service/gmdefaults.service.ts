@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http, Response, Headers, RequestOptions } from "@angular/http";
 import { Observable } from "rxjs/Observable";
 import "rxjs/Rx";
-import { GMDefaultModel, ResourceCostDetail, OrgMetaData, GMCalculationParams, GMInput } from "../Model";
+import { GMDefaultModel, ResourceCostDetail, OrgMetaData, GMCalculationParams, GMInput, UserAccess } from "../Model";
 
 @Injectable()
 export class GmdefaultsService {
@@ -38,14 +38,9 @@ export class GmdefaultsService {
   }
 
   UploadData(data: Array<GMCalculationParams>, gmdefault: GMDefaultModel): Observable<GMInput> {
-    console.log(data);
     var inputdata = new GMInput();
     inputdata.GMCalculationParams = data;
     inputdata.GMDefaults = gmdefault;
-    console.log(inputdata);
-    //return new Promise((resolve, reject) => {
-    //  this.http.post(this._postsURL + "/calculateGM", inputdata).subscribe(res => { resolve(res) })
-    //});
     return this.http
       .post(this._url + "/calculateGM", inputdata).map((response: Response) => { return <GMInput>response.json(); }).catch(this.handleError);
   }
@@ -53,4 +48,9 @@ export class GmdefaultsService {
   private handleError(error: Response) {
     return Observable.throw(error.statusText);
   }
+
+  getUseraccess(name: string): Observable<UserAccess> {
+    return this.http
+      .post(this._url + "/getuseraccess", name).map((response: Response) => { return <UserAccess>response.json(); }).catch(this.handleError);
+  } 
 }

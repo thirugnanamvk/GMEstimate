@@ -6,3 +6,4 @@ export * from './OrgMetaData';
 export * from './ResourceCostModel';
 export * from './GMInput';
 export * from './alert';
+export * from './useraccess';

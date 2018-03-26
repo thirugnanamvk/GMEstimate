@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using HM.GM.BAL.Processors;
 using HM.GM.DAL.Repository;
+using Microsoft.AspNetCore.Server.HttpSys;
 
 namespace HM.GM
 {
@@ -26,6 +27,8 @@ namespace HM.GM
                 options.SerializerSettings.ContractResolver
                     = new Newtonsoft.Json.Serialization.DefaultContractResolver();
             });
+
+            services.AddAuthentication(HttpSysDefaults.AuthenticationScheme);
 
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>

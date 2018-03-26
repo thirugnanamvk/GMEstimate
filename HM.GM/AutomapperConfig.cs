@@ -20,6 +20,9 @@ namespace HM.GM
                 cfg.CreateMap<BALModel.OrganizationMetadata, DALModel.OrganizationMetadata>();
                 cfg.CreateMap<DALModel.OrganizationMetadata, BALModel.OrganizationMetadata>();
 
+                cfg.CreateMap<BALModel.UserAccess, DALModel.UserAccess>();
+                cfg.CreateMap<DALModel.UserAccess, BALModel.UserAccess>();
+
             });
         }
     }

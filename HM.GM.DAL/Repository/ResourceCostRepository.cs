@@ -98,7 +98,6 @@ namespace HM.GM.DAL.Repository
                 catch (Exception ex)
                 {
                     transaction.Rollback();
-                    throw ex;
                 }
                 finally
                 {
@@ -182,6 +181,31 @@ namespace HM.GM.DAL.Repository
             };
         }
 
+        public UserAccess GetUserAccess(string username)
+        {
+            var query = "select Id, UserName, IsAdmin from tbl_useraccess where UserName=@username ;";
+            var connectionString = _configuration.GetConnectionString("DefaultConnection");
+            UserAccess userAccess = new UserAccess();
+            using (var connection = new MySqlConnection(connectionString))
+            {
+                using (var cmd = new MySqlCommand(query, connection))
+                {
+                    connection.Open();
+                    cmd.CommandType = CommandType.Text;
+                    cmd.Parameters.Add(new MySqlParameter() { ParameterName = "@username", Value = username });
+                    var reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        userAccess = new UserAccess();
+                        userAccess.Id = (Convert.ToInt32(reader["Id"])); ;
+                        userAccess.UserName = reader["UserName"].ToString();
+                        userAccess.IsAdmin = Convert.ToBoolean(reader["IsAdmin"]);
+                    }
+                }
+            }
+            return userAccess;
+        }
+
         private List<string> GetAllSkills()
         {
             var query = "Select DISTINCT Skill from tbl_ResourceCost order by Skill";
@@ -250,6 +274,5 @@ namespace HM.GM.DAL.Repository
             }
             return practiceList;
         }
-
     }
 }

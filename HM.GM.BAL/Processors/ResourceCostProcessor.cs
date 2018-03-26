@@ -54,7 +54,7 @@ namespace HM.GM.BAL.Processors
                         param.TotalCost = (costPerMonth * param.MonthLoadingWithContengency) + param.OnsiteCost;
                         param.TotalGMInPercentage = Math.Round(((param.TotalBilling - param.TotalCost) / param.TotalBilling) * 100, 2);
                         gmInput.ErrorMessage = "";
-                        param.MonthLoadingWithContengency = Math.Round(param.MonthLoadingWithContengency,2);
+                        param.MonthLoadingWithContengency = Math.Round(param.MonthLoadingWithContengency, 2);
                     }
                     else
                     {
@@ -76,5 +76,10 @@ namespace HM.GM.BAL.Processors
             return Mapper.Map<BALModel.OrganizationMetadata>(orgMetadata);
         }
 
+        public BALModel.UserAccess GetUserAccess(string username)
+        {
+            var userData = _resourceCostRepository.GetUserAccess(username);
+            return Mapper.Map<BALModel.UserAccess>(userData);
+        }
     }
 }

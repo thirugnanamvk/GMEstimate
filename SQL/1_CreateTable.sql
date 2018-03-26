@@ -44,3 +44,11 @@ CREATE TABLE tbl_ResourceCost (
  );
  
  INSERT INTO tbl_GM_Defaults (Contengency, HoursInDay ,DaysInWeek, DaysInMonth, WeeksInMonth, DollarValueInINR, IsActive) VALUES ('15','8.75','5','21','4.2','65', True);
+ 
+ CREATE TABLE tbl_useraccess (
+	Id int(11) NOT NULL AUTO_INCREMENT,
+	Username varchar(100) NOT NULL,
+	IsAdmin tinyint(4) NOT NULL,
+	PRIMARY KEY (`id`),
+	UNIQUE KEY `username_UNIQUE` (`username`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8; 
