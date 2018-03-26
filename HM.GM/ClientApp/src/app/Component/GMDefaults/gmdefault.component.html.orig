@@ -54,9 +54,12 @@
           <td><input [(ngModel)]="field.TotalBilling" class="form-control" type="number" min="0" name="{{field.TotalBilling}}" disabled="false" /> </td>
           <td><input [(ngModel)]="field.OnsiteCost" class="form-control" type="number" min="0" name="{{field.OnsiteCost}}" /> </td>
           <td><input [(ngModel)]="field.TotalGMInPercentage" class="form-control" min="0" type="number" name="{{field.TotalGMInPercentage}}" disabled="false" /> </td>
+<<<<<<< HEAD
+=======
           <td>
             <button type ="button"  class="btn btn-danger" (click)="deleteFieldValue(i)"><span class ="glyphicon glyphicon-trash"></span></button>
           </td>
+>>>>>>> notification_changes
         </tr>
         <tr>
           <td colspan="9"></td>
@@ -67,11 +70,15 @@
       <tbody>
     </table>
   </div>
+<<<<<<< HEAD
+  <div>
+=======
   <div class="animationload">
     <ng4-loading-spinner [threshold]="01" [template]="" [loadingText]="'Please wait...'" [zIndex]="9999"></ng4-loading-spinner>
     <div class="osahanloading"></div>
   </div>
-  <div>
+  <div class="sub-container">
+>>>>>>> notification_changes
     <div class="row">
       <form #f="ngForm" (ngSubmit)="onDefaultSubmit()">
         <table class="table">

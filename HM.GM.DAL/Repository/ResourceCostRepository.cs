@@ -98,6 +98,7 @@ namespace HM.GM.DAL.Repository
                 catch (Exception ex)
                 {
                     transaction.Rollback();
+                    throw ex;
                 }
                 finally
                 {

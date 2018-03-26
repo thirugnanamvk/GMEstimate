@@ -33,16 +33,19 @@
   <ItemGroup>
     <None Remove="ClientApp\e2e\app.e2e-spec.ts" />
     <None Remove="ClientApp\e2e\app.po.ts" />
+    <None Remove="ClientApp\src\app\app-service\alert.service.ts" />
     <None Remove="ClientApp\src\app\app-service\gmdefaults.service.ts" />
     <None Remove="ClientApp\src\app\app-service\index.ts" />
     <None Remove="ClientApp\src\app\app-service\upload-data.service.ts" />
     <None Remove="ClientApp\src\app\app.component.ts" />
     <None Remove="ClientApp\src\app\app.module.ts" />
+    <None Remove="ClientApp\src\app\Component\alert\alert.component.ts" />
     <None Remove="ClientApp\src\app\Component\GMDefaults\gmdefault.component.ts" />
     <None Remove="ClientApp\src\app\Component\index.ts" />
     <None Remove="ClientApp\src\app\gmcalculator\gmcalculator.component.ts" />
     <None Remove="ClientApp\src\app\GMDataLoader\dataUploader.component.ts" />
     <None Remove="ClientApp\src\app\home\home.component.ts" />
+    <None Remove="ClientApp\src\app\Model\alert.ts" />
     <None Remove="ClientApp\src\app\Model\GenericList.ts" />
     <None Remove="ClientApp\src\app\Model\GMCalculationParams.ts" />
     <None Remove="ClientApp\src\app\Model\GMDefaultModel.ts" />
@@ -73,16 +76,19 @@
   <ItemGroup>
     <TypeScriptCompile Include="ClientApp\e2e\app.e2e-spec.ts" />
     <TypeScriptCompile Include="ClientApp\e2e\app.po.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\app-service\alert.service.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\app-service\gmdefaults.service.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\app-service\index.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\app-service\upload-data.service.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\app.component.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\app.module.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\Component\alert\alert.component.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\Component\GMDefaults\gmdefault.component.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\Component\index.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\gmcalculator\gmcalculator.component.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\GMDataLoader\dataUploader.component.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\home\home.component.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\Model\alert.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\Model\GenericList.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\Model\GMCalculationParams.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\Model\GMDefaultModel.ts" />
