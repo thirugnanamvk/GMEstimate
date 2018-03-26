@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using HM.GM.BAL.Model;
 using HM.GM.BAL.Processors;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HM.GM.Controllers
 {
@@ -31,7 +32,7 @@ namespace HM.GM.Controllers
             return _resourceCostProcessor.GetGMDefaults();
         }
 
-
+        [Authorize(Roles = "Domain Admin")]
         [HttpPost]
         public void Post([FromBody]List<ResourceCostDetail> costDetails)
         {
@@ -52,5 +53,11 @@ namespace HM.GM.Controllers
             return _resourceCostProcessor.GetOrganizationMetadata();
         }
 
+        [HttpPost]
+        [Route("getuseraccess")]
+        public UserAccess GetUserAccess(string username)
+        {
+            return _resourceCostProcessor.GetUserAccess(username);
+        }
     }
 }
