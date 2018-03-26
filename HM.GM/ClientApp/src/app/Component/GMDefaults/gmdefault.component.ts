@@ -132,8 +132,9 @@ export class GMdefaultComponent implements OnInit {
       this.TotalOnSiteCost = this.TotalOnSiteCost + this.gridData[i].OnsiteCost;
       this.TotalCost = this.TotalCost + this.gridData[i].TotalCost;
     }
-    this.TotalGMPercentage = ((this.TotalBilling - this.TotalCost) / this.TotalBilling)*100;
+    this.TotalGMPercentage = ((this.TotalBilling - this.TotalCost) / this.TotalBilling) * 100;
     this._spinner.hide();
+  }
 
   public clearall() {
     this.newAttribute = new GMCalculationParams("", "", "", "", undefined, undefined, undefined, undefined, 0, 0, undefined, undefined);
