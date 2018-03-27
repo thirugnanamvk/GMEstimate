@@ -49,8 +49,8 @@ export class GmdefaultsService {
     return Observable.throw(error.statusText);
   }
 
-  getUseraccess(name: string): Observable<UserAccess> {
+   getUseraccess(userAccess: UserAccess): Observable<UserAccess> {
     return this.http
-      .post(this._url + "/getuseraccess", name).map((response: Response) => { return <UserAccess>response.json(); }).catch(this.handleError);
+      .post(this._url + "/getUserAccess", userAccess).map((response: Response) => { return <UserAccess>response.json(); }).catch(this.handleError);
   } 
 }

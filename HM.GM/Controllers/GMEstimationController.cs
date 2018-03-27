@@ -54,10 +54,10 @@ namespace HM.GM.Controllers
         }
 
         [HttpPost]
-        [Route("getuseraccess")]
-        public UserAccess GetUserAccess(string username)
+        [Route("getUserAccess")]
+        public UserAccess GetUserAccess([FromBody] UserAccess user)
         {
-            return _resourceCostProcessor.GetUserAccess(username);
+            return _resourceCostProcessor.GetUserAccess(user.UserName);
         }
     }
 }
