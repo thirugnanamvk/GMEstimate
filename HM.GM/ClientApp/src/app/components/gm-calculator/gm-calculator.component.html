@@ -36,7 +36,7 @@
           <td><input (keyup)="validate()" [(ngModel)]="field.Practice" class="form-control" type="text" auto-complete [source]="orgmetadata.Practices" name="{{field.Practice}}" /></td>
           <td><input (keyup)="validate()" [(ngModel)]="field.Skill" class="form-control" type="text" auto-complete [source]="orgmetadata.Skills" name="{{field.Skill}}" /> </td>
           <td><input (keyup)="validate()" [(ngModel)]="field.Competency" class="form-control" type="text" auto-complete [source]="orgmetadata.Competencies" name="{{field.Competency}}" /> </td>
-          <td><input (keyup)="validate()" (click)="validate()" [(ngModel)]="field.PercentageLoading" class="form-control" max="100" min="0" type="number" name="{{field.PercentageLoading}}" /> </td>
+          <td><input (keyup)="validate()" (click)="validate()" [(ngModel)]="field.PercentageLoading" class="form-control" max="100" min="0" style="width:70px" type="number" name="{{field.PercentageLoading}}" /> </td>
           <td><input (keyup)="validate()" (click)="validate()" [(ngModel)]="field.RatePerHour" class="form-control" type="number" min="0" name="{{field.RatePerHour}}" /> </td>
           <td><input (keyup)="validate()" (click)="validate()" [(ngModel)]="field.WeeksActualLoading" class="form-control" min="0" type="number" name="{{field.WeeksActualLoading}}" /> </td>
           <td><input [(ngModel)]="field.MonthLoadingWithContengency" class="form-control" min="0" type="number" name="{{field.MonthLoadingWithContengency}}" disabled="false" /> </td>
