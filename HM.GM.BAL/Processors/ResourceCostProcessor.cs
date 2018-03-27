@@ -41,17 +41,17 @@ namespace HM.GM.BAL.Processors
                 var gmDefaults = gmInput.GMDefaults;
                 foreach (var param in gmInput.GMCalculationParams)
                 {
-                    var monthlyRate = param.RatePerHour * gmDefaults.DaysPerMonth * gmDefaults.HoursPerDay;
                     var costDetails = _resourceCostRepository.GetCostForResource(param.Location, param.Practice, param.Skill, param.Competency);
                     if (costDetails.OffshoreCost != 0 || costDetails.OnsiteCost != 0)
                     {
+                        var monthlyRate = param.RatePerHour * gmDefaults.DaysPerMonth * gmDefaults.HoursPerDay;
                         var costPerHour = param.Location.Equals("ONSITE", StringComparison.InvariantCultureIgnoreCase) ? costDetails.OnsiteCost : costDetails.OffshoreCost;
                         var costPerMonth = costPerHour * gmDefaults.DaysPerMonth * gmDefaults.HoursPerDay;
                         var monthsActualLoading = (param.WeeksActualLoading * gmDefaults.DaysPerWeek / gmDefaults.DaysPerMonth);
                         var weeksWithContengency = param.WeeksActualLoading + (param.WeeksActualLoading * (gmDefaults.Contengency / 100));
                         param.MonthLoadingWithContengency = (param.WeeksActualLoading * gmDefaults.DaysPerWeek / gmDefaults.DaysPerMonth) + (param.WeeksActualLoading * gmDefaults.DaysPerWeek / gmDefaults.DaysPerMonth) * (gmDefaults.Contengency / 100);
-                        param.TotalBilling = Math.Round((param.MonthLoadingWithContengency * monthlyRate) + param.OnsitePerdim, 2);
-                        param.TotalCost = (costPerMonth * param.MonthLoadingWithContengency) + param.OnsiteCost;
+                        param.TotalBilling = Math.Round(((param.MonthLoadingWithContengency * monthlyRate) + param.OnsitePerdim) * (param.PercentageLoading / 100), 2);
+                        param.TotalCost = ((costPerMonth * param.MonthLoadingWithContengency) * (param.PercentageLoading / 100)) + param.OnsiteCost;
                         param.TotalGMInPercentage = Math.Round(((param.TotalBilling - param.TotalCost) / param.TotalBilling) * 100, 2);
                         gmInput.ErrorMessage = "";
                         param.MonthLoadingWithContengency = Math.Round(param.MonthLoadingWithContengency, 2);
