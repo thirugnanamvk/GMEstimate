@@ -4,13 +4,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS, HttpClient } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
-import { NavMenuComponent } from './nav-menu/nav-menu.component';
-import { HomeComponent } from './home/home.component';
-import { DataUploaderComponent } from './GMDataLoader/dataUploader.component';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
-import { Uploadservice, GmdefaultsService, AlertService, WinAuthInterceptor, AuthenticationService } from './app-service';
-import { GMdefaultComponent, AlertComponent } from './Component';
-import { GmcalculatorComponent } from './gmcalculator/gmcalculator.component';
+import * as services from './services';
+import * as components from './components';
 import { NguiAutoCompleteModule } from '@ngui/auto-complete';
 import { ToastModule } from 'ng2-toastr/ng2-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -19,12 +15,11 @@ import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
 @NgModule({
   declarations: [
     AppComponent,
-    NavMenuComponent,
-    HomeComponent,
-    DataUploaderComponent,
-    GMdefaultComponent,
-    GmcalculatorComponent,
-    AlertComponent
+    components.NavMenuComponent,
+    components.DataUploaderComponent,
+    components.AlertComponent,
+    components.GmCalculatorContainerComponent,
+    components.GmCalculatorComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -37,21 +32,21 @@ import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
     ToastModule.forRoot(),
     Ng4LoadingSpinnerModule.forRoot(),
     RouterModule.forRoot([
-      { path: 'gmcalculator', component: GmcalculatorComponent, pathMatch: 'full' },
-      { path: 'dataUploader', component: DataUploaderComponent },
-      { path: '', component: GmcalculatorComponent }
+      { path: 'gmcalculator', component: components.GmCalculatorContainerComponent, pathMatch: 'full' },
+      { path: 'dataUploader', component: components.DataUploaderComponent },
+      { path: '', component: components.GmCalculatorContainerComponent }
     ])
   ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
-      useClass: WinAuthInterceptor,
+      useClass: services.WinauthInterceptorService,
       multi: true
     },
-    Uploadservice,
-    GmdefaultsService,
-    AlertService,
-    AuthenticationService
+    services.UploadDataService,
+    services.GmCalculatorService,
+    services.AlertService,
+    services.AuthenticationService
   ],
   bootstrap: [AppComponent]
 })

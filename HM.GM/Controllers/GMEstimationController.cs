@@ -32,7 +32,6 @@ namespace HM.GM.Controllers
             return _resourceCostProcessor.GetGMDefaults();
         }
 
-        [Authorize(Roles = "Domain Admin")]
         [HttpPost]
         public void Post([FromBody]List<ResourceCostDetail> costDetails)
         {
