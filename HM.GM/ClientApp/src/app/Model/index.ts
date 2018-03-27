@@ -1,4 +1,3 @@
-export * from './GenericList';
 export * from './GMDefaultModel';
 export * from './ResourceCostDetail';
 export * from './GMCalculationParams';

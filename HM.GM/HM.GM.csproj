@@ -46,7 +46,6 @@
     <None Remove="ClientApp\src\app\GMDataLoader\dataUploader.component.ts" />
     <None Remove="ClientApp\src\app\home\home.component.ts" />
     <None Remove="ClientApp\src\app\Model\alert.ts" />
-    <None Remove="ClientApp\src\app\Model\GenericList.ts" />
     <None Remove="ClientApp\src\app\Model\GMCalculationParams.ts" />
     <None Remove="ClientApp\src\app\Model\GMDefaultModel.ts" />
     <None Remove="ClientApp\src\app\Model\GMInput.ts" />
@@ -89,7 +88,6 @@
     <TypeScriptCompile Include="ClientApp\src\app\GMDataLoader\dataUploader.component.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\home\home.component.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\Model\Alert.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\Model\GenericList.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\Model\GMCalculationParams.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\Model\GMDefaultModel.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\Model\GMInput.ts" />
