@@ -9,7 +9,7 @@ import { UserAccess } from '../Model';
 })
 export class NavMenuComponent {
   isExpanded = false;
-  public isUploadEnable = true;
+  public isUploadEnable = false;
   public currentuser: models.UserAccess;
   collapse() {
     this.isExpanded = false;
