@@ -11,6 +11,7 @@ import { NguiAutoCompleteModule } from '@ngui/auto-complete';
 import { ToastModule } from 'ng2-toastr/ng2-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
+import { GmFilterPipe } from './components/gm-filter/gm-filter.pipe';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
     components.DataUploaderComponent,
     components.AlertComponent,
     components.GmCalculatorContainerComponent,
-    components.GmCalculatorComponent
+    components.GmCalculatorComponent,
+    GmFilterPipe
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -46,7 +48,8 @@ import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
     services.UploadDataService,
     services.GmCalculatorService,
     services.AlertService,
-    services.AuthenticationService
+    services.AuthenticationService,
+    services.PagerService
   ],
   bootstrap: [AppComponent]
 })

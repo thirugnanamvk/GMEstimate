@@ -4,9 +4,10 @@ import { BehaviorSubject } from 'rxjs';
 import { Ng2SmartTableModule, LocalDataSource } from 'ng2-smart-table';
 import { ResourceCostDetail } from '../../model';
 import { HttpClient } from '@angular/common/http';
-import { UploadDataService, AlertService } from '../../services';
+import { UploadDataService, AlertService, PagerService } from '../../services';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 import { error } from 'protractor';
+import { GmFilterPipe } from '../gm-filter/gm-filter.pipe';
 
 @Component({
   selector: 'app-data-uploader',
@@ -21,40 +22,44 @@ export class DataUploaderComponent {
   public file: File;
   public source: LocalDataSource;
   public uploadFile: boolean = true;
+  public newAttribute: ResourceCostDetail = new ResourceCostDetail("", "", "", 0, 0);
+  //public settings = {
+  //  actions: false,
+  //  columns: {
 
-  public settings = {
-    actions: false,
-    columns: {
+  //    Practice: {
+  //      title: 'Practice'
+  //    },
+  //    Skill: {
+  //      title: 'Skillset'
+  //    },
+  //    Competency: {
+  //      title: 'Competency'
+  //    },
+  //    OnsiteCost: {
+  //      title: 'USDHrOnsite',
+  //      valuePrepareFunction: function (c, r) {
+  //        if (!c) return 0;
+  //        else return c;
+  //      }
+  //    },
+  //    OffshoreCost: {
+  //      title: 'USDHrOffshore',
+  //      valuePrepareFunction: function (c, r) {
+  //        if (!c) return 0;
+  //        else return c;
+  //      }
+  //    }
+  //  }
+  //};
 
-      Practice: {
-        title: 'Practice'
-      },
-      Skill: {
-        title: 'Skillset'
-      },
-      Competency: {
-        title: 'Competency'
-      },
-      OnsiteCost: {
-        title: 'USDHrOnsite',
-        valuePrepareFunction: function (c, r) {
-          if (!c) return 0;
-          else return c;
-        }
-      },
-      OffshoreCost: {
-        title: 'USDHrOffshore',
-        valuePrepareFunction: function (c, r) {
-          if (!c) return 0;
-          else return c;
-        }
-      }
-    }
-  };
-
-  constructor(private http: HttpClient, private _uploadservice: UploadDataService, private alertService: AlertService, vcr: ViewContainerRef, private _spinner: Ng4LoadingSpinnerService) {
-    this.source = new LocalDataSource(this.gridData);
+  constructor(private http: HttpClient, private _uploadservice: UploadDataService, private alertService: AlertService, vcr: ViewContainerRef, private _spinner: Ng4LoadingSpinnerService, private pagerService: PagerService) {
+    //this.source = new LocalDataSource(this.gridData);
+    this.gridData =[] ;
   }
+
+  
+
 
   public incomingfile(event: any) {
     this.file = event.target.files[0];
@@ -100,7 +105,7 @@ export class DataUploaderComponent {
       var worksheet = workbook.Sheets['Cost Sheet Data - Master'];
 
       this.gridData = XLSX.utils.sheet_to_json(worksheet);
-
+     // this.setPage(1);
       this._spinner.hide();
     }
     fileReader.readAsArrayBuffer(this.file);
@@ -127,5 +132,15 @@ export class DataUploaderComponent {
     );
     this.isDisabled = false;
     this.uploadFile = true;
+  }
+
+  public addFieldValue() {
+    this.gridData.unshift(this.newAttribute)
+    this.newAttribute = new ResourceCostDetail("", "", "", 0,0);
+    this.isDisabled = true;
+  }
+
+  public deleteFieldValue(index) {
+    this.gridData.splice(index, 1);
   }
 }
