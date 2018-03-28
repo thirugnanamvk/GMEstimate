@@ -73,9 +73,9 @@ export class GmCalculatorComponent implements OnInit {
         this.gridData[i].Competency
         && (this.gridData[i].PercentageLoading && this.gridData[i].PercentageLoading > 0)
         && (this.gridData[i].RatePerHour && this.gridData[i].RatePerHour >= 0)
-        && (this.gridData[i].OnsitePerdim && this.gridData[i].OnsitePerdim >= 0)
-        && (this.gridData[i].OnsiteCost && this.gridData[i].OnsiteCost >= 0)
-        && (this.gridData[i].NoOfMinds && this.gridData[i].NoOfMinds >= 1)
+        && (this.gridData[i].OnsitePerdim >= 0)
+        && (this.gridData[i].OnsiteCost >= 0)
+        && (this.gridData[i].NoOfMinds >= 1)
         && (this.gridData[i].WeeksActualLoading && this.gridData[i].WeeksActualLoading >= 0)) {
         this.savedisabled = false;
         return false;
