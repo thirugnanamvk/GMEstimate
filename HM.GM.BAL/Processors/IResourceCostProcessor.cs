@@ -9,7 +9,7 @@ namespace HM.GM.BAL.Processors
 
         List<ResourceCostDetail> GetResourceCostDetails();
 
-        GMDefaults GetGMDefaults();
+        Dictionary<string, string> GetGMDefaults();
 
         GMInput CalculateGM(GMInput gMInput);
 

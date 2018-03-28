@@ -14,9 +14,6 @@ namespace HM.GM
                   .ForMember(m => m.CreatedBy, opt => opt.MapFrom(src => src.CreatedBy != null ? src.CreatedBy : "Admin")); //TODO: Get logedIn user name once loging is implemented.
                 cfg.CreateMap<DALModel.ResourceCostDetail, BALModel.ResourceCostDetail>();
 
-                cfg.CreateMap<BALModel.GMDefaults, DALModel.GMDefaults>();
-                cfg.CreateMap<DALModel.GMDefaults, BALModel.GMDefaults>();
-
                 cfg.CreateMap<BALModel.OrganizationMetadata, DALModel.OrganizationMetadata>();
                 cfg.CreateMap<DALModel.OrganizationMetadata, BALModel.OrganizationMetadata>();
 

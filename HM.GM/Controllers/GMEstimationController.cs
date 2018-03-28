@@ -27,7 +27,7 @@ namespace HM.GM.Controllers
 
         [HttpGet]
         [Route("GMDefaults")]
-        public GMDefaults GetGMDefaults()
+        public Dictionary<string, string> GetGMDefaults()
         {
             return _resourceCostProcessor.GetGMDefaults();
         }

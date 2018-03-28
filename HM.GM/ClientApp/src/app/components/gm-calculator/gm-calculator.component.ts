@@ -14,6 +14,7 @@ import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 export class GmCalculatorComponent implements OnInit {
 
   public gmdefaults: GMDefaultModel = new GMDefaultModel();
+  
   public enableExport: boolean = false;
   public excelData: any = [{}];
   public TotalGMPercentage: number = 0
@@ -26,15 +27,15 @@ export class GmCalculatorComponent implements OnInit {
   public gridData: Array<GMCalculationParams> = [];
   public location = ["OnSite", "OffShore"];
   public savedisabled: boolean = true;
-  public newAttribute: GMCalculationParams = new GMCalculationParams("", "", "", "", undefined, undefined, undefined, undefined, 0, 0, undefined, undefined);
-
+  public newAttribute: GMCalculationParams = this.GetDefaultGMCalculationParams();
+  public currency: string = "$";
   constructor(protected service: GmCalculatorService, protected _spinner: Ng4LoadingSpinnerService) {
     this.gridData = [];
   }
 
   public addFieldValue() {
     this.gridData.push(this.newAttribute)
-    this.newAttribute = new GMCalculationParams("", "", "", "", undefined, undefined, undefined, undefined, 0, 0, undefined, undefined);
+    this.newAttribute = this.GetDefaultGMCalculationParams();
     this.savedisabled = true;
   }
 
@@ -44,20 +45,26 @@ export class GmCalculatorComponent implements OnInit {
   }
 
   ngOnInit() {
+    this._spinner.show();
     this.service
       .getGMDefaults()
       .subscribe(
-      (defaults) => {
-        this.gmdefaults = defaults;
+      (success) => {
+        this.gmdefaults = success;
+        this.service
+          .getOrgMetaData()
+          .subscribe(
+          (defaults) => {
+            this.orgmetadata = defaults;
+            this._spinner.hide();
+          },
+          (error) => {
+           this._spinner.hide();
+          }
+          );
       }
       );
-    this.service
-      .getOrgMetaData()
-      .subscribe(
-      (defaults) => {
-        this.orgmetadata = defaults;
-      }
-      );
+    
   }
 
   public validate(): boolean {
@@ -66,6 +73,9 @@ export class GmCalculatorComponent implements OnInit {
         this.gridData[i].Competency
         && (this.gridData[i].PercentageLoading && this.gridData[i].PercentageLoading > 0)
         && (this.gridData[i].RatePerHour && this.gridData[i].RatePerHour >= 0)
+        && (this.gridData[i].OnsitePerdim && this.gridData[i].OnsitePerdim >= 0)
+        && (this.gridData[i].OnsiteCost && this.gridData[i].OnsiteCost >= 0)
+        && (this.gridData[i].NoOfMinds && this.gridData[i].NoOfMinds >= 1)
         && (this.gridData[i].WeeksActualLoading && this.gridData[i].WeeksActualLoading >= 0)) {
         this.savedisabled = false;
         return false;
@@ -82,8 +92,7 @@ export class GmCalculatorComponent implements OnInit {
         this.gridData[i].Practice, this.gridData[i].Skill,
         parseFloat(this.gridData[i].PercentageLoading.toString()), parseFloat(this.gridData[i].RatePerHour.toString()),
         parseFloat(this.gridData[i].WeeksActualLoading.toString()), 0, parseFloat(this.gridData[i].OnsiteCost.toString()),
-        parseFloat(this.gridData[i].MonthLoadingWithContengency.toString()), 0,
-        0));
+        parseFloat(this.gridData[i].MonthLoadingWithContengency.toString()), 0, 0, parseInt(this.gridData[i].NoOfMinds.toString())));
     }
 
     this.service.UploadData(objList, this.gmdefaults).subscribe
@@ -106,7 +115,7 @@ export class GmCalculatorComponent implements OnInit {
     );
   }
 
-  public tableToExcel(table: any, name: any) {
+  public exportToExcel(table: any, name: any) {
     this._spinner.show();
     var uri = 'data:application/vnd.ms-excel;base64,'
       , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
@@ -123,7 +132,7 @@ export class GmCalculatorComponent implements OnInit {
   }
 
   public resetAll() {
-    this.newAttribute = new GMCalculationParams("", "", "", "", undefined, undefined, undefined, undefined, 0, 0, undefined, undefined);
+    this.newAttribute = this.GetDefaultGMCalculationParams();
     this.gridData = [];
     this.calculateTotal();
     this.enableExport = false;
@@ -146,4 +155,7 @@ export class GmCalculatorComponent implements OnInit {
     this._spinner.hide();
   }
 
+  private GetDefaultGMCalculationParams(): GMCalculationParams {
+    return new GMCalculationParams("", "", "", "", undefined, undefined, undefined, 0, 0, 0, undefined, undefined, 1);
+  }
 }

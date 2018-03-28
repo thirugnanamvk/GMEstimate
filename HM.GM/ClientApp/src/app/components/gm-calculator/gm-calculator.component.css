@@ -10,7 +10,10 @@ body {
   background: gray;
   color: white;
 }
-
+.th-inverse {
+  background: gray;
+  color: white;
+}
 .sub-container {
   padding: 0 70% 0 0;
 }
@@ -67,4 +70,7 @@ td, th {
 
 .completer-input {
   height: 35px;
+}
+.item-padding {
+  padding-bottom:5px;
 }

@@ -106,11 +106,11 @@ namespace HM.GM.DAL.Repository
             }
         }
 
-        public GMDefaults GetGMDefaults()
+        public Dictionary<string, string> GetGMDefaults()
         {
-            var query = "Select Contengency, DaysInMonth ,DaysInWeek, HoursInDay, WeeksInMonth, DollarValueInINR, IsActive from tbl_GM_Defaults";
+            var query = "Select PropertyName ,PropertyValue from tbl_GM_Defaults order by id";
             var connectionString = _configuration.GetConnectionString("DefaultConnection");
-            var gMDefaults = new GMDefaults();
+            var gMDefaults = new Dictionary<string, string>();
             using (var connection = new MySqlConnection(connectionString))
             {
                 using (var cmd = new MySqlCommand(query, connection))
@@ -121,15 +121,7 @@ namespace HM.GM.DAL.Repository
 
                     while (reader.Read())
                     {
-                        gMDefaults = new GMDefaults();
-
-                        gMDefaults.Contengency = Convert.ToDouble(reader["Contengency"]);
-                        gMDefaults.DaysPerMonth = Convert.ToDouble(reader["DaysInMonth"]);
-                        gMDefaults.DaysPerWeek = Convert.ToDouble(reader["DaysInWeek"]);
-                        gMDefaults.HoursPerDay = Convert.ToDouble(reader["HoursInDay"]);
-                        gMDefaults.WeeksPerMonth = Convert.ToDouble(reader["WeeksInMonth"]);
-                        gMDefaults.DollarValueInINR = Convert.ToDouble(reader["DollarValueInINR"]);
-                        gMDefaults.IsActive = Convert.ToBoolean(reader["IsActive"]);
+                        gMDefaults.Add(Convert.ToString(reader["PropertyName"]), Convert.ToString(reader["PropertyValue"]));
                     }
                 }
             }

@@ -9,7 +9,7 @@ namespace HM.GM.DAL.Repository
 
         List<ResourceCostDetail> GetResourceDetails();
 
-        GMDefaults GetGMDefaults();
+        Dictionary<string, string> GetGMDefaults();
 
         ResourceCostDetail GetCostForResource(string location, string practice, string skill, string competency);
 

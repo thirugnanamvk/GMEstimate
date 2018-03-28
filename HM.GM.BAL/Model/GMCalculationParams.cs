@@ -28,5 +28,7 @@ namespace HM.GM.BAL.Model
         public double TotalGMInPercentage { get; set; }
 
         public double TotalCost { get; set; }
+
+        public int NoOfMinds { get; set; }
     }
 }

@@ -1,14 +1,24 @@
 
 <div class="container-fluid">
-  <div class="row">
-    <div>
-      <button type="button" class="btn btn-success pull-left" (click)="addFieldValue(i)">Add Row</button>
-      <button type="button" class="btn btn-success pull-right" [disabled]="savedisabled" (click)="calculateGM()"><i class="glyphicon glyphicon-hourglass"></i>Calculate GM</button>
-      <button type="button" class="btn btn-danger pull-right" [disabled]="!enableExport" (click)="resetAll()"><i class="glyphicon glyphicon-refresh"></i> Reset</button>
-      <button type="button" class="btn btn-info pull-right" [disabled]="!enableExport" (click)="tableToExcel('gridTable', 'defaultTable', 'GM Table')"><i class="glyphicon glyphicon-refresh"></i> Export To Excel</button>
+  <div class="row item-padding">
+    <div class="col-md-1">
+      <button type="button" class="btn btn-success" (click)="addFieldValue(i)">Add Row</button>
     </div>
-    <br />
-    <br />
+    <div class="col-md-7">
+      &nbsp;
+    </div>
+    <div class="col-md-1">
+      <button type="button" class="btn btn-info" [disabled]="!enableExport" (click)="exportToExcel('gridTable', 'GM Table')"><i class ="glyphicon glyphicon-refresh"></i> Export To Excel</button>
+    </div>
+    <div class="col-md-1">
+      <button type="button" class="btn btn-danger" style="margin-left: 30px" [disabled]="!enableExport" (click)="resetAll()"><i class ="glyphicon glyphicon-refresh"></i> Reset</button>
+    </div>
+    <div class="col-md-1">
+      <button type="button" class="btn btn-success" [disabled]="savedisabled" (click)="calculateGM()"><i class ="glyphicon glyphicon-hourglass"></i>Calculate GM</button>
+    </div>
+    <div class="col-md-1"> &nbsp;</div>
+  </div>
+  <div class="row">
     <table class="table table-responsive">
       <thead>
         <tr>
@@ -17,14 +27,15 @@
           <th>Practice<span class="text-danger">*</span></th>
           <th>Skill<span class="text-danger">*</span></th>
           <th>Competency<span class="text-danger">*</span></th>
+          <th>#Minds<span class="text-danger">*</span></th>
           <th>% Loading<span class="text-danger">*</span></th>
           <th>Rate Card/Hr<span class="text-danger">*</span></th>
           <th>Weeks(Actual Loading)<span class="text-danger">*</span></th>
-          <!--<th>OnsitePerdim</th>-->
-          <th>Month Loading + Contengency</th>
-          <th>Total Billing</th>
-          <th>Onsite Cost</th>
-          <th>Total GM%</th>
+          <th>OnSite Perdim({{currency}}) </th>
+          <th>Onsite Cost({{currency}})</th>
+          <th class="th-inverse">Month Loading + Contengency</th>
+          <th class="th-inverse">Total Billing({{currency}})</th>
+          <th class="th-inverse">Total GM%</th>
         </tr>
       </thead>
       <tbody>
@@ -36,19 +47,21 @@
           <td><input (keyup)="validate()" [(ngModel)]="field.Practice" class="form-control" type="text" auto-complete [source]="orgmetadata.Practices" name="{{field.Practice}}" /></td>
           <td><input (keyup)="validate()" [(ngModel)]="field.Skill" class="form-control" type="text" auto-complete [source]="orgmetadata.Skills" name="{{field.Skill}}" /> </td>
           <td><input (keyup)="validate()" [(ngModel)]="field.Competency" class="form-control" type="text" auto-complete [source]="orgmetadata.Competencies" name="{{field.Competency}}" /> </td>
+          <td><input (keyup)="validate()" (click)="validate()" [(ngModel)]="field.NoOfMinds" class="form-control" min="1" style="width:50px" type="number" name="{{field.NoOfMinds}}" /> </td>
           <td><input (keyup)="validate()" (click)="validate()" [(ngModel)]="field.PercentageLoading" class="form-control" max="100" min="0" style="width:70px" type="number" name="{{field.PercentageLoading}}" /> </td>
           <td><input (keyup)="validate()" (click)="validate()" [(ngModel)]="field.RatePerHour" class="form-control" type="number" min="0" name="{{field.RatePerHour}}" /> </td>
           <td><input (keyup)="validate()" (click)="validate()" [(ngModel)]="field.WeeksActualLoading" class="form-control" min="0" type="number" name="{{field.WeeksActualLoading}}" /> </td>
+          <td><input (keyup)="validate()" (click)="validate()" [(ngModel)]="field.OnsitePerdim" class="form-control" type="number" min="0" name="{{field.OnsitePerdim}}" /> </td>
+          <td><input (keyup)="validate()" (click)="validate()" [(ngModel)]="field.OnsiteCost" class="form-control" type="number" min="0" name="{{field.OnsiteCost}}" /> </td>
           <td><input [(ngModel)]="field.MonthLoadingWithContengency" class="form-control" min="0" type="number" name="{{field.MonthLoadingWithContengency}}" disabled="false" /> </td>
           <td><input [(ngModel)]="field.TotalBilling" class="form-control" type="number" min="0" name="{{field.TotalBilling}}" disabled="false" /> </td>
-          <td><input [(ngModel)]="field.OnsiteCost" class="form-control" type="number" min="0" name="{{field.OnsiteCost}}" /> </td>
           <td><input [(ngModel)]="field.TotalGMInPercentage" class="form-control" min="0" type="number" name="{{field.TotalGMInPercentage}}" disabled="false" /> </td>
         </tr>
         <tr>
-          <td colspan="9"></td>
-          <td><span class="text-right font-size-12">{{TotalBilling | number : '1.2-2'}}</span></td>
-          <td><span class="text-right font-size-12">{{TotalOnSiteCost | number : '1.2-2'}}</span></td>
-          <td><span class="text-right font-size-12" [ngClass]="TotalGMPercentage < 60 ? 'label label-danger' : 'label label-success'">{{TotalGMPercentage | number : '1.2-2'}}</span></td>
+          <td colspan="11"></td>
+          <td><span class="text-right font-size-12">{{currency}} {{TotalBilling | number : '1.2-2'}}</span></td>
+          <td><span class="text-right font-size-12">{{currency}} {{TotalOnSiteCost | number : '1.2-2'}}</span></td>
+          <td><span class="text-right font-size-12" [ngClass]="TotalGMPercentage < 60 ? 'label label-danger' : 'label label-success'">{{currency}} {{TotalGMPercentage | number : '1.2-2'}}</span></td>
         </tr>
       <tbody>
     </table>
@@ -57,55 +70,55 @@
     <ng4-loading-spinner [threshold]="01" [template]="" [loadingText]="'Please wait...'" [zIndex]="9999"></ng4-loading-spinner>
     <div class="osahanloading"></div>
   </div>
-  <div>
-    <div class="row">
-      <form #f="ngForm" (ngSubmit)="onDefaultSubmit()">
-        <table class="table">
-          <thead class="thead-inverse">
-            <tr>
-              <th class="text-center">Avergae Billing Rate</th>
-              <th class="text-center">Value</th>
-              <th class="text-center">Avergae Billing Rate</th>
-              <th class="text-center">Value</th>
-              <th class="text-center">Avergae Billing Rate</th>
-              <th class="text-center">Value</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="text-left">Contengency</td>
-              <td class="text-center">
-                <input type="text" name="contengency" class="form-control" maxlength="3" required [(ngModel)]="gmdefaults.Contengency" pattern="[0-9]*" />
-              </td>
 
-              <td class="text-left">Number Of Hours Per Day</td>
-              <td class="text-center">
-                <input type="text" name="hoursPerDay" class="form-control" maxlength="3" required [(ngModel)]="gmdefaults.HoursPerDay" pattern="[0-9]*" />
-              </td>
-              <td class="text-left">Number Of Days In A Week </td>
-              <td class="text-center">
-                <input type="text" name="daysPerWeek" class="form-control" maxlength="1" required [(ngModel)]="gmdefaults.DaysPerWeek" pattern="[0-9]*" />
-              </td>
-            </tr>
-            <tr>
-              <td class="text-left">Number Of Days Per Month</td>
-              <td class="text-center">
-                <input type="text" name="daysPerMonth" class="form-control" maxlength="2" required [(ngModel)]="gmdefaults.DaysPerMonth" pattern="[0-9]*" />
-              </td>
-              <td class="text-left">Number Of Weeks Per Month</td>
-              <td class="text-center">
-                <input type="text" name="weeksPerMonth" class="form-control" maxlength="3" required [(ngModel)]="gmdefaults.WeeksPerMonth" pattern="[0-9]*" />
-              </td>
-              <td class="text-left">$ Converstion To INR</td>
-              <td class="text-center">
-                <input type="text" name="dollarValueInINR" class="form-control" maxlength="9" required [(ngModel)]="gmdefaults.DollarValueInINR" pattern="[0-9]*" />
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </form>
-    </div>
+  <div class="row">
+    <form #f="ngForm" (ngSubmit)="onDefaultSubmit()">
+      <table class="table">
+        <thead class="thead-inverse">
+          <tr>
+            <th class="text-center">Avergae Billing Rate</th>
+            <th class="text-center">Value</th>
+            <th class="text-center">Avergae Billing Rate</th>
+            <th class="text-center">Value</th>
+            <th class="text-center">Avergae Billing Rate</th>
+            <th class="text-center">Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="text-left">Contengency</td>
+            <td class="text-center">
+              <input type="text" name="contengency" class="form-control" maxlength="3" required [(ngModel)]="gmdefaults.Contengency" pattern="[0-9]*" />
+            </td>
+
+            <td class="text-left">Number Of Hours Per Day (OffShore)</td>
+            <td class="text-center">
+              <input type="text" name="hoursPerDay" class="form-control" maxlength="3" required [(ngModel)]="gmdefaults.HoursPerDayOffShore" pattern="[0-9]*" />
+            </td>
+            <td class="text-left">Number Of Days In A Week </td>
+            <td class="text-center">
+              <input type="text" name="daysPerWeek" class="form-control" maxlength="1" required [(ngModel)]="gmdefaults.DaysPerWeek" pattern="[0-9]*" />
+            </td>
+          </tr>
+          <tr>
+            <td class="text-left">Number Of Weeks Per Month</td>
+            <td class="text-center">
+              <input type="text" name="daysPerMonth" class="form-control" maxlength="2" required [(ngModel)]="gmdefaults.WeeksPerMonth" pattern="[0-9]*" />
+            </td>
+            <td class="text-left">Number Of Hours Per Day (OnSite)</td>
+            <td class="text-center">
+              <input type="text" name="weeksPerMonth" class="form-control" maxlength="3" required [(ngModel)]="gmdefaults.HoursPerDayOnSite" pattern="[0-9]*" />
+            </td>
+            <td class="text-left">$ Converstion To INR</td>
+            <td class="text-center">
+              <input type="text" name="dollarValueInINR" class="form-control" maxlength="9" required [(ngModel)]="gmdefaults.DollarValueInINR" pattern="[0-9]*" />
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </form>
   </div>
+
 
   <div class="row" id="gridTable" [hidden]="true">
     <table class="table table-responsive" style="border:solid  .5pt #000">
@@ -162,31 +175,31 @@
           </td>
         </tr>
         <tr>
-          <td class="text-left">Number Of Hours Per Day</td>
+          <td class="text-left">Number of hours per day</td>
           <td class="text-center">
             {{gmdefaults.HoursPerDay}}
           </td>
         </tr>
         <tr>
-          <td class="text-left">Number Of Days In A Week </td>
+          <td class="text-left">Number of days in a week </td>
           <td class="text-center">
             {{gmdefaults.DaysPerWeek}}
           </td>
         </tr>
         <tr>
-          <td class="text-left">Number Of Days Per Month</td>
+          <td class="text-left">Number of days per month</td>
           <td class="text-center">
             {{gmdefaults.DaysPerMonth}}
           </td>
         </tr>
         <tr>
-          <td class="text-left">Number Of Weeks Per Month</td>
+          <td class="text-left">Number of weeks per month</td>
           <td class="text-center">
             {{gmdefaults.WeeksPerMonth}}
           </td>
         </tr>
         <tr>
-          <td class="text-left">$ Converstion To INR</td>
+          <td class="text-left">$ Converstion to INR</td>
           <td class="text-center">
             {{gmdefaults.DollarValueInINR}}
           </td>
@@ -194,4 +207,5 @@
       </tbody>
     </table>
   </div>
+
 </div>

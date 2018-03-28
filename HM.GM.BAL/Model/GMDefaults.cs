@@ -5,7 +5,9 @@ namespace HM.GM.BAL.Model
     {
         public double Contengency { get; set; }
 
-        public double HoursPerDay { get; set; }
+        public double HoursPerDayOnSite { get; set; }
+
+        public double HoursPerDayOffShore { get; set; }
 
         public double DaysPerWeek { get; set; }
 
