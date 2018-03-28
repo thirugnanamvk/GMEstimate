@@ -75,3 +75,12 @@ td, th {
   padding-bottom: 5px;
   padding-right: 20px;
 }
+.line-height-3{
+  line-height:3;
+}
+.no-padding{
+  padding:0 !important;
+}
+.page-container {
+
+}

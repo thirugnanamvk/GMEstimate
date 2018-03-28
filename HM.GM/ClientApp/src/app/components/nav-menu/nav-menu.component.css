@@ -6,7 +6,7 @@ li .glyphicon {
 li.link-active a,
 li.link-active a:hover,
 li.link-active a:focus {
-  background-color: #4189C7;
+  background-color: #0d4e44;
   color: white;
 }
 
@@ -64,10 +64,25 @@ li.link-active a:focus {
     text-overflow: ellipsis;
   }
 
+  .navbar-inverse {
+    background: linear-gradient(90deg,#1f786a,#41b94d,#b3d056);
+    color: white;
+    -moz-box-shadow: 3px 3px 5px 6px #ccc;
+    -webkit-box-shadow: 3px 3px 5px 6px #ccc;
+    box-shadow: 3px 3px 3px 1px #ccc;
+  }
+
+    .navbar-inverse .navbar-brand {
+      color: white;
+    }
+
+    .navbar-inverse .navbar-nav > li > a {
+      color: white;
+    }
+
   a.disabled {
     color: gray;
     cursor: not-allowed;
     text-decoration: underline;
-    
   }
 }
