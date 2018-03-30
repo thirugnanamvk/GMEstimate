@@ -31,7 +31,7 @@ export class GmCalculatorComponent implements OnInit {
   public currency: string = "$";
   constructor(protected service: GmCalculatorService, protected _spinner: Ng4LoadingSpinnerService) {
     this.gridData = [];
-  }
+  } 
 
   public addFieldValue() {
     this.gridData.push(this.newAttribute)

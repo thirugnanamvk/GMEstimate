@@ -58,5 +58,12 @@ namespace HM.GM.Controllers
         {
             return _resourceCostProcessor.GetUserAccess(user.UserName);
         }
+
+        [HttpGet]
+        [Route("GetCompetencyMatrix")]
+        public string GetCompetencyMatrix()
+        {
+            return _resourceCostProcessor.GetCompetencyMatrix();
+        }
     }
 }

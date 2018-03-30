@@ -2,7 +2,7 @@
 <div class="container-fluid">
   <div class="row item-padding">
     <div class="col-md-1 no-padding">
-      <button type="button" class="btn btn-success" (click)="addFieldValue(i)">Add Row</button>
+      <button type="button" class="btn btn-success" (click)="addFieldValue()">Add Row</button>
     </div>
     <div class="col-md-7">
       &nbsp;
@@ -21,21 +21,22 @@
   <div class="row">
     <table class="table table-responsive">
       <thead>
-        <tr>
+        <tr style="vertical-align:central">
           <th></th>
-          <th>Location<span class="text-danger">*</span></th>
+          <th width="6%">Location<span class="text-danger">*</span></th>
           <th>Practice<span class="text-danger">*</span></th>
           <th>Skill<span class="text-danger">*</span></th>
-          <th>Competency<span class="text-danger">*</span></th>
-          <th>#Minds<span class="text-danger">*</span></th>
+          <th width="5%">Competency<span class="text-danger">*</span></th>
+          <th width="5%">#Minds<span class="text-danger">*</span></th>
           <th>% Loading<span class="text-danger">*</span></th>
-          <th>Rate Card/Hr<span class="text-danger">*</span></th>
-          <th>Weeks(Actual Loading)<span class="text-danger">*</span></th>
-          <th>OnSite Perdim({{currency}}) </th>
-          <th>Onsite Cost({{currency}})</th>
-          <th class="th-inverse">Month Loading + Contengency</th>
-          <th class="th-inverse">Total Billing({{currency}})</th>
-          <th class="th-inverse">Total GM%</th>
+          <th width="5%">Rate Card/Hr<span class="text-danger">*</span></th>
+          <th width="5%">Weeks(Actual Loading)<span class="text-danger">*</span></th>
+          <th width="5%">OnSite  Perdim({{currency}}) </th>
+          <th width="5%">Onsite Cost({{currency}})</th>
+          <th class="th-inverse" width="5%">Total Loading</th>
+          <th class="th-inverse" width="5%">Month Loading + Contengency</th>
+          <th class="th-inverse" width="6%">Total Billing({{currency}})</th>
+          <th class="th-inverse" width="5%">GM%</th>
         </tr>
       </thead>
       <tbody>
@@ -53,15 +54,17 @@
           <td><input (keyup)="validate()" (click)="validate()" [(ngModel)]="field.WeeksActualLoading" class="form-control" min="0" type="number" name="{{field.WeeksActualLoading}}" /> </td>
           <td><input (keyup)="validate()" (click)="validate()" [(ngModel)]="field.OnsitePerdim" class="form-control" type="number" min="0" name="{{field.OnsitePerdim}}" /> </td>
           <td><input (keyup)="validate()" (click)="validate()" [(ngModel)]="field.OnsiteCost" class="form-control" type="number" min="0" name="{{field.OnsiteCost}}" /> </td>
+          <td><input [(ngModel)]="field.NoOfMinds * field.WeeksActualLoading" class="form-control" min="0" type="number" name="{{field.MonthLoadingWithContengency}}" disabled="false" /> </td>
           <td><input [(ngModel)]="field.MonthLoadingWithContengency" class="form-control" min="0" type="number" name="{{field.MonthLoadingWithContengency}}" disabled="false" /> </td>
           <td><input [(ngModel)]="field.TotalBilling" class="form-control" type="number" min="0" name="{{field.TotalBilling}}" disabled="false" /> </td>
           <td><input [(ngModel)]="field.TotalGMInPercentage" class="form-control" min="0" type="number" name="{{field.TotalGMInPercentage}}" disabled="false" /> </td>
         </tr>
         <tr>
           <td colspan="11"></td>
-          <td><span class="text-right font-size-12">{{currency}} {{TotalBilling | number : '1.2-2'}}</span></td>
           <td><span class="text-right font-size-12">{{currency}} {{TotalOnSiteCost | number : '1.2-2'}}</span></td>
-          <td><span class="text-right font-size-12" [ngClass]="TotalGMPercentage < 60 ? 'label label-danger' : 'label label-success'">{{currency}} {{TotalGMPercentage | number : '1.2-2'}}</span></td>
+          <td></td>
+          <td><span class="text-right font-size-12">{{currency}} {{TotalBilling | number : '1.2-2'}}</span></td>
+          <td><span class="text-right font-size-12" [ngClass]="TotalGMPercentage < 60 ? 'label label-danger' : 'label label-success'">{{TotalGMPercentage | number : '1.2-2'}} %</span></td>
         </tr>
       <tbody>
     </table>
@@ -72,7 +75,7 @@
   </div>
 
   <div class="row">
-    <form #f="ngForm" (ngSubmit)="onDefaultSubmit()">
+    <form #f="ngForm">
       <table class="table">
         <thead class="thead-inverse">
           <tr>
@@ -177,21 +180,21 @@
           </td>
         </tr>
         <tr>
-          <td class="text-left">Number of hours per day</td>
+          <td class="text-left">Number Of Hours Per Day (OffShore)</td>
           <td class="text-center">
-            {{gmdefaults.HoursPerDay}}
+            {{gmdefaults.HoursPerDayOffShore}}
+          </td>
+        </tr>
+        <tr>
+          <td class="text-left">Number Of Hours Per Day (OnSite)</td>
+          <td class="text-center">
+            {{gmdefaults.HoursPerDayOnSite}}
           </td>
         </tr>
         <tr>
           <td class="text-left">Number of days in a week </td>
           <td class="text-center">
             {{gmdefaults.DaysPerWeek}}
-          </td>
-        </tr>
-        <tr>
-          <td class="text-left">Number of days per month</td>
-          <td class="text-center">
-            {{gmdefaults.DaysPerMonth}}
           </td>
         </tr>
         <tr>

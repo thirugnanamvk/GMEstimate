@@ -20,7 +20,7 @@ export class DataUploaderComponent {
   public gridData: ResourceCostDetail[];
   public file: File;
   public source: LocalDataSource;
-  public uploadFile: boolean = true;
+  public uploadfile: boolean = true;
 
   public settings = {
     actions: false,
@@ -59,7 +59,7 @@ export class DataUploaderComponent {
   public incomingfile(event: any) {
     this.file = event.target.files[0];
     this.clear();
-    this.uploadFile = false;
+    this.uploadfile = false;
   }
 
   public success(message: string) {
@@ -126,6 +126,6 @@ export class DataUploaderComponent {
       }
     );
     this.isDisabled = false;
-    this.uploadFile = true;
+    this.uploadfile = true;
   }
 }

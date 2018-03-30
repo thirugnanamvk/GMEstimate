@@ -11,11 +11,11 @@ export class NavMenuComponent {
   public isExpanded = false;
   public isUploadEnable = false;
   public currentuser: models.UserAccess;
-  private authRslt: string = '';
-  private authBack: string = 'grey';
-  private postRslt: string = '';
-  private user: models.UserAccess;
-  private postBack: string = 'grey';
+  public authRslt: string = '';
+  public authBack: string = 'grey';
+  public postRslt: string = '';
+  public user: models.UserAccess;
+  public postBack: string = 'grey';
 
   constructor(private authSvc: services.AuthenticationService, protected service: services.GmCalculatorService) {
     this.testAuthentication();

@@ -60,6 +60,7 @@
     <None Remove="ClientApp\src\test.ts" />
     <None Remove="ClientApp\src\typings.d.ts" />
     <None Remove="ClientApp\tsconfig.json" />
+    <None Remove="Properties\PublishProfiles\CustomProfile.pubxml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -94,6 +95,10 @@
     <TypeScriptCompile Include="ClientApp\src\polyfills.ts" />
     <TypeScriptCompile Include="ClientApp\src\test.ts" />
     <TypeScriptCompile Include="ClientApp\src\typings.d.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Properties\PublishProfiles\" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
