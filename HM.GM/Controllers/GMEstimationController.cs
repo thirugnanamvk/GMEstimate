@@ -49,7 +49,7 @@ namespace HM.GM.Controllers
         [Route("orgMetadata")]
         public OrganizationMetadata GetOrganizationMetadata()
         {
-            return _resourceCostProcessor.GetOrganizationMetadata();
+            return null;
         }
 
         [HttpPost]

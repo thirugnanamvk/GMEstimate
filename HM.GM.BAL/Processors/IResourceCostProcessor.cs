@@ -13,8 +13,8 @@ namespace HM.GM.BAL.Processors
 
         GMInput CalculateGM(GMInput gMInput);
 
-        OrganizationMetadata GetOrganizationMetadata();
-
         UserAccess GetUserAccess(string username);
+
+        string GetCompetencyMatrix();
     }
 }

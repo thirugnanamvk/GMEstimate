@@ -5,6 +5,7 @@ using HM.GM.DAL.Model;
 using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
 using System.Data;
+using Newtonsoft.Json;
 
 namespace HM.GM.DAL.Repository
 {
@@ -163,16 +164,6 @@ namespace HM.GM.DAL.Repository
             return detail;
         }
 
-        public OrganizationMetadata GetOrganizationMetadata()
-        {
-            return new OrganizationMetadata
-            {
-                Competencies = GetAllCompetency(),
-                Practices = GetAllPractice(),
-                Skills = GetAllSkills(),
-            };
-        }
-
         public UserAccess GetUserAccess(string username)
         {
             var query = "select Id, UserName, IsAdmin from tbl_useraccess where UserName=@username ;";
@@ -197,12 +188,13 @@ namespace HM.GM.DAL.Repository
             }
             return userAccess;
         }
-
-        private List<string> GetAllSkills()
+        public string GetCompetencyMatrix()
         {
-            var query = "Select DISTINCT Skill from tbl_ResourceCost order by Skill";
+            List<ResourceGroup> rsgroup = new List<ResourceGroup>();
+            ResourceGroup rs = new ResourceGroup();
+            rs.Practice = new List<Practice>();
+            var query = "Select distinct Practice from tbl_ResourceCost order by Practice";
             var connectionString = _configuration.GetConnectionString("DefaultConnection");
-            var skillList = new List<string>();
             using (var connection = new MySqlConnection(connectionString))
             {
                 using (var cmd = new MySqlCommand(query, connection))
@@ -210,22 +202,14 @@ namespace HM.GM.DAL.Repository
                     connection.Open();
                     cmd.CommandType = CommandType.Text;
                     var reader = cmd.ExecuteReader();
-
                     while (reader.Read())
-                    {
-                        var detail = new ResourceCostDetail();
-                        skillList.Add(Convert.ToString(reader["Skill"])); ;
-                    }
+                        rs.Practice.Add(new Practice(rs.Practice.Count + 1, Convert.ToString(reader["Practice"])));
                 }
             }
-            return skillList;
-        }
-
-        private List<string> GetAllCompetency()
-        {
-            var query = "Select DISTINCT Competency from tbl_ResourceCost order by Competency";
-            var connectionString = _configuration.GetConnectionString("DefaultConnection");
-            var competencyList = new List<string>();
+            rsgroup.Add(rs);
+            rs = new ResourceGroup();
+            rs.Skills = new List<SKillCompentency>();
+            query = "select p.Practice, p.Skill, p.id from hm_gm.tbl_resourcecost p group by p.Skill,Practice order by p.Practice,p.skill";
             using (var connection = new MySqlConnection(connectionString))
             {
                 using (var cmd = new MySqlCommand(query, connection))
@@ -233,22 +217,16 @@ namespace HM.GM.DAL.Repository
                     connection.Open();
                     cmd.CommandType = CommandType.Text;
                     var reader = cmd.ExecuteReader();
-
                     while (reader.Read())
                     {
-                        var detail = new ResourceCostDetail();
-                        competencyList.Add(Convert.ToString(reader["Competency"])); ;
+                        rs.Skills.Add(new SKillCompentency(rs.Skills.Count + 1, Convert.ToString(reader["Skill"]), new Practice(rs.Skills.Count + 1, Convert.ToString(reader["Practice"]))));
                     }
                 }
+                rsgroup.Add(rs);
             }
-            return competencyList;
-        }
-
-        private List<string> GetAllPractice()
-        {
-            var query = "Select DISTINCT Practice from tbl_ResourceCost order by Practice";
-            var connectionString = _configuration.GetConnectionString("DefaultConnection");
-            var practiceList = new List<string>();
+            query = "select p.Competency, p.Skill,p.id from hm_gm.tbl_resourcecost p group by p.Competency,p.Skill order by p.Competency,p.skill";
+            rs = new ResourceGroup();
+            rs.Compentency = new List<SKillCompentency>();
             using (var connection = new MySqlConnection(connectionString))
             {
                 using (var cmd = new MySqlCommand(query, connection))
@@ -256,15 +234,21 @@ namespace HM.GM.DAL.Repository
                     connection.Open();
                     cmd.CommandType = CommandType.Text;
                     var reader = cmd.ExecuteReader();
-
                     while (reader.Read())
                     {
-                        var detail = new ResourceCostDetail();
-                        practiceList.Add(Convert.ToString(reader["Practice"])); ;
+                        rs.Compentency.Add(new SKillCompentency(rs.Compentency.Count + 1, Convert.ToString(reader["Competency"]), new Practice(rs.Compentency.Count + 1, Convert.ToString(reader["Skill"]))));
                     }
                 }
+                rsgroup.Add(rs);
             }
-            return practiceList;
+            return JsonConvert.SerializeObject(rsgroup, Formatting.None,
+                                                    new JsonSerializerSettings
+                                                    {
+                                                        NullValueHandling = NullValueHandling.Ignore
+                                                    });
+
         }
     }
+
+    
 }

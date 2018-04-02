@@ -13,8 +13,8 @@ namespace HM.GM.DAL.Repository
 
         ResourceCostDetail GetCostForResource(string location, string practice, string skill, string competency);
 
-        OrganizationMetadata GetOrganizationMetadata();
-
         UserAccess GetUserAccess(string username);
+
+        string GetCompetencyMatrix();
     }
 }

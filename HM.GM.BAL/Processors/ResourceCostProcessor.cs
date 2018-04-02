@@ -70,16 +70,15 @@ namespace HM.GM.BAL.Processors
             return gmInput;
         }
 
-        public BALModel.OrganizationMetadata GetOrganizationMetadata()
-        {
-            var orgMetadata = _resourceCostRepository.GetOrganizationMetadata();
-            return Mapper.Map<BALModel.OrganizationMetadata>(orgMetadata);
-        }
-
         public BALModel.UserAccess GetUserAccess(string username)
         {
             var userData = _resourceCostRepository.GetUserAccess(username);
             return Mapper.Map<BALModel.UserAccess>(userData);
+        }
+
+        public string GetCompetencyMatrix()
+        {
+            return _resourceCostRepository.GetCompetencyMatrix();
         }
     }
 }
