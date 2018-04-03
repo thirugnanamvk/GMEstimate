@@ -2,19 +2,19 @@
 <div class="container-fluid">
   <div class="row item-padding">
     <div class="col-md-1 no-padding">
-      <button type="button" class="btn btn-success" (click)="addFieldValue()">Add Row</button>
+      <button type="button" class="btn btn-success" autofocus (click)="addFieldValue(i)">Add Row</button>
     </div>
-    <div class="col-md-7">
+    <div class="col-md-6">
       &nbsp;
     </div>
     <div class="col-md-2 col-xs-4">
       <button type="button" class="btn btn-info pull-right" [disabled]="!enableExport" (click)="exportToExcel('gridTable', 'GM Table')"><i class ="glyphicon glyphicon-refresh"></i> Export To Excel</button>
     </div>
-    <div class="col-md-1 col-xs-4">
-      <button type="button" class="btn btn-danger center" [disabled]="!enableExport" (click)="resetAll()"><i class ="glyphicon glyphicon-refresh"></i> Reset </button>
+    <div class="col-md-2 col-xs-4">
+      <button type="button" class="btn btn-danger center" [disabled]="!enableExport" (click)="resetAll()"><i class ="glyphicon glyphicon-refresh"></i> Reset All</button>
     </div>
     <div class="col-md-1 col-xs-4">
-      <button type="button" class="btn btn-success" [disabled]="savedisabled" (click)="calculateGM()"><i class ="glyphicon glyphicon-hourglass"></i>Calculate GM</button>
+      <button #btncalculate type="button" class="btn btn-success" [disabled]="savedisabled" (click)="calculateGM()"><i class ="glyphicon glyphicon-hourglass"></i>Calculate GM</button>
     </div>
 
   </div>
@@ -22,13 +22,13 @@
     <table class="table table-responsive">
       <thead>
         <tr style="vertical-align:central">
-          <th></th>
+          <th width="3%"></th>
           <th width="6%">Location<span class="text-danger">*</span></th>
-          <th>Practice<span class="text-danger">*</span></th>
-          <th>Skill<span class="text-danger">*</span></th>
+          <th width="9%">Practice<span class="text-danger">*</span></th>
+          <th width="9%">Skill<span class="text-danger">*</span></th>
           <th width="5%">Competency<span class="text-danger">*</span></th>
-          <th width="5%">#Minds<span class="text-danger">*</span></th>
-          <th>% Loading<span class="text-danger">*</span></th>
+          <th width="5%"># Minds<span class="text-danger">*</span></th>
+          <th width="5%">% Loading<span class="text-danger">*</span></th>
           <th width="5%">Rate Card/Hr<span class="text-danger">*</span></th>
           <th width="5%">Weeks(Actual Loading)<span class="text-danger">*</span></th>
           <th width="5%">OnSite  Perdim({{currency}}) </th>
@@ -45,11 +45,11 @@
             <button type ="button"  class="btn btn-danger" (click)="deleteFieldValue(i)"><span class ="glyphicon glyphicon-trash"></span></button>
           </td>
           <td><input (keyup)="validate()" [(ngModel)]="field.Location" class="form-control" type="text" auto-complete [source]="location" name="{{field.Location}}" /></td>
-          <td><input (keyup)="validate()" [(ngModel)]="field.Practice" class="form-control" type="text" auto-complete [source]="orgmetadata.Practices" name="{{field.Practice}}" /></td>
-          <td><input (keyup)="validate()" [(ngModel)]="field.Skill" class="form-control" type="text" auto-complete [source]="orgmetadata.Skills" name="{{field.Skill}}" /> </td>
-          <td><input (keyup)="validate()" [(ngModel)]="field.Competency" class="form-control" type="text" auto-complete [source]="orgmetadata.Competencies" name="{{field.Competency}}" /> </td>
-          <td><input (keyup)="validate()" (click)="validate()" [(ngModel)]="field.NoOfMinds" class="form-control" min="1" style="width:50px" type="number" name="{{field.NoOfMinds}}" /> </td>
-          <td><input (keyup)="validate()" (click)="validate()" [(ngModel)]="field.PercentageLoading" class="form-control" max="100" min="0" style="width:70px" type="number" name="{{field.PercentageLoading}}" /> </td>
+          <td><input (keyup)="validate()" [(ngModel)]="field.Practice" class="form-control" type="text" auto-complete [source]="filteredPractices" name="{{field.Practice}}" list-formatter="value" (valueChanged)="filterPractices(  i)" /></td>
+          <td><input (keyup)="validate()" [(ngModel)]="field.Skill" class="form-control" type="text" auto-complete [source]="filteredSkills" name="{{field.Skill}}" list-formatter="value" open-on-focus="false" (focus)="filterSkills(field.Practice, i)" /> </td>
+          <td><input (keyup)="validate()" [(ngModel)]="field.Competency" class="form-control" type="text" auto-complete [source]="filteredCompetencies" name="{{field.Competency}}" open-on-focus="false" (focus)="filterCompetency(field.Skill,field.Practice)" list-formatter="value" /> </td>
+          <td><input (keyup)="validate()" (click)="validate()" [(ngModel)]="field.NoOfMinds" class="form-control" min="1" type="number" name="{{field.NoOfMinds}}" /> </td>
+          <td><input (keyup)="validate()" (click)="validate()" [(ngModel)]="field.PercentageLoading" class="form-control" max="100" min="0" type="number" name="{{field.PercentageLoading}}" /> </td>
           <td><input (keyup)="validate()" (click)="validate()" [(ngModel)]="field.RatePerHour" class="form-control" type="number" min="0" name="{{field.RatePerHour}}" /> </td>
           <td><input (keyup)="validate()" (click)="validate()" [(ngModel)]="field.WeeksActualLoading" class="form-control" min="0" type="number" name="{{field.WeeksActualLoading}}" /> </td>
           <td><input (keyup)="validate()" (click)="validate()" [(ngModel)]="field.OnsitePerdim" class="form-control" type="number" min="0" name="{{field.OnsitePerdim}}" /> </td>
@@ -60,22 +60,23 @@
           <td><input [(ngModel)]="field.TotalGMInPercentage" class="form-control" min="0" type="number" name="{{field.TotalGMInPercentage}}" disabled="false" /> </td>
         </tr>
         <tr>
-          <td colspan="11"></td>
+          <td colspan="10"></td>
           <td><span class="text-right font-size-12">{{currency}} {{TotalOnSiteCost | number : '1.2-2'}}</span></td>
-          <td></td>
+          <td colspan="2"></td>
           <td><span class="text-right font-size-12">{{currency}} {{TotalBilling | number : '1.2-2'}}</span></td>
           <td><span class="text-right font-size-12" [ngClass]="TotalGMPercentage < 60 ? 'label label-danger' : 'label label-success'">{{TotalGMPercentage | number : '1.2-2'}} %</span></td>
         </tr>
       <tbody>
     </table>
   </div>
+  
   <div class="animationload">
     <ng4-loading-spinner [threshold]="01" [template]="" [loadingText]="'Please wait...'" [zIndex]="9999"></ng4-loading-spinner>
     <div class="osahanloading"></div>
   </div>
-
+  
   <div class="row">
-    <form #f="ngForm">
+    <form #f="ngForm" (ngSubmit)="onDefaultSubmit()">
       <table class="table">
         <thead class="thead-inverse">
           <tr>
@@ -133,9 +134,11 @@
           <th>Practice<span class="text-danger">*</span></th>
           <th>Skill<span class="text-danger">*</span></th>
           <th>Competency<span class="text-danger">*</span></th>
+          <th>#Minds<span class="text-danger">*</span></th>
           <th>% Loading<span class="text-danger">*</span></th>
           <th>Rate Card/Hr<span class="text-danger">*</span></th>
           <th>Weeks(Actual Loading)<span class="text-danger">*</span></th>
+          <th>Total Loading</th>
           <th>Month Loading + Contengency</th>
           <th>Total Billing</th>
           <th>Onsite Cost</th>
@@ -148,17 +151,19 @@
           <td>{{field.Practice}}</td>
           <td>{{field.Skill}}</td>
           <td>{{field.Competency}}</td>
+          <td>{{field.NoOfMinds}}</td>
           <td>{{field.PercentageLoading}}</td>
           <td>{{field.RatePerHour}}</td>
           <td>{{field.WeeksActualLoading}}</td>
+          <td>{{field.NoOfMinds * field.WeeksActualLoading}}</td>
           <td>{{field.MonthLoadingWithContengency}}</td>
           <td>{{field.TotalBilling}}</td>
           <td>{{field.OnsiteCost}}</td>
           <td>{{field.TotalGMInPercentage}}</td>
         </tr>
-        <tr><td colspan="11">&nbsp;</td></tr>
+        <tr><td colspan="13">&nbsp;</td></tr>
         <tr>
-          <td colspan="8"></td>
+          <td colspan="10"></td>
           <td style="border:solid  .5pt #000; background:#000; color:white;"><span>{{TotalBilling | number : '1.2-2'}}</span></td>
           <td style="border:solid  .5pt #000; background:#000; color:white;"><span>{{TotalOnSiteCost | number : '1.2-2'}}</span></td>
           <td style="border:solid  .5pt #000; background:#000; color:white;"><span>{{TotalGMPercentage | number : '1.2-2'}}%</span></td>
@@ -186,15 +191,15 @@
           </td>
         </tr>
         <tr>
-          <td class="text-left">Number Of Hours Per Day (OnSite)</td>
-          <td class="text-center">
-            {{gmdefaults.HoursPerDayOnSite}}
-          </td>
-        </tr>
-        <tr>
           <td class="text-left">Number of days in a week </td>
           <td class="text-center">
             {{gmdefaults.DaysPerWeek}}
+          </td>
+        </tr>
+        <tr>
+          <td class="text-left">Number Of Hours Per Day (OnSite)</td>
+          <td class="text-center">
+            {{gmdefaults.HoursPerDayOnSite}}
           </td>
         </tr>
         <tr>

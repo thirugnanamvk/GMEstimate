@@ -45,13 +45,6 @@ namespace HM.GM.Controllers
             return _resourceCostProcessor.CalculateGM(gmInput);
         }
 
-        [HttpGet]
-        [Route("orgMetadata")]
-        public OrganizationMetadata GetOrganizationMetadata()
-        {
-            return null;
-        }
-
         [HttpPost]
         [Route("getUserAccess")]
         public UserAccess GetUserAccess([FromBody] UserAccess user)

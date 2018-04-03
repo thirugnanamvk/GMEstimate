@@ -29,6 +29,6 @@ namespace HM.GM.BAL.Model
 
         public double TotalCost { get; set; }
 
-        public int NoOfMinds { get; set; }
+        public double NoOfMinds { get; set; }
     }
 }

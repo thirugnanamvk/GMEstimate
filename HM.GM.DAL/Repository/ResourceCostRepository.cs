@@ -190,7 +190,6 @@ namespace HM.GM.DAL.Repository
         }
         public string GetCompetencyMatrix()
         {
-            List<ResourceGroup> rsgroup = new List<ResourceGroup>();
             ResourceGroup rs = new ResourceGroup();
             rs.Practice = new List<Practice>();
             var query = "Select distinct Practice from tbl_ResourceCost order by Practice";
@@ -206,8 +205,8 @@ namespace HM.GM.DAL.Repository
                         rs.Practice.Add(new Practice(rs.Practice.Count + 1, Convert.ToString(reader["Practice"])));
                 }
             }
-            rsgroup.Add(rs);
-            rs = new ResourceGroup();
+
+
             rs.Skills = new List<SKillCompentency>();
             query = "select p.Practice, p.Skill, p.id from hm_gm.tbl_resourcecost p group by p.Skill,Practice order by p.Practice,p.skill";
             using (var connection = new MySqlConnection(connectionString))
@@ -222,10 +221,8 @@ namespace HM.GM.DAL.Repository
                         rs.Skills.Add(new SKillCompentency(rs.Skills.Count + 1, Convert.ToString(reader["Skill"]), new Practice(rs.Skills.Count + 1, Convert.ToString(reader["Practice"]))));
                     }
                 }
-                rsgroup.Add(rs);
             }
-            query = "select p.Competency, p.Skill,p.id from hm_gm.tbl_resourcecost p group by p.Competency,p.Skill order by p.Competency,p.skill";
-            rs = new ResourceGroup();
+            query = "select Concat(p.Skill,'-',Practice) as Skill , p.Competency ,p.id from hm_gm.tbl_resourcecost p group by p.Competency,p.Skill order by p.Competency,p.skill,p.Practice";
             rs.Compentency = new List<SKillCompentency>();
             using (var connection = new MySqlConnection(connectionString))
             {
@@ -239,9 +236,9 @@ namespace HM.GM.DAL.Repository
                         rs.Compentency.Add(new SKillCompentency(rs.Compentency.Count + 1, Convert.ToString(reader["Competency"]), new Practice(rs.Compentency.Count + 1, Convert.ToString(reader["Skill"]))));
                     }
                 }
-                rsgroup.Add(rs);
+
             }
-            return JsonConvert.SerializeObject(rsgroup, Formatting.None,
+            return JsonConvert.SerializeObject(rs, Formatting.None,
                                                     new JsonSerializerSettings
                                                     {
                                                         NullValueHandling = NullValueHandling.Ignore
@@ -250,5 +247,5 @@ namespace HM.GM.DAL.Repository
         }
     }
 
-    
+
 }

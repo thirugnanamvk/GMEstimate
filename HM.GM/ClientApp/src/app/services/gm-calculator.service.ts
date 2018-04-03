@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http, Response, Headers, RequestOptions } from "@angular/http";
 import { Observable } from "rxjs/Observable";
 import "rxjs/Rx";
-import { GMDefaultModel, ResourceCostDetail, OrgMetaData, GMCalculationParams, GMInput, UserAccess } from "../model";
+import { GMDefaultModel, ResourceCostDetail, ResourceGroup, GMCalculationParams, GMInput, UserAccess } from "../model";
 
 @Injectable()
 export class GmCalculatorService {
@@ -29,11 +29,11 @@ export class GmCalculatorService {
       .catch(this.handleError);
   }
 
-  getOrgMetaData(): Observable<OrgMetaData> {
+  getOrgMetaData(): Observable<ResourceGroup> {
     return this.http
-      .get(this._url + "/orgMetadata")
+      .get(this._url + "/GetCompetencyMatrix")
       .map((response: Response) => {
-        return <OrgMetaData>response.json();
+        return <ResourceGroup>response.json();
       })
       .catch(this.handleError);
   }
