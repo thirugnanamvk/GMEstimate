@@ -2,7 +2,7 @@
 <div class="container-fluid">
   <div class="row item-padding">
     <div class="col-md-1 no-padding">
-      <button type="button" class="btn btn-success" autofocus (click)="addFieldValue(i)">Add Row</button>
+      <button type="button" class="btn btn-success" autofocus (click)="addFieldValue()">Add Row</button>
     </div>
     <div class="col-md-6">
       &nbsp;
@@ -76,7 +76,7 @@
   </div>
   
   <div class="row">
-    <form #f="ngForm" (ngSubmit)="onDefaultSubmit()">
+    <form #f="ngForm" >
       <table class="table">
         <thead class="thead-inverse">
           <tr>
