@@ -48,6 +48,7 @@ export class GmCalculatorComponent implements OnInit {
   public deleteFieldValue(index) {
     this.gridData.splice(index, 1);
     this.calculateTotal();
+    this.enableExport = false;
   }
 
   ngOnInit() {
@@ -86,6 +87,7 @@ export class GmCalculatorComponent implements OnInit {
         && (this.gridData[i].NoOfMinds >= 1)
         && (this.gridData[i].WeeksActualLoading && this.gridData[i].WeeksActualLoading >= 0)) {
         this.savedisabled = false;
+        this.enableExport = false;
         return false;
       }
     }
@@ -118,12 +120,12 @@ export class GmCalculatorComponent implements OnInit {
         else {
           alert(data.ErrorMessage);
           this.savedisabled = true;
+          this.enableExport = false;
           this._spinner.hide();
         }
       }
       );
   }
-  public donothing() { }
   public exportToExcel(table: any, name: any) {
     this._spinner.show();
     var uri = 'data:application/vnd.ms-excel;base64,'

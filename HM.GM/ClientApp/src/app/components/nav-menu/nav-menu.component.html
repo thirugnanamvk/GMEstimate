@@ -18,7 +18,7 @@
         </a>
       </li>
       <li [routerLinkActive]="['link-active']">
-        <a [routerLink]="['/dataUploader']">
+        <a [routerLink]="['/dataUploader']" *ngIf="isUploadEnable">
           <span class='glyphicon glyphicon-upload'></span>Upload Cost
         </a>
       </li>

@@ -19,6 +19,8 @@ export class NavMenuComponent {
 
   constructor(private authSvc: services.AuthenticationService, protected service: services.GmCalculatorService) {
     this.testAuthentication();
+    this.isUploadEnable = false;
+
   }
 
   public collapse() {
