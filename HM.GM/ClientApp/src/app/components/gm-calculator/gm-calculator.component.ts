@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ViewChild, ElementRef  } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Http } from '@angular/http';
 import { GmCalculatorService } from '../../services';
 import { GMDefaultModel, ResourceCostDetail, ResourceCostModel, GMCalculationParams, ResourceGroup, SKillCompentency } from "../../model";
@@ -11,10 +11,9 @@ import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
   templateUrl: './gm-calculator.component.html',
   styleUrls: ['./gm-calculator.component.css']
 })
-export class GmCalculatorComponent implements OnInit, AfterViewInit {
+export class GmCalculatorComponent implements OnInit {
 
   public gmdefaults: GMDefaultModel = new GMDefaultModel();
-
   public enableExport: boolean = false;
   public excelData: any = [{}];
   public TotalGMPercentage: number = 0
