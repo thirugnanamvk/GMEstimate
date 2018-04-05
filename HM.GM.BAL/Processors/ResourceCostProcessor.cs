@@ -27,23 +27,20 @@ namespace HM.GM.BAL.Processors
             var dalModel = Mapper.Map<List<DALModel.ResourceCostDetail>>(resourceCostDetailList);
             _resourceCostRepository.InsertResourceCostDetails(dalModel);
         }
-
+        public void UpdateResourceCostDetails(List<BALModel.ResourceCostDetail> resourceCostDetailList)
+        {
+            var dalModel = Mapper.Map<List<DALModel.ResourceCostDetail>>(resourceCostDetailList);
+            _resourceCostRepository.UpdateResourceCostDetails(dalModel);
+        }
         public void DeleteResourceCostDetails(List<BALModel.ResourceCostDetail> resourceCostDetailList)
         {
             var dalModel = Mapper.Map<List<DALModel.ResourceCostDetail>>(resourceCostDetailList);
             _resourceCostRepository.DeleteResourceCostDeatils(dalModel);
         }
 
-        public void UpdateResourceCostDetails(List<BALModel.ResourceCostDetail> resourceCostDetailList)
+        public Dictionary<string, string> GetGMDefaults()
         {
-            var dalModel = Mapper.Map<List<DALModel.ResourceCostDetail>>(resourceCostDetailList);
-            _resourceCostRepository.UpdateResourceCostDetails(dalModel);
-        }
-
-        public BALModel.GMDefaults GetGMDefaults()
-        {
-            var gMDefaultsDAL = _resourceCostRepository.GetGMDefaults();
-            return Mapper.Map<BALModel.GMDefaults>(gMDefaultsDAL);
+            return _resourceCostRepository.GetGMDefaults();
         }
 
         public BALModel.GMInput CalculateGM(BALModel.GMInput gmInput)
@@ -56,21 +53,22 @@ namespace HM.GM.BAL.Processors
                     var costDetails = _resourceCostRepository.GetCostForResource(param.Location, param.Practice, param.Skill, param.Competency);
                     if (costDetails.OffshoreCost != 0 || costDetails.OnsiteCost != 0)
                     {
-                        var monthlyRate = param.RatePerHour * gmDefaults.DaysPerMonth * gmDefaults.HoursPerDay;
+                        var hoursPerDay = param.Location.Equals("ONSITE", StringComparison.InvariantCultureIgnoreCase) ? gmDefaults.HoursPerDayOnSite : gmDefaults.HoursPerDayOffShore;
+                        var monthlyRate = param.RatePerHour * gmDefaults.DaysPerMonth * hoursPerDay;
                         var costPerHour = param.Location.Equals("ONSITE", StringComparison.InvariantCultureIgnoreCase) ? costDetails.OnsiteCost : costDetails.OffshoreCost;
-                        var costPerMonth = costPerHour * gmDefaults.DaysPerMonth * gmDefaults.HoursPerDay;
+                        var costPerMonth = costPerHour * gmDefaults.DaysPerMonth * hoursPerDay;
                         var monthsActualLoading = (param.WeeksActualLoading * gmDefaults.DaysPerWeek / gmDefaults.DaysPerMonth);
                         var weeksWithContengency = param.WeeksActualLoading + (param.WeeksActualLoading * (gmDefaults.Contengency / 100));
                         param.MonthLoadingWithContengency = (param.WeeksActualLoading * gmDefaults.DaysPerWeek / gmDefaults.DaysPerMonth) + (param.WeeksActualLoading * gmDefaults.DaysPerWeek / gmDefaults.DaysPerMonth) * (gmDefaults.Contengency / 100);
-                        param.TotalBilling = Math.Round(((param.MonthLoadingWithContengency * monthlyRate) + param.OnsitePerdim) * (param.PercentageLoading / 100), 2);
-                        param.TotalCost = ((costPerMonth * param.MonthLoadingWithContengency) * (param.PercentageLoading / 100)) + param.OnsiteCost;
+                        param.TotalBilling = Math.Round((((param.MonthLoadingWithContengency * monthlyRate) + param.OnsitePerdim) * (param.PercentageLoading / 100)) * param.NoOfMinds, 2);
+                        param.TotalCost = (((costPerMonth * param.MonthLoadingWithContengency) * (param.PercentageLoading / 100)) + param.OnsiteCost) * param.NoOfMinds;
                         param.TotalGMInPercentage = Math.Round(((param.TotalBilling - param.TotalCost) / param.TotalBilling) * 100, 2);
                         gmInput.ErrorMessage = "";
                         param.MonthLoadingWithContengency = Math.Round(param.MonthLoadingWithContengency, 2);
                     }
                     else
                     {
-                        gmInput.ErrorMessage = $"No resource avaliable in {param.Practice} with {param.Skill} skill of {param.Competency} Competency";
+                        gmInput.ErrorMessage = $"Billing detail is not avaliable for Competency {param.Competency} in {param.Practice} with {param.Skill} skill ";
                         break;
                     }
                 }
@@ -82,16 +80,15 @@ namespace HM.GM.BAL.Processors
             return gmInput;
         }
 
-        public BALModel.OrganizationMetadata GetOrganizationMetadata()
-        {
-            var orgMetadata = _resourceCostRepository.GetOrganizationMetadata();
-            return Mapper.Map<BALModel.OrganizationMetadata>(orgMetadata);
-        }
-
         public BALModel.UserAccess GetUserAccess(string username)
         {
             var userData = _resourceCostRepository.GetUserAccess(username);
             return Mapper.Map<BALModel.UserAccess>(userData);
+        }
+
+        public string GetCompetencyMatrix()
+        {
+            return _resourceCostRepository.GetCompetencyMatrix();
         }
     }
 }

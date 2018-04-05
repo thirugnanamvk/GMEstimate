@@ -11,12 +11,12 @@ namespace HM.GM.BAL.Processors
 
         List<ResourceCostDetail> GetResourceCostDetails();
 
-        GMDefaults GetGMDefaults();
+        Dictionary<string, string> GetGMDefaults();
 
         GMInput CalculateGM(GMInput gMInput);
 
-        OrganizationMetadata GetOrganizationMetadata();
-
         UserAccess GetUserAccess(string username);
+
+        string GetCompetencyMatrix();
     }
 }

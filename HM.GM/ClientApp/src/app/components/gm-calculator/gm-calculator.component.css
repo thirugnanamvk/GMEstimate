@@ -11,6 +11,11 @@ body {
   color: white;
 }
 
+.th-inverse {
+  background: gray;
+  color: white;
+}
+
 .sub-container {
   padding: 0 70% 0 0;
 }
@@ -67,4 +72,20 @@ td, th {
 
 .completer-input {
   height: 35px;
+}
+
+.item-padding {
+  padding-bottom: 5px;
+  padding-right: 20px;
+}
+
+.line-height-3 {
+  line-height: 3;
+}
+
+.no-padding {
+  padding: 0 !important;
+}
+
+.page-container {
 }

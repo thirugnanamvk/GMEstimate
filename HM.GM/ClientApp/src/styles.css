@@ -1,4 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
+body {
+  background: #e9ebee !important;
+}
 .completer-input {
   display: block;
   width: 100%;
@@ -26,4 +29,11 @@
 .ng2-smart-titles {
   background: #dcdcdc;
   font-size: 12px;
+}
+.custom-card {
+  padding: 1% 2% !important;
+  background: white;
+  margin: 1% !important;
+  border-radius: 5px;
+  box-shadow: grey 0px 0px 1px;
 }

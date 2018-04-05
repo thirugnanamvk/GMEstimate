@@ -1,7 +1,7 @@
-import { Component, ViewContainerRef } from '@angular/core';
+import { Component, ViewContainerRef, OnInit } from '@angular/core';
 import * as XLSX from 'ts-xlsx';
 import { BehaviorSubject } from 'rxjs';
-import { ResourceCostDetail } from '../../model';
+import { ResourceCostDetail, SaveResourceCostDetail } from '../../model';
 import { HttpClient } from '@angular/common/http';
 import { UploadDataService, AlertService, PagerService } from '../../services';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
@@ -14,7 +14,7 @@ import { forEach } from '@angular/router/src/utils/collection';
   templateUrl: './data-uploader.component.html',
   styleUrls: ['./data-uploader.component.css']
 })
-export class DataUploaderComponent {
+export class DataUploaderComponent implements OnInit{
 
   private arrayBuffer: any;
   public isDisabled: boolean = false;
@@ -22,9 +22,15 @@ export class DataUploaderComponent {
   public file: File;
   public uploadFile: boolean = true;
   public Isdeleted: Array<number>;
-  public newAttribute: ResourceCostDetail = new ResourceCostDetail(0, "", "", "", 0, 0, false, false, true, "");
+  public savedisabled: boolean = true;
+  public SaveResourceCostDetailVal: SaveResourceCostDetail = new SaveResourceCostDetail();
   constructor(private http: HttpClient, private _uploadservice: UploadDataService, private alertService: AlertService, vcr: ViewContainerRef, private _spinner: Ng4LoadingSpinnerService, private pagerService: PagerService) {
     this.gridData = [];
+  }
+
+
+  ngOnInit(): void {
+    this.getDataFromDb();
   }
 
   public incomingfile(event: any) {
@@ -53,6 +59,18 @@ export class DataUploaderComponent {
     this.alertService.clear();
   }
 
+   public validate(): boolean {
+    for (var i = 0; i < this.gridData.length; i++) {
+      if (( this.gridData[i].Practice) && (this.gridData[i].Skill) &&  (this.gridData[i].Competency)
+        && (this.gridData[i].OffshoreCost >= 0)
+        && (this.gridData[i].OnsiteCost >= 0))
+      {
+        this.savedisabled = false;
+        return false;
+      }
+    }
+    this.savedisabled = true;
+  }
 
   public Upload() {
     this.clear();
@@ -77,11 +95,7 @@ export class DataUploaderComponent {
     }
     fileReader.readAsArrayBuffer(this.file);
   }
-  Public UploadDataFromDb() {
-    this._spinner.show();
-    var objList = new Array<ResourceCostDetail>();
 
-  }
   public uploadData() {
     this._spinner.show();
     var objList = new Array<ResourceCostDetail>();
@@ -106,7 +120,7 @@ export class DataUploaderComponent {
   }
 
   public addFieldValue() {
-    this.gridData.unshift(new ResourceCostDetail(0, "", "", "", 0, 0, false, false, true, ""));
+    this.gridData.unshift(new ResourceCostDetail(0, "", "", "", 0, 0, false, false, true, "", false));
   }
 
   public deleteFieldValue(index) {
@@ -117,16 +131,34 @@ export class DataUploaderComponent {
       this.gridData.splice(index, 1);
     }
   }
+
   public updateColIndex(index) {
     if (this.gridData[index].Id != 0) {
       this.gridData[index].IsUpdated = true;
     }
   }
 
+  public getDataFromDb() {
+    this._spinner.show();
+    this._uploadservice.GetData()
+      .subscribe(
+        (data) => {
+          this.gridData = data;
+          this._spinner.hide();
+        },
+        (error) => {
+          this.error("Oops! Somethings went wrong. Please try again later.");
+          this._spinner.hide();
+          this.isDisabled = true;
+        });
+
+  }
+
   public saveData() {
     var requestNew: Array<ResourceCostDetail> = new Array<ResourceCostDetail>();
     var requestUpdate: Array<ResourceCostDetail> = new Array<ResourceCostDetail>();
     var requestDelete: Array<ResourceCostDetail> = new Array<ResourceCostDetail>();
+   
     this.gridData.forEach(function (item) {
       if (item.IsNew)
         requestNew.push(item);
@@ -135,51 +167,31 @@ export class DataUploaderComponent {
       else if (item.IsDeleted)
         requestDelete.push(item);
     });
-    if (requestDelete.length > 0)
-      this._uploadservice.DeleteResource(requestDelete).subscribe
-        (
-        (success) => {
-          this.success("Data Deleted Successfully");
-          alert(success);
-          this._spinner.hide();
-        },
-        (error) => {
-          this.error("Oops! Somethings went wrong. Please try again later.");
-          this._spinner.hide();
-          this.isDisabled = true;
-          alert(error);
-        }
-        );
-    if (requestUpdate.length > 0)
-      this._uploadservice.UpdateResource(requestUpdate).subscribe
-        (
-        (success) => {
-          this.success("Data Updated Successfully");
-          alert(success);
-          this._spinner.hide();
-        },
-        (error) => {
-          this.error("Oops! Somethings went wrong. Please try again later.");
-          this._spinner.hide();
-          this.isDisabled = true;
-          alert(error);
-        }
-        );
-    if (requestNew.length > 0)
-      this._uploadservice.InsertResource(requestNew).subscribe
+    if (requestDelete.length > 0) {
+      this.SaveResourceCostDetailVal.DeleteResourceCostDetail = requestDelete;
+    }
+     
+    if (requestUpdate.length > 0) {
+      this.SaveResourceCostDetailVal.UpdateResourceCostDetail = requestUpdate;
+    }
+    
+    if (requestNew.length > 0) {
+      this.SaveResourceCostDetailVal.InsertResourceCostDetail = requestNew;
+    }
+    if (requestNew.length > 0 || requestUpdate.length > 0 || requestDelete.length > 0) {
+      this._uploadservice.SaveResource(this.SaveResourceCostDetailVal).subscribe
         (
         (success) => {
           this.success("Data Saved Successfully");
-          alert(success);
           this._spinner.hide();
         },
         (error) => {
           this.error("Oops! Somethings went wrong. Please try again later.");
           this._spinner.hide();
           this.isDisabled = true;
-          alert(error);
         }
         );
+    }
     
 
   }

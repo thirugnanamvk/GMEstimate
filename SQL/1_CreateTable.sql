@@ -32,18 +32,33 @@ CREATE TABLE tbl_ResourceCost (
  
  
  CREATE TABLE tbl_GM_Defaults (
+	
 	Id int not null auto_increment,
-	Contengency decimal(10,2) not null,
-	HoursInDay decimal(10,2) not null,
-	DaysInWeek decimal(10,2) not null,
-	DaysInMonth decimal(10,2) not null,
-	WeeksInMonth decimal(10,2) not null,
-	DollarValueInINR decimal(10,2) not null,
+	
+	PropertyName varchar(200) not null,
+	
+	PropertyValue varchar(200) not null,
+	
 	IsActive boolean not null,
-    primary key (Id)
- );
  
- INSERT INTO tbl_GM_Defaults (Contengency, HoursInDay ,DaysInWeek, DaysInMonth, WeeksInMonth, DollarValueInINR, IsActive) VALUES ('15','8.75','5','21','4.2','65', True);
+	primary key (Id)
+ 
+);
+ 
+INSERT INTO tbl_GM_Defaults (PropertyName ,PropertyValue ,IsActive) values ("Contengency","15",1);
+ 
+INSERT INTO tbl_GM_Defaults (PropertyName ,PropertyValue ,IsActive) values ("HoursPerDayOffShore" ,"8.75",1);
+ 
+INSERT INTO tbl_GM_Defaults (PropertyName ,PropertyValue ,IsActive) values ("HoursPerDayOnSite" ,"8",1);
+ 
+INSERT INTO tbl_GM_Defaults (PropertyName ,PropertyValue ,IsActive) values ("DaysPerWeek", "5",1);
+ 
+INSERT INTO tbl_GM_Defaults (PropertyName ,PropertyValue ,IsActive) values ("DaysPerMonth", "21",1);
+ 
+INSERT INTO tbl_GM_Defaults (PropertyName ,PropertyValue ,IsActive) values ("WeeksPerMonth", "4.2",1);
+ 
+INSERT INTO tbl_GM_Defaults (PropertyName ,PropertyValue ,IsActive) values ("DollarValueInINR", "65",1); 
+
  
  CREATE TABLE tbl_useraccess (
 	Id int(11) NOT NULL AUTO_INCREMENT,

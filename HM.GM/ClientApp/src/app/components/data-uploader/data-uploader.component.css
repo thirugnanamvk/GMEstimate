@@ -1,0 +1,8 @@
+.custom-card {
+  padding: 1% 2% !important;
+  background: white;
+  margin: 1% !important;
+  border-radius: 5px;
+  -webkit-box-shadow: grey 0px 0px 1px;
+  box-shadow: grey 0px 0px 1px;
+}

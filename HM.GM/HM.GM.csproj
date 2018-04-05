@@ -16,7 +16,7 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="6.2.2" />
-    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.6" />
     <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="2.0.0" />
   </ItemGroup>
 
@@ -57,12 +57,14 @@
     <None Remove="ClientApp\src\app\model\GMDefaultModel.ts" />
     <None Remove="ClientApp\src\app\model\GMInput.ts" />
     <None Remove="ClientApp\src\app\model\index.ts" />
-    <None Remove="ClientApp\src\app\model\OrgMetaData.ts" />
+    <None Remove="ClientApp\src\app\model\Practice.ts" />
     <None Remove="ClientApp\src\app\model\ResourceCostDetail.ts" />
-    <None Remove="ClientApp\src\app\model\ResourceCostModel.ts" />
     <None Remove="ClientApp\src\app\components\nav-menu\nav-menu.component.ts" />
+    <None Remove="ClientApp\src\app\Model\SaveResourceCostDetail.ts" />
     <None Remove="ClientApp\src\app\Model\useraccess.ts" />
     <None Remove="ClientApp\src\app\services\alert.service.ts" />
+    <None Remove="ClientApp\src\app\Model\ResourceGroup.ts" />
+    <None Remove="ClientApp\src\app\Model\SKillCompentency.ts" />
     <None Remove="ClientApp\src\app\services\authentication.service.ts" />
     <None Remove="ClientApp\src\app\services\gm-calculator.service.ts" />
     <None Remove="ClientApp\src\app\services\index.ts" />
@@ -77,6 +79,7 @@
     <None Remove="ClientApp\src\test.ts" />
     <None Remove="ClientApp\src\typings.d.ts" />
     <None Remove="ClientApp\tsconfig.json" />
+    <None Remove="Properties\PublishProfiles\CustomProfile.pubxml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -93,12 +96,15 @@
     <TypeScriptCompile Include="ClientApp\e2e\app.po.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\components\data-uploader\data-uploader.component.spec.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\components\data-uploader\data-uploader.component.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\Model\SKillCompentency.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\Model\ResourceGroup.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\components\gm-calculator-container\gm-calculator-container.component.spec.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\components\gm-calculator-container\gm-calculator-container.component.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\components\gm-calculator\gm-calculator.component.spec.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\components\gm-calculator\gm-calculator.component.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\components\gm-filter\gm-filter.pipe.spec.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\components\gm-filter\gm-filter.pipe.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\Model\SaveResourceCostDetail.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\Model\useraccess.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\services\alert.service.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\services\authentication.service.ts" />
@@ -113,9 +119,8 @@
     <TypeScriptCompile Include="ClientApp\src\app\model\GMDefaultModel.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\model\GMInput.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\model\index.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\model\OrgMetaData.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\model\Practice.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\model\ResourceCostDetail.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\model\ResourceCostModel.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\components\nav-menu\nav-menu.component.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\services\pager.service.spec.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\services\pager.service.ts" />
@@ -127,6 +132,10 @@
     <TypeScriptCompile Include="ClientApp\src\polyfills.ts" />
     <TypeScriptCompile Include="ClientApp\src\test.ts" />
     <TypeScriptCompile Include="ClientApp\src\typings.d.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Properties\PublishProfiles\" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

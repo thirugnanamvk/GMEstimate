@@ -1,7 +1,7 @@
 
 export class ResourceCostDetail {
   constructor(_Id: number, _Practice: string, _Skill: string, _Competency: string, _OnsiteCost: number,
-    _OffshoreCost: number, _IsUpdated: boolean, _IsDeleted: boolean, _IsNew: boolean, _CreatedBy: string) {
+    _OffshoreCost: number, _IsUpdated: boolean, _IsDeleted: boolean, _IsNew: boolean, _CreatedBy: string, _IsDisabled: boolean = true) {
     this.Id = _Id;
     this.Practice = _Practice;
     this.Skill = _Skill;
@@ -11,7 +11,7 @@ export class ResourceCostDetail {
     this.IsDeleted = _IsDeleted;
     this.IsNew = _IsNew;
     this.CreatedBy = _CreatedBy;
-   // this.CreatedDate = _CreatedDate;
+    this.IsDisabled = _IsDisabled;
   }
   Id: number;
   Practice: string;
@@ -23,4 +23,5 @@ export class ResourceCostDetail {
   IsDeleted: boolean = false;
   IsNew: boolean = false;
   CreatedBy: string;
+  IsDisabled: boolean = true;
 }

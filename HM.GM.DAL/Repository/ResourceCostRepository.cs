@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
 using System.Data;
 using System.Linq;
+using Newtonsoft.Json;
 namespace HM.GM.DAL.Repository
 {
     public class ResourceCostRepository : IResourceCostRepository
@@ -19,7 +20,7 @@ namespace HM.GM.DAL.Repository
 
         public List<ResourceCostDetail> GetResourceDetails()
         {
-            var query = "Select Id,Practice, Skill ,Competency, CreatedDate, CreatedBy, IsActive from tbl_ResourceCost";
+            var query = "Select Id,Practice, Skill ,Competency, CreatedDate, CreatedBy, OffshoreCost, OnsiteCost, IsActive from tbl_ResourceCost";
             var connectionString = _configuration.GetConnectionString("DefaultConnection");
             var resourceCostDetailList = new List<ResourceCostDetail>();
             using (var connection = new MySqlConnection(connectionString))
@@ -40,7 +41,8 @@ namespace HM.GM.DAL.Repository
                         detail.IsActive = Convert.ToBoolean(reader["IsActive"]);
                         detail.Practice = Convert.ToString(reader["Practice"]);
                         detail.Skill = Convert.ToString(reader["Skill"]);
-
+                        detail.OnsiteCost = Convert.ToDouble(reader["OnsiteCost"]);
+                        detail.OffshoreCost = Convert.ToDouble(reader["OffshoreCost"]);
                         resourceCostDetailList.Add(detail); ;
                     }
                 }
@@ -71,6 +73,7 @@ namespace HM.GM.DAL.Repository
                 catch (Exception ex)
                 {
                     transaction.Rollback();
+                    throw ex;
                 }
                 finally
                 {
@@ -112,6 +115,7 @@ namespace HM.GM.DAL.Repository
                 catch (Exception ex)
                 {
                     transaction.Rollback();
+                    throw ex;
                 }
                 finally
                 {
@@ -128,16 +132,7 @@ namespace HM.GM.DAL.Repository
                 var transaction = connection.BeginTransaction();
                 try
                 {
-
-                    //*************************//
-                    //  Update History Table   //
-                    //*************************//
-                    string sp = "SP_UpdateResourceCostHistory";
-                    var sp_cmd = new MySqlCommand(sp, connection);
-                    sp_cmd.CommandType = CommandType.StoredProcedure;
-                    sp_cmd.Parameters.AddWithValue("@UpdatedBy", resourceCostDetails[0].CreatedBy);
-                    sp_cmd.ExecuteNonQuery();
-
+                                       
                     //*********************************************//
                     //  Insert new record in resource cost table   //
                     //********************************************//
@@ -169,6 +164,7 @@ namespace HM.GM.DAL.Repository
                 catch (Exception ex)
                 {
                     transaction.Rollback();
+                    throw ex;
                 }
                 finally
                 {
@@ -177,11 +173,11 @@ namespace HM.GM.DAL.Repository
             }
         }
 
-        public GMDefaults GetGMDefaults()
+        public Dictionary<string, string> GetGMDefaults()
         {
-            var query = "Select Contengency, DaysInMonth ,DaysInWeek, HoursInDay, WeeksInMonth, DollarValueInINR, IsActive from tbl_GM_Defaults";
+            var query = "Select PropertyName ,PropertyValue from tbl_GM_Defaults order by id";
             var connectionString = _configuration.GetConnectionString("DefaultConnection");
-            var gMDefaults = new GMDefaults();
+            var gMDefaults = new Dictionary<string, string>();
             using (var connection = new MySqlConnection(connectionString))
             {
                 using (var cmd = new MySqlCommand(query, connection))
@@ -192,15 +188,7 @@ namespace HM.GM.DAL.Repository
 
                     while (reader.Read())
                     {
-                        gMDefaults = new GMDefaults();
-
-                        gMDefaults.Contengency = Convert.ToDouble(reader["Contengency"]);
-                        gMDefaults.DaysPerMonth = Convert.ToDouble(reader["DaysInMonth"]);
-                        gMDefaults.DaysPerWeek = Convert.ToDouble(reader["DaysInWeek"]);
-                        gMDefaults.HoursPerDay = Convert.ToDouble(reader["HoursInDay"]);
-                        gMDefaults.WeeksPerMonth = Convert.ToDouble(reader["WeeksInMonth"]);
-                        gMDefaults.DollarValueInINR = Convert.ToDouble(reader["DollarValueInINR"]);
-                        gMDefaults.IsActive = Convert.ToBoolean(reader["IsActive"]);
+                        gMDefaults.Add(Convert.ToString(reader["PropertyName"]), Convert.ToString(reader["PropertyValue"]));
                     }
                 }
             }
@@ -242,16 +230,6 @@ namespace HM.GM.DAL.Repository
             return detail;
         }
 
-        public OrganizationMetadata GetOrganizationMetadata()
-        {
-            return new OrganizationMetadata
-            {
-                Competencies = GetAllCompetency(),
-                Practices = GetAllPractice(),
-                Skills = GetAllSkills(),
-            };
-        }
-
         public UserAccess GetUserAccess(string username)
         {
             var query = "select Id, UserName, IsAdmin from tbl_useraccess where UserName=@username ;";
@@ -276,12 +254,12 @@ namespace HM.GM.DAL.Repository
             }
             return userAccess;
         }
-
-        private List<string> GetAllSkills()
+        public string GetCompetencyMatrix()
         {
-            var query = "Select DISTINCT Skill from tbl_ResourceCost order by Skill";
+            ResourceGroup rs = new ResourceGroup();
+            rs.Practice = new List<Practice>();
+            var query = "Select distinct Practice from tbl_ResourceCost order by Practice";
             var connectionString = _configuration.GetConnectionString("DefaultConnection");
-            var skillList = new List<string>();
             using (var connection = new MySqlConnection(connectionString))
             {
                 using (var cmd = new MySqlCommand(query, connection))
@@ -289,22 +267,14 @@ namespace HM.GM.DAL.Repository
                     connection.Open();
                     cmd.CommandType = CommandType.Text;
                     var reader = cmd.ExecuteReader();
-
                     while (reader.Read())
-                    {
-                        var detail = new ResourceCostDetail();
-                        skillList.Add(Convert.ToString(reader["Skill"])); ;
-                    }
+                        rs.Practice.Add(new Practice(rs.Practice.Count + 1, Convert.ToString(reader["Practice"])));
                 }
             }
-            return skillList;
-        }
 
-        private List<string> GetAllCompetency()
-        {
-            var query = "Select DISTINCT Competency from tbl_ResourceCost order by Competency";
-            var connectionString = _configuration.GetConnectionString("DefaultConnection");
-            var competencyList = new List<string>();
+
+            rs.Skills = new List<SKillCompentency>();
+            query = "select p.Practice, p.Skill, p.id from hm_gm.tbl_resourcecost p group by p.Skill,Practice order by p.Practice,p.skill";
             using (var connection = new MySqlConnection(connectionString))
             {
                 using (var cmd = new MySqlCommand(query, connection))
@@ -312,22 +282,14 @@ namespace HM.GM.DAL.Repository
                     connection.Open();
                     cmd.CommandType = CommandType.Text;
                     var reader = cmd.ExecuteReader();
-
                     while (reader.Read())
                     {
-                        var detail = new ResourceCostDetail();
-                        competencyList.Add(Convert.ToString(reader["Competency"])); ;
+                        rs.Skills.Add(new SKillCompentency(rs.Skills.Count + 1, Convert.ToString(reader["Skill"]), new Practice(rs.Skills.Count + 1, Convert.ToString(reader["Practice"]))));
                     }
                 }
             }
-            return competencyList;
-        }
-
-        private List<string> GetAllPractice()
-        {
-            var query = "Select DISTINCT Practice from tbl_ResourceCost order by Practice";
-            var connectionString = _configuration.GetConnectionString("DefaultConnection");
-            var practiceList = new List<string>();
+            query = "select Concat(p.Skill,'-',Practice) as Skill , p.Competency ,p.id from hm_gm.tbl_resourcecost p group by p.Competency,p.Skill order by p.Competency,p.skill,p.Practice";
+            rs.Compentency = new List<SKillCompentency>();
             using (var connection = new MySqlConnection(connectionString))
             {
                 using (var cmd = new MySqlCommand(query, connection))
@@ -335,15 +297,21 @@ namespace HM.GM.DAL.Repository
                     connection.Open();
                     cmd.CommandType = CommandType.Text;
                     var reader = cmd.ExecuteReader();
-
                     while (reader.Read())
                     {
-                        var detail = new ResourceCostDetail();
-                        practiceList.Add(Convert.ToString(reader["Practice"])); ;
+                        rs.Compentency.Add(new SKillCompentency(rs.Compentency.Count + 1, Convert.ToString(reader["Competency"]), new Practice(rs.Compentency.Count + 1, Convert.ToString(reader["Skill"]))));
                     }
                 }
+
             }
-            return practiceList;
+            return JsonConvert.SerializeObject(rs, Formatting.None,
+                                                    new JsonSerializerSettings
+                                                    {
+                                                        NullValueHandling = NullValueHandling.Ignore
+                                                    });
+
         }
     }
+
+
 }

@@ -27,17 +27,17 @@ namespace HM.GM.Controllers
 
         [HttpGet]
         [Route("GMDefaults")]
-        public GMDefaults GetGMDefaults()
+        public List<ResourceCostDetail> GetGMDefaults()
         {
-            return _resourceCostProcessor.GetGMDefaults();
+            return _resourceCostProcessor.GetResourceCostDetails();
         }
 
         [HttpPost]
-        public bool Post([FromBody]List<ResourceCostDetail> costDetails)
+        public void Post([FromBody]List<ResourceCostDetail> costDetails)
         {
             if (costDetails != null)
                 _resourceCostProcessor.InsertResourceCostDetails(costDetails);
-            return true;
+           
         }
 
         [HttpPost]
@@ -48,10 +48,10 @@ namespace HM.GM.Controllers
         }
 
         [HttpGet]
-        [Route("orgMetadata")]
-        public OrganizationMetadata GetOrganizationMetadata()
+        [Route("GetCompetencyMatrix")]
+        public string GetCompetencyMatrix()
         {
-            return _resourceCostProcessor.GetOrganizationMetadata();
+            return _resourceCostProcessor.GetCompetencyMatrix();
         }
 
         [HttpPost]
@@ -66,19 +66,35 @@ namespace HM.GM.Controllers
 
         [HttpPut]
         [Route("updateResourceCost")]
-        public IActionResult UpdateResourceCost([FromBody] List<ResourceCostDetail> costDetails)
+        public void UpdateResourceCost([FromBody] List<ResourceCostDetail> costDetails)
         {
-            _resourceCostProcessor.DeleteResourceCostDetails(costDetails);
-            return new ViewResult();
+            _resourceCostProcessor.UpdateResourceCostDetails(costDetails);
         }
 
 
         [HttpDelete]
         [Route("deleteResourceCost")]
-        public IActionResult DeleteResourceCost([FromBody]  List<ResourceCostDetail> costDetails)
+        public void DeleteResourceCost([FromBody]  List<ResourceCostDetail> costDetails)
         {
-            _resourceCostProcessor.UpdateResourceCostDetails(costDetails);
-            return new ViewResult();
+            _resourceCostProcessor.DeleteResourceCostDetails(costDetails);
+            
+        }
+        [HttpPost]
+        [Route("SaveResourceCostChanges")]
+        public void SaveResourceCostChanges([FromBody] SaveResourceCostDetail saveResourceCostDetail)
+        {
+            if (saveResourceCostDetail.UpdateResourceCostDetail != null)
+            {
+                _resourceCostProcessor.UpdateResourceCostDetails(saveResourceCostDetail.UpdateResourceCostDetail);
+            }
+            if (saveResourceCostDetail.DeleteResourceCostDetail != null)
+            {
+                _resourceCostProcessor.DeleteResourceCostDetails(saveResourceCostDetail.DeleteResourceCostDetail);
+            }
+            if (saveResourceCostDetail.InsertResourceCostDetail != null)
+            {
+                _resourceCostProcessor.InsertResourceCostDetails(saveResourceCostDetail.InsertResourceCostDetail);
+            }
         }
 
     }

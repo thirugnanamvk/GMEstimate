@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Http } from '@angular/http';
 import { GmCalculatorService } from '../../services';
-import { GMDefaultModel, ResourceCostDetail, OrgMetaData, ResourceCostModel, GMCalculationParams } from "../../model";
+import { GMDefaultModel, ResourceCostDetail, GMCalculationParams, ResourceGroup, SKillCompentency } from "../../model";
 import { NgModule } from '@angular/core';
 declare function unescape(s: string): string;
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
@@ -21,43 +21,59 @@ export class GmCalculatorComponent implements OnInit {
   public TotalOnSiteCost: number = 0
   public TotalCost: number = 0;
   public gmMasterData: ResourceCostDetail[];
-  public orgmetadata: OrgMetaData;
+  public orgMatrix: ResourceGroup;
   public complete: boolean = false;
   public gridData: Array<GMCalculationParams> = [];
   public location = ["OnSite", "OffShore"];
   public savedisabled: boolean = true;
-  public newAttribute: GMCalculationParams = new GMCalculationParams("", "", "", "", undefined, undefined, undefined, undefined, 0, 0, undefined, undefined);
+  public newAttribute: GMCalculationParams = this.GetDefaultGMCalculationParams();
+  public currency: string = "$";
+  public filteredPractices: any[] = [];
+  public filteredSkills: SKillCompentency[] = [];
+  public filteredCompetencies: SKillCompentency[] = [];
+  public isApiCalled: boolean = false;
 
   constructor(protected service: GmCalculatorService, protected _spinner: Ng4LoadingSpinnerService) {
     this.gridData = [];
   }
 
+
   public addFieldValue() {
-    this.gridData.push(this.newAttribute)
-    this.newAttribute = new GMCalculationParams("", "", "", "", undefined, undefined, undefined, undefined, 0, 0, undefined, undefined);
+    this.gridData.unshift(this.newAttribute)
+    this.newAttribute = this.GetDefaultGMCalculationParams();
     this.savedisabled = true;
+    this.enableExport = false;
   }
 
   public deleteFieldValue(index) {
     this.gridData.splice(index, 1);
     this.calculateTotal();
+    this.enableExport = false;
   }
 
   ngOnInit() {
+    this._spinner.show();
     this.service
       .getGMDefaults()
       .subscribe(
-      (defaults) => {
-        this.gmdefaults = defaults;
+      (success) => {
+        this.gmdefaults = success;
+        this.service
+          .getOrgMetaData()
+          .subscribe(
+          (success_orgdata) => {
+            this.orgMatrix = success_orgdata;
+            this.filteredPractices = this.orgMatrix.Practice;
+            this._spinner.hide();
+            
+          },
+          (error) => {
+            this._spinner.hide();
+          }
+          );
       }
       );
-    this.service
-      .getOrgMetaData()
-      .subscribe(
-      (defaults) => {
-        this.orgmetadata = defaults;
-      }
-      );
+
   }
 
   public validate(): boolean {
@@ -66,8 +82,12 @@ export class GmCalculatorComponent implements OnInit {
         this.gridData[i].Competency
         && (this.gridData[i].PercentageLoading && this.gridData[i].PercentageLoading > 0)
         && (this.gridData[i].RatePerHour && this.gridData[i].RatePerHour >= 0)
+        && (this.gridData[i].OnsitePerdim >= 0)
+        && (this.gridData[i].OnsiteCost >= 0)
+        && (this.gridData[i].NoOfMinds >= 1)
         && (this.gridData[i].WeeksActualLoading && this.gridData[i].WeeksActualLoading >= 0)) {
         this.savedisabled = false;
+        this.enableExport = false;
         return false;
       }
     }
@@ -78,35 +98,35 @@ export class GmCalculatorComponent implements OnInit {
     this._spinner.show();
     var objList = new Array<GMCalculationParams>();
     for (var i = 0; i < this.gridData.length; i++) {
-      objList.push(new GMCalculationParams(this.gridData[i].Competency, this.gridData[i].Location,
-        this.gridData[i].Practice, this.gridData[i].Skill,
+      objList.push(new GMCalculationParams(this.gridData[i].Competency.toString(), this.gridData[i].Location,
+        this.gridData[i].Practice.toString(), this.gridData[i].Skill.toString(),
         parseFloat(this.gridData[i].PercentageLoading.toString()), parseFloat(this.gridData[i].RatePerHour.toString()),
-        parseFloat(this.gridData[i].WeeksActualLoading.toString()), 0, parseFloat(this.gridData[i].OnsiteCost.toString()),
-        parseFloat(this.gridData[i].MonthLoadingWithContengency.toString()), 0,
-        0));
+        (this.gridData[i].WeeksActualLoading?parseFloat(this.gridData[i].WeeksActualLoading.toString()):0), 0, parseFloat(this.gridData[i].OnsiteCost.toString()),
+        parseFloat(this.gridData[i].MonthLoadingWithContengency.toString()), 0, 0, parseInt(this.gridData[i].NoOfMinds.toString())));
     }
 
     this.service.UploadData(objList, this.gmdefaults).subscribe
-    (
+      (
       (defaults) => {
-          var data = defaults;
-          if (data.ErrorMessage == '') {
-            this.excelData = data.GMCalculationParams;
-            this.gridData = data.GMCalculationParams;
-            this.calculateTotal();
-            this.enableExport = true;
-            this._spinner.hide();
+        var data = defaults;
+        if (data.ErrorMessage == '') {
+          this.excelData = data.GMCalculationParams;
+          this.gridData = data.GMCalculationParams;
+          this.calculateTotal();
+          this.enableExport = true;
+          this._spinner.hide();
+          this.isApiCalled = true;
         }
         else {
           alert(data.ErrorMessage);
           this.savedisabled = true;
+          this.enableExport = false;
           this._spinner.hide();
         }
       }
-    );
+      );
   }
-
-  public tableToExcel(table: any, name: any) {
+  public exportToExcel(table: any, name: any) {
     this._spinner.show();
     var uri = 'data:application/vnd.ms-excel;base64,'
       , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
@@ -123,11 +143,38 @@ export class GmCalculatorComponent implements OnInit {
   }
 
   public resetAll() {
-    this.newAttribute = new GMCalculationParams("", "", "", "", undefined, undefined, undefined, undefined, 0, 0, undefined, undefined);
+    this.newAttribute = this.GetDefaultGMCalculationParams();
     this.gridData = [];
     this.calculateTotal();
     this.enableExport = false;
     this.savedisabled = true;
+  }
+
+  public filterPractices(index: number) {
+    if (!this.isApiCalled) {
+      this.gridData[index].Skill = "";
+      this.gridData[index].Competency = "";
+      
+    }
+  }
+
+  public filterSkills(modelPractice: string, index: number) {
+    if (modelPractice) {
+      this.filteredSkills = this.orgMatrix.Skills.filter(
+        item => item.parent.value == modelPractice.toString());
+      if (!this.isApiCalled) {
+        this.gridData[index].Competency = "";
+      }
+    }
+  }
+
+  public filterCompetency(modelSkill: string, modelPractice: string) {
+    if (modelSkill) {
+      this.filteredCompetencies = this.orgMatrix.Compentency.filter(
+        item => item.parent.value == modelSkill.toString() + '-' + modelPractice.toString())
+      
+    }
+    
   }
 
   private calculateTotal() {
@@ -146,4 +193,7 @@ export class GmCalculatorComponent implements OnInit {
     this._spinner.hide();
   }
 
+  private GetDefaultGMCalculationParams(): GMCalculationParams {
+    return new GMCalculationParams("", "", "", "", undefined, undefined, undefined, 0, 0, 0, undefined, undefined, 1);
+  }
 }

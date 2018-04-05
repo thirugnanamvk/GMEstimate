@@ -6,7 +6,9 @@
       <span class='icon-bar'></span>
       <span class='icon-bar'></span>
     </button>
-    <a class='navbar-brand' [routerLink]='["/"]'>GM Calculator</a>
+    <a class='navbar-brand' [routerLink]='["/"]'>
+      GM Calculator
+    </a>
   </div>
   <div class='navbar-collapse collapse' [ngClass]='{ "in": isExpanded }'>
     <ul class='nav navbar-nav'>
@@ -17,11 +19,10 @@
       </li>
       <li [routerLinkActive]="['link-active']">
         <!--*ngIf="isUploadEnable"-->
-        <a [routerLink]="['/dataUploader']">
+        <a [routerLink]="['/dataUploader']" *ngIf="isUploadEnable">
           <span class='glyphicon glyphicon-upload'></span>Upload Cost
         </a>
       </li>
-
     </ul>
     <div class="pull-right">
       <span style="color: white;line-height: 4;
