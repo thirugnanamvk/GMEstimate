@@ -1,13 +1,13 @@
 import { Component, ViewContainerRef } from '@angular/core';
 import * as XLSX from 'ts-xlsx';
 import { BehaviorSubject } from 'rxjs';
-import { Ng2SmartTableModule, LocalDataSource } from 'ng2-smart-table';
 import { ResourceCostDetail } from '../../model';
 import { HttpClient } from '@angular/common/http';
 import { UploadDataService, AlertService, PagerService } from '../../services';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 import { error } from 'protractor';
 import { GmFilterPipe } from '../gm-filter/gm-filter.pipe';
+import { forEach } from '@angular/router/src/utils/collection';
 
 @Component({
   selector: 'app-data-uploader',
@@ -20,46 +20,12 @@ export class DataUploaderComponent {
   public isDisabled: boolean = false;
   public gridData: ResourceCostDetail[];
   public file: File;
-  public source: LocalDataSource;
   public uploadFile: boolean = true;
-  public newAttribute: ResourceCostDetail = new ResourceCostDetail("", "", "", 0, 0);
-  //public settings = {
-  //  actions: false,
-  //  columns: {
-
-  //    Practice: {
-  //      title: 'Practice'
-  //    },
-  //    Skill: {
-  //      title: 'Skillset'
-  //    },
-  //    Competency: {
-  //      title: 'Competency'
-  //    },
-  //    OnsiteCost: {
-  //      title: 'USDHrOnsite',
-  //      valuePrepareFunction: function (c, r) {
-  //        if (!c) return 0;
-  //        else return c;
-  //      }
-  //    },
-  //    OffshoreCost: {
-  //      title: 'USDHrOffshore',
-  //      valuePrepareFunction: function (c, r) {
-  //        if (!c) return 0;
-  //        else return c;
-  //      }
-  //    }
-  //  }
-  //};
-
+  public Isdeleted: Array<number>;
+  public newAttribute: ResourceCostDetail = new ResourceCostDetail(0, "", "", "", 0, 0, false, false, true, "");
   constructor(private http: HttpClient, private _uploadservice: UploadDataService, private alertService: AlertService, vcr: ViewContainerRef, private _spinner: Ng4LoadingSpinnerService, private pagerService: PagerService) {
-    //this.source = new LocalDataSource(this.gridData);
-    this.gridData =[] ;
+    this.gridData = [];
   }
-
-  
-
 
   public incomingfile(event: any) {
     this.file = event.target.files[0];
@@ -87,6 +53,7 @@ export class DataUploaderComponent {
     this.alertService.clear();
   }
 
+
   public Upload() {
     this.clear();
     this._spinner.show();
@@ -105,12 +72,16 @@ export class DataUploaderComponent {
       var worksheet = workbook.Sheets['Cost Sheet Data - Master'];
 
       this.gridData = XLSX.utils.sheet_to_json(worksheet);
-     // this.setPage(1);
+      // this.setPage(1);
       this._spinner.hide();
     }
     fileReader.readAsArrayBuffer(this.file);
   }
+  Public UploadDataFromDb() {
+    this._spinner.show();
+    var objList = new Array<ResourceCostDetail>();
 
+  }
   public uploadData() {
     this._spinner.show();
     var objList = new Array<ResourceCostDetail>();
@@ -119,7 +90,7 @@ export class DataUploaderComponent {
     }
 
     this._uploadservice.UploadData(objList).subscribe
-    (
+      (
       (success) => {
         this.success("Data Uploaded Successfully");
         this._spinner.hide();
@@ -129,18 +100,87 @@ export class DataUploaderComponent {
         this._spinner.hide();
         this.isDisabled = true;
       }
-    );
+      );
     this.isDisabled = false;
     this.uploadFile = true;
   }
 
   public addFieldValue() {
-    this.gridData.unshift(this.newAttribute)
-    this.newAttribute = new ResourceCostDetail("", "", "", 0,0);
-    this.isDisabled = true;
+    this.gridData.unshift(new ResourceCostDetail(0, "", "", "", 0, 0, false, false, true, ""));
   }
 
   public deleteFieldValue(index) {
-    this.gridData.splice(index, 1);
+    if (this.gridData[index].Id != 0) {
+      this.gridData[index].IsDeleted = true;
+      this.gridData[index].IsUpdated = false;
+    } else {
+      this.gridData.splice(index, 1);
+    }
+  }
+  public updateColIndex(index) {
+    if (this.gridData[index].Id != 0) {
+      this.gridData[index].IsUpdated = true;
+    }
+  }
+
+  public saveData() {
+    var requestNew: Array<ResourceCostDetail> = new Array<ResourceCostDetail>();
+    var requestUpdate: Array<ResourceCostDetail> = new Array<ResourceCostDetail>();
+    var requestDelete: Array<ResourceCostDetail> = new Array<ResourceCostDetail>();
+    this.gridData.forEach(function (item) {
+      if (item.IsNew)
+        requestNew.push(item);
+      else if (item.IsUpdated)
+        requestUpdate.push(item);
+      else if (item.IsDeleted)
+        requestDelete.push(item);
+    });
+    if (requestDelete.length > 0)
+      this._uploadservice.DeleteResource(requestDelete).subscribe
+        (
+        (success) => {
+          this.success("Data Deleted Successfully");
+          alert(success);
+          this._spinner.hide();
+        },
+        (error) => {
+          this.error("Oops! Somethings went wrong. Please try again later.");
+          this._spinner.hide();
+          this.isDisabled = true;
+          alert(error);
+        }
+        );
+    if (requestUpdate.length > 0)
+      this._uploadservice.UpdateResource(requestUpdate).subscribe
+        (
+        (success) => {
+          this.success("Data Updated Successfully");
+          alert(success);
+          this._spinner.hide();
+        },
+        (error) => {
+          this.error("Oops! Somethings went wrong. Please try again later.");
+          this._spinner.hide();
+          this.isDisabled = true;
+          alert(error);
+        }
+        );
+    if (requestNew.length > 0)
+      this._uploadservice.InsertResource(requestNew).subscribe
+        (
+        (success) => {
+          this.success("Data Saved Successfully");
+          alert(success);
+          this._spinner.hide();
+        },
+        (error) => {
+          this.error("Oops! Somethings went wrong. Please try again later.");
+          this._spinner.hide();
+          this.isDisabled = true;
+          alert(error);
+        }
+        );
+    
+
   }
 }

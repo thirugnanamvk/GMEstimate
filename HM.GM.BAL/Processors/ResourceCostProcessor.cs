@@ -28,6 +28,18 @@ namespace HM.GM.BAL.Processors
             _resourceCostRepository.InsertResourceCostDetails(dalModel);
         }
 
+        public void DeleteResourceCostDetails(List<BALModel.ResourceCostDetail> resourceCostDetailList)
+        {
+            var dalModel = Mapper.Map<List<DALModel.ResourceCostDetail>>(resourceCostDetailList);
+            _resourceCostRepository.DeleteResourceCostDeatils(dalModel);
+        }
+
+        public void UpdateResourceCostDetails(List<BALModel.ResourceCostDetail> resourceCostDetailList)
+        {
+            var dalModel = Mapper.Map<List<DALModel.ResourceCostDetail>>(resourceCostDetailList);
+            _resourceCostRepository.UpdateResourceCostDetails(dalModel);
+        }
+
         public BALModel.GMDefaults GetGMDefaults()
         {
             var gMDefaultsDAL = _resourceCostRepository.GetGMDefaults();

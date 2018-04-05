@@ -4,6 +4,7 @@ namespace HM.GM.DAL.Model
 {
     public class ResourceCostDetail
     {
+        public int Id { get; set; }
         public string Practice { get; set; }
 
         public string Skill { get; set; }
@@ -19,6 +20,8 @@ namespace HM.GM.DAL.Model
         public string CreatedBy { get; set; }
 
         public bool IsActive { get; set; }
+
+
 
     }
 }

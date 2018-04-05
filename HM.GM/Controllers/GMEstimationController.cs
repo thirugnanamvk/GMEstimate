@@ -33,9 +33,11 @@ namespace HM.GM.Controllers
         }
 
         [HttpPost]
-        public void Post([FromBody]List<ResourceCostDetail> costDetails)
+        public bool Post([FromBody]List<ResourceCostDetail> costDetails)
         {
-            _resourceCostProcessor.InsertResourceCostDetails(costDetails);
+            if (costDetails != null)
+                _resourceCostProcessor.InsertResourceCostDetails(costDetails);
+            return true;
         }
 
         [HttpPost]
@@ -58,5 +60,26 @@ namespace HM.GM.Controllers
         {
             return _resourceCostProcessor.GetUserAccess(user.UserName);
         }
+
+
+
+
+        [HttpPut]
+        [Route("updateResourceCost")]
+        public IActionResult UpdateResourceCost([FromBody] List<ResourceCostDetail> costDetails)
+        {
+            _resourceCostProcessor.DeleteResourceCostDetails(costDetails);
+            return new ViewResult();
+        }
+
+
+        [HttpDelete]
+        [Route("deleteResourceCost")]
+        public IActionResult DeleteResourceCost([FromBody]  List<ResourceCostDetail> costDetails)
+        {
+            _resourceCostProcessor.UpdateResourceCostDetails(costDetails);
+            return new ViewResult();
+        }
+
     }
 }

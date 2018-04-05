@@ -6,6 +6,9 @@ namespace HM.GM.DAL.Repository
     public interface IResourceCostRepository
     {
         void InsertResourceCostDetails(List<ResourceCostDetail> resourceCostDetailList);
+        void DeleteResourceCostDeatils(List<ResourceCostDetail> resourceCostDetailList);
+        void UpdateResourceCostDetails(List<ResourceCostDetail> resourceCostDetailList);
+
 
         List<ResourceCostDetail> GetResourceDetails();
 

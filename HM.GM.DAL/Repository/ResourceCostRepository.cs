@@ -5,7 +5,7 @@ using HM.GM.DAL.Model;
 using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
 using System.Data;
-
+using System.Linq;
 namespace HM.GM.DAL.Repository
 {
     public class ResourceCostRepository : IResourceCostRepository
@@ -19,7 +19,7 @@ namespace HM.GM.DAL.Repository
 
         public List<ResourceCostDetail> GetResourceDetails()
         {
-            var query = "Select Practice, Skill ,Competency, CreatedDate, CreatedBy, IsActive from tbl_ResourceCost";
+            var query = "Select Id,Practice, Skill ,Competency, CreatedDate, CreatedBy, IsActive from tbl_ResourceCost";
             var connectionString = _configuration.GetConnectionString("DefaultConnection");
             var resourceCostDetailList = new List<ResourceCostDetail>();
             using (var connection = new MySqlConnection(connectionString))
@@ -33,7 +33,7 @@ namespace HM.GM.DAL.Repository
                     while (reader.Read())
                     {
                         var detail = new ResourceCostDetail();
-
+                        detail.Id = Convert.ToInt32(reader["Id"]);
                         detail.Competency = Convert.ToString(reader["Competency"]);
                         detail.CreatedBy = Convert.ToString(reader["CreatedBy"]);
                         detail.CreatedDate = Convert.ToDateTime(reader["CreatedDate"]);
@@ -48,6 +48,77 @@ namespace HM.GM.DAL.Repository
             return resourceCostDetailList;
         }
 
+        public void DeleteResourceCostDeatils(List<ResourceCostDetail> listOfDpdatedResource)
+        {
+            var records = listOfDpdatedResource.Select(o => o.Id).ToList();
+            var connectionString = _configuration.GetConnectionString("DefaultConnection");
+            using (var connection = new MySqlConnection(connectionString))
+            {
+                connection.Open();
+                var transaction = connection.BeginTransaction();
+                try
+                {
+                    var sCommand = new StringBuilder("DELETE FROM tbl_ResourceCost WHERE ID IN (" + String.Join(",", records) + ")");
+
+                    using (var cmd = new MySqlCommand(sCommand.ToString(), connection))
+                    {
+                        cmd.CommandType = CommandType.Text;
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    transaction.Commit();
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+        }
+        public void UpdateResourceCostDetails(List<ResourceCostDetail> listOfUpdatedResource)
+        {
+            var connectionString = _configuration.GetConnectionString("DefaultConnection");
+            using (var connection = new MySqlConnection(connectionString))
+            {
+                connection.Open();
+                var transaction = connection.BeginTransaction();
+                try
+                {
+
+                    foreach (var UpdatedResource in listOfUpdatedResource)
+                    {
+                        var sCommand = "Update tbl_ResourceCost set Practice=@practice, Skill=@skill ,Competency =@Competency , OnsiteCost=@OnsiteCost, OffshoreCost=@OffshoreCost, CreatedBy=@CreatedBy, IsActive=@IsActive where id=" + UpdatedResource.Id;
+                        using (var cmd = new MySqlCommand(sCommand.ToString(), connection))
+                        {
+                            cmd.Parameters.AddRange(new MySqlParameter[] 
+                                {
+                                    new MySqlParameter{ ParameterName = "@practice", Value = UpdatedResource.Practice.ToUpper()},
+                                    new MySqlParameter{ ParameterName = "@skill", Value = UpdatedResource.Skill.ToUpper()},
+                                    new MySqlParameter{ ParameterName = "@Competency", Value = UpdatedResource.Competency.ToUpper()},
+                                    new MySqlParameter{ ParameterName = "@OnsiteCost", Value = UpdatedResource.OnsiteCost},
+                                    new MySqlParameter{ ParameterName = "@OffshoreCost", Value = UpdatedResource.OffshoreCost},
+                                    new MySqlParameter{ ParameterName = "@CreatedBy", Value = UpdatedResource.CreatedBy.ToUpper()},
+                                    new MySqlParameter{ ParameterName = "@IsActive", Value = 1}
+                                 });
+                            cmd.CommandType = CommandType.Text;
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+                    transaction.Commit();
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+        }
         public void InsertResourceCostDetails(List<ResourceCostDetail> resourceCostDetails)
         {
             var connectionString = _configuration.GetConnectionString("DefaultConnection");
