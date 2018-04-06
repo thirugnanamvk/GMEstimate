@@ -9,6 +9,10 @@
 
   <div class="container-fluid custom-card">
     <div class="row">
+      <alert></alert>
+      <router-outlet></router-outlet>
+    </div>
+    <div class="row" *ngIf="showUploadDiv">
       <div class="col-xs-12 col-sm-5 col-md-4">
         <input type="file" style="display: inline-block;" id="btnuploadfile" #btnuploadfile (change)="incomingfile($event)" placeholder="Upload file" accept=".xlsx">
       </div>
@@ -16,7 +20,7 @@
         <button type="button" id="btnUpload" [disabled]="uploadfile" class="btn btn-success" (click)="importToLocal()"><span class ="glyphicon glyphicon-import"></span> Import</button>
       </div>
       <div class="col-xs-12 col-sm-5 col-md-2">
-        <button type="button" class="btn btn-success" (click)="uploadData()" [disabled]="!isDisabled"><span class ="glyphicon glyphicon-upload"></span> Upload</button>
+        <button type="button" class="btn btn-success" (click)="uploadData()" [disabled]="!isUploadDataDisabled"><span class ="glyphicon glyphicon-upload"></span> Upload</button>
       </div>
     </div>
     <div class="animationload">
@@ -50,19 +54,15 @@
           <ng-container *ngFor="let field of gridData | gmFilter: queryStringPractice : 'Practice'  | gmFilter: queryStringSkill : 'Skill' | gmFilter: queryStringCompetency : 'Competency'; let i = index">
             <tr *ngIf="!field.IsDeleted">
               <td><button type="button"  class="btn btn-danger" (ngModelChange)="updateColIndex(i)" (click)="deleteFieldValue(i)"><span class ="glyphicon glyphicon-trash"></span></button></td>
-              <td><input (keyup)="validate()" (click)="validate()" [(ngModel)]="field.Practice" [disabled]="field.IsDisabled" class="form-control" (ngModelChange)="updateColIndex(i)" type="text" name="{{field.Practice}}" /></td>
-              <td><input (keyup)="validate()" (click)="validate()" [(ngModel)]="field.Skill" [disabled]="field.IsDisabled" class="form-control" type="text" (ngModelChange)="updateColIndex(i)" name="{{field.Skill}}" /></td>
-              <td><input (keyup)="validate()" (click)="validate()" [(ngModel)]="field.Competency" [disabled]="field.IsDisabled" class="form-control" type="text" (ngModelChange)="updateColIndex(i)" name="{{field.Competency}}" /> </td>
+              <td><input (keyup)="validate()" (click)="validate()" [disabled]="!field.IsNew" [(ngModel)]="field.Practice" class="form-control" (ngModelChange)="updateColIndex(i)" type="text" name="{{field.Practice}}" /></td>
+              <td><input (keyup)="validate()" (click)="validate()" [disabled]="!field.IsNew" [(ngModel)]="field.Skill" class="form-control" type="text" (ngModelChange)="updateColIndex(i)" name="{{field.Skill}}" /></td>
+              <td><input (keyup)="validate()" (click)="validate()" [disabled]="!field.IsNew" [(ngModel)]="field.Competency" class="form-control" type="text" (ngModelChange)="updateColIndex(i)" name="{{field.Competency}}" /> </td>
               <td><input (keyup)="validate()" (click)="validate()" [(ngModel)]="field.OffshoreCost" class="form-control" type="number" (ngModelChange)="updateColIndex(i)" name="{{field.OffshoreCost}}" /> </td>
               <td><input (keyup)="validate()" (click)="validate()" [(ngModel)]="field.OnsiteCost" class="form-control" type="number" (ngModelChange)="updateColIndex(i)" name="{{field.OnsiteCost}}" /> </td>
             </tr>
           </ng-container>
         <tbody>
       </table>
-    </div>
-    <div class="col-sm-8 col-sm-offset-2">
-      <alert></alert>
-      <router-outlet></router-outlet>
     </div>
   </div>
 </body>

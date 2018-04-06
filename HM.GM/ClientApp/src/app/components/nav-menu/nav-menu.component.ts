@@ -43,7 +43,7 @@ export class NavMenuComponent {
           .subscribe(
           (defaults) => {
             this.currentuser = defaults;
-            //this.isUploadEnable = this.currentuser.IsAdmin;
+            this.isUploadEnable = this.currentuser.IsAdmin;
           }
           );
       },

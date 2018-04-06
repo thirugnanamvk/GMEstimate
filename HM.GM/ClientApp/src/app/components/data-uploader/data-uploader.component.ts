@@ -17,12 +17,13 @@ import { forEach } from '@angular/router/src/utils/collection';
 export class DataUploaderComponent implements OnInit {
 
   private arrayBuffer: any;
-  public isDisabled: boolean = false;
+  public isUploadDataDisabled: boolean = false;
   public gridData: ResourceCostDetail[];
   public file: File;
   public uploadFile: boolean = true;
   public Isdeleted: Array<number>;
   public saveDisabled: boolean = true;
+  public showUploadDiv: boolean = false;
   public resourceCostDetailList: ResourceCostDetailList = new ResourceCostDetailList();
   constructor(private http: HttpClient, private _uploadservice: UploadDataService, private alertService: AlertService, vcr: ViewContainerRef, private _spinner: Ng4LoadingSpinnerService, private pagerService: PagerService) {
     this.gridData = [];
@@ -77,7 +78,7 @@ export class DataUploaderComponent implements OnInit {
   public importToLocal() {
     this.clear();
     this._spinner.show();
-    this.isDisabled = true;
+    this.isUploadDataDisabled = true;
     let fileReader = new FileReader();
     fileReader.onload = (e) => {
       this.arrayBuffer = fileReader.result;
@@ -114,10 +115,10 @@ export class DataUploaderComponent implements OnInit {
       (error) => {
         this.error("Oops! Somethings went wrong. Please try again later.");
         this._spinner.hide();
-        this.isDisabled = true;
+        this.isUploadDataDisabled = true;
       }
       );
-    this.isDisabled = false;
+    this.isUploadDataDisabled = false;
     this.uploadFile = true;
   }
 
@@ -148,13 +149,18 @@ export class DataUploaderComponent implements OnInit {
     this._uploadservice.GetData()
       .subscribe(
       (data) => {
-        this.gridData = data;
+        if (data.length <= 0) {
+          this.showUploadDiv = true
+        }
+        else {
+          this.gridData = data;
+        }
         this._spinner.hide();
       },
       (error) => {
         this.error("Oops! Somethings went wrong. Please try again later.");
         this._spinner.hide();
-        this.isDisabled = true;
+        this.isUploadDataDisabled = true;
       });
 
   }
@@ -184,16 +190,18 @@ export class DataUploaderComponent implements OnInit {
       this.resourceCostDetailList.InsertCostDetailList = requestNew;
     }
     if (requestNew.length > 0 || requestUpdate.length > 0 || requestDelete.length > 0) {
+      this._spinner.show();
       this._uploadservice.SaveResource(this.resourceCostDetailList).subscribe
         (
         (success) => {
           this.success("Data Saved Successfully");
+          this.saveDisabled = true;
           this._spinner.hide();
         },
         (error) => {
           this.error("Oops! Somethings went wrong. Please try again later.");
           this._spinner.hide();
-          this.isDisabled = true;
+          this.isUploadDataDisabled = true;
         }
         );
     }
