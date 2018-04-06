@@ -7,4 +7,4 @@ export * from './UserAccess';
 export * from './Practice';
 export * from './SKillCompentency';
 export * from './ResourceGroup';
-export * from './SaveResourceCostDetail';
+export * from './ResourceCostDetailList';
