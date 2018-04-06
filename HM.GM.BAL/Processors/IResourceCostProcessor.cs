@@ -6,9 +6,8 @@ namespace HM.GM.BAL.Processors
     public interface IResourceCostProcessor
     {
         void InsertResourceCostDetails(List<ResourceCostDetail> resourceCostDetailList);
-        void DeleteResourceCostDetails(List<ResourceCostDetail> resourceCostDetailList);
-        void UpdateResourceCostDetails(List<ResourceCostDetail> resourceCostDetailList);
 
+        void SaveChangesResourceCostDetail(SaveResourceCostDetail resourceCostDetail);
         List<ResourceCostDetail> GetResourceCostDetails();
 
         Dictionary<string, string> GetGMDefaults();

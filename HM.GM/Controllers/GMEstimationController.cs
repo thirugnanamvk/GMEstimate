@@ -64,37 +64,13 @@ namespace HM.GM.Controllers
 
 
 
-        [HttpPut]
-        [Route("updateResourceCost")]
-        public void UpdateResourceCost([FromBody] List<ResourceCostDetail> costDetails)
-        {
-            _resourceCostProcessor.UpdateResourceCostDetails(costDetails);
-        }
-
-
-        [HttpDelete]
-        [Route("deleteResourceCost")]
-        public void DeleteResourceCost([FromBody]  List<ResourceCostDetail> costDetails)
-        {
-            _resourceCostProcessor.DeleteResourceCostDetails(costDetails);
-            
-        }
+       
         [HttpPost]
         [Route("SaveResourceCostChanges")]
         public void SaveResourceCostChanges([FromBody] SaveResourceCostDetail saveResourceCostDetail)
         {
-            if (saveResourceCostDetail.UpdateResourceCostDetail != null)
-            {
-                _resourceCostProcessor.UpdateResourceCostDetails(saveResourceCostDetail.UpdateResourceCostDetail);
-            }
-            if (saveResourceCostDetail.DeleteResourceCostDetail != null)
-            {
-                _resourceCostProcessor.DeleteResourceCostDetails(saveResourceCostDetail.DeleteResourceCostDetail);
-            }
-            if (saveResourceCostDetail.InsertResourceCostDetail != null)
-            {
-                _resourceCostProcessor.InsertResourceCostDetails(saveResourceCostDetail.InsertResourceCostDetail);
-            }
+            _resourceCostProcessor.SaveChangesResourceCostDetail(saveResourceCostDetail);
+           
         }
 
     }
