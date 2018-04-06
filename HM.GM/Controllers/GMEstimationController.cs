@@ -67,7 +67,7 @@ namespace HM.GM.Controllers
        
         [HttpPost]
         [Route("SaveResourceCostChanges")]
-        public void SaveResourceCostChanges([FromBody] SaveResourceCostDetail saveResourceCostDetail)
+        public void SaveResourceCostChanges([FromBody] ResourceCostDetailList saveResourceCostDetail)
         {
             _resourceCostProcessor.SaveChangesResourceCostDetail(saveResourceCostDetail);
            

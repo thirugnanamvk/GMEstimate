@@ -7,7 +7,7 @@ namespace HM.GM.DAL.Repository
     {
         void InsertResourceCostDetails(List<ResourceCostDetail> resourceCostDetailList);
        
-        void SaveChangesResourceCostDetail(SaveResourceCostDetail resourceCostDetail);
+        void SaveChangesResourceCostDetail(ResourceCostDetailList resourceCostDetail);
 
         List<ResourceCostDetail> GetResourceDetails();
 

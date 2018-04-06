@@ -13,62 +13,52 @@
         <input type="file" style="display: inline-block;" id="btnuploadfile" #btnuploadfile (change)="incomingfile($event)" placeholder="Upload file" accept=".xlsx">
       </div>
       <div class="col-xs-12 col-sm-5 col-md-3">
-        <button type="button" id="btnUpload" [disabled]="uploadfile" class="btn btn-success" (click)="Upload()"><span class ="glyphicon glyphicon-import"></span> Import</button>
+        <button type="button" id="btnUpload" [disabled]="uploadfile" class="btn btn-success" (click)="importToLocal()"><span class ="glyphicon glyphicon-import"></span> Import</button>
       </div>
       <div class="col-xs-12 col-sm-5 col-md-2">
         <button type="button" class="btn btn-success" (click)="uploadData()" [disabled]="!isDisabled"><span class ="glyphicon glyphicon-upload"></span> Upload</button>
       </div>
-      <!--<div class="col-xs-12 col-sm-5 col-md-2">
-        <button type="button" class="btn btn-success" (click)="getDataFromDb()"><span class ="glyphicon glyphicon-upload"></span> Get Data</button>
-      </div>-->
     </div>
     <div class="animationload">
       <ng4-loading-spinner [threshold]="01" [template]="" [loadingText]="'Please wait...'" [zIndex]="9999"></ng4-loading-spinner>
       <div class="osahanloading"></div>
     </div>
     <div class="row">
-      <!--<div class="col-xs-12" style="padding:2% 0 2% 0">
-        <ng2-smart-table [settings]="settings" [source]="gridData" class="col-xs-12"></ng2-smart-table>
-      </div>-->
       <button type="button" class="btn btn-success" (click)="addFieldValue()">Add Row</button>
-          <table class="table table-responsive">
-            <thead>
-              <tr>
-                <th><span> Search:  </span></th>
-                <th><input type="text" [(ngModel)]="queryStringPractice" class="form-control" /></th>
-                <th><input type="text" [(ngModel)]="queryStringSkill" class="form-control" /></th>
-                <th><input type="text" [(ngModel)]="queryStringCompetency" class="form-control" /></th>
-                <th></th>
-                <th><button type="button" [disabled]="savedisabled" class="btn btn-success" (click)="saveData()"><span class ="glyphicon glyphicon-saved"></span> Save</button></th>
-              </tr>
-            </thead>
-            <thead>
-              <tr>
-                <th></th>
-                <th>Practice</th>
-                <th>Skill</th>
-                <th>Competency</th>
-                <th>Rate Card/Hr (Offshore)</th>
-                <th>Rate Card/Hr (Onsite)</th>
-              </tr>
-            </thead>
-            <tbody>
-              <ng-container *ngFor="let field of gridData | gmFilter: queryStringPractice : 'Practice'  | gmFilter: queryStringSkill : 'Skill' | gmFilter: queryStringCompetency : 'Competency'; let i = index">
-                <tr *ngIf="!field.IsDeleted">
-                  <td><button type="button"  class="btn btn-danger" (ngModelChange)="updateColIndex(i)" (click)="deleteFieldValue(i)"><span class ="glyphicon glyphicon-trash"></span></button></td>
-                  <td><input (keyup)="validate()" [(ngModel)]="field.Practice" [disabled]="field.IsDisabled" class="form-control" (ngModelChange)="updateColIndex(i)" type="text" name="{{field.Practice}}" /></td>
-                  <td><input (keyup)="validate()" [(ngModel)]="field.Skill" [disabled]="field.IsDisabled" class="form-control" type="text" (ngModelChange)="updateColIndex(i)" name="{{field.Skill}}" /></td>
-                  <td><input (keyup)="validate()" [(ngModel)]="field.Competency" [disabled]="field.IsDisabled" class="form-control" type="text" (ngModelChange)="updateColIndex(i)" name="{{field.Competency}}" /> </td>
-                  <td><input (keyup)="validate()" [(ngModel)]="field.OffshoreCost" class="form-control" type="number" (ngModelChange)="updateColIndex(i)" name="{{field.OffshoreCost}}" /> </td>
-                  <td><input (keyup)="validate()" [(ngModel)]="field.OnsiteCost" class="form-control" type="number" (ngModelChange)="updateColIndex(i)" name="{{field.OnsiteCost}}" /> </td>
-                </tr>
-              </ng-container>
-            <tbody>
-          </table>
-
-          <div class="row">
-
-          </div>
+      <table class="table table-responsive">
+        <thead>
+          <tr>
+            <th><span> Search:  </span></th>
+            <th><input type="text" [(ngModel)]="queryStringPractice" class="form-control" /></th>
+            <th><input type="text" [(ngModel)]="queryStringSkill" class="form-control" /></th>
+            <th><input type="text" [(ngModel)]="queryStringCompetency" class="form-control" /></th>
+            <th></th>
+            <th><button type="button" [disabled]="saveDisabled" class="btn btn-success" (click)="saveData()"><span class ="glyphicon glyphicon-saved"></span> Save</button></th>
+          </tr>
+        </thead>
+        <thead>
+          <tr>
+            <th></th>
+            <th>Practice</th>
+            <th>Skill</th>
+            <th>Competency</th>
+            <th>Rate Card/Hr (Offshore)</th>
+            <th>Rate Card/Hr (Onsite)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let field of gridData | gmFilter: queryStringPractice : 'Practice'  | gmFilter: queryStringSkill : 'Skill' | gmFilter: queryStringCompetency : 'Competency'; let i = index">
+            <tr *ngIf="!field.IsDeleted">
+              <td><button type="button"  class="btn btn-danger" (ngModelChange)="updateColIndex(i)" (click)="deleteFieldValue(i)"><span class ="glyphicon glyphicon-trash"></span></button></td>
+              <td><input (keyup)="validate()" (click)="validate()" [(ngModel)]="field.Practice" [disabled]="field.IsDisabled" class="form-control" (ngModelChange)="updateColIndex(i)" type="text" name="{{field.Practice}}" /></td>
+              <td><input (keyup)="validate()" (click)="validate()" [(ngModel)]="field.Skill" [disabled]="field.IsDisabled" class="form-control" type="text" (ngModelChange)="updateColIndex(i)" name="{{field.Skill}}" /></td>
+              <td><input (keyup)="validate()" (click)="validate()" [(ngModel)]="field.Competency" [disabled]="field.IsDisabled" class="form-control" type="text" (ngModelChange)="updateColIndex(i)" name="{{field.Competency}}" /> </td>
+              <td><input (keyup)="validate()" (click)="validate()" [(ngModel)]="field.OffshoreCost" class="form-control" type="number" (ngModelChange)="updateColIndex(i)" name="{{field.OffshoreCost}}" /> </td>
+              <td><input (keyup)="validate()" (click)="validate()" [(ngModel)]="field.OnsiteCost" class="form-control" type="number" (ngModelChange)="updateColIndex(i)" name="{{field.OnsiteCost}}" /> </td>
+            </tr>
+          </ng-container>
+        <tbody>
+      </table>
     </div>
     <div class="col-sm-8 col-sm-offset-2">
       <alert></alert>

@@ -20,6 +20,9 @@ namespace HM.GM
                 cfg.CreateMap<BALModel.UserAccess, DALModel.UserAccess>();
                 cfg.CreateMap<DALModel.UserAccess, BALModel.UserAccess>();
 
+                cfg.CreateMap<BALModel.ResourceCostDetailList, DALModel.ResourceCostDetailList>();
+                cfg.CreateMap<DALModel.ResourceCostDetailList, BALModel.ResourceCostDetailList>();
+
             });
         }
     }

@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Http, Response, Headers, RequestOptions } from "@angular/http";
 import { ResourceCostDetail } from '../model/ResourceCostDetail';
 import { Observable } from "rxjs/Observable";
-import { SaveResourceCostDetail } from '../model';
+import { ResourceCostDetailList } from '../model';
 
 @Injectable()
 export class UploadDataService {
@@ -42,7 +42,7 @@ export class UploadDataService {
 
   //  return this.http.put(this.url +"/updateResourceCost", data).map((response: Response) => { return response; }).catch(this.handleError);
   //}
-  SaveResource(data: SaveResourceCostDetail): Observable<any> {
+  SaveResource(data: ResourceCostDetailList): Observable<any> {
     return this.http
       .post(this.url + "/SaveResourceCostChanges", data)
       .map((response: Response) => { return response; })

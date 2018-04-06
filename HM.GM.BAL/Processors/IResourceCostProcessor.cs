@@ -7,7 +7,7 @@ namespace HM.GM.BAL.Processors
     {
         void InsertResourceCostDetails(List<ResourceCostDetail> resourceCostDetailList);
 
-        void SaveChangesResourceCostDetail(SaveResourceCostDetail resourceCostDetail);
+        void SaveChangesResourceCostDetail(ResourceCostDetailList resourceCostDetail);
         List<ResourceCostDetail> GetResourceCostDetails();
 
         Dictionary<string, string> GetGMDefaults();

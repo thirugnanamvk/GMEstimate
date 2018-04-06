@@ -4,7 +4,6 @@ using AutoMapper;
 using DALModel = HM.GM.DAL.Model;
 using HM.GM.DAL.Repository;
 using System;
-using HM.GM.BAL.Model;
 
 namespace HM.GM.BAL.Processors
 {
@@ -29,11 +28,12 @@ namespace HM.GM.BAL.Processors
             _resourceCostRepository.InsertResourceCostDetails(dalModel);
         }
        
-        public void SaveChangesResourceCostDetail(BALModel.SaveResourceCostDetail resourceCostDetail)
+        public void SaveChangesResourceCostDetail(BALModel.ResourceCostDetailList resourceCostDetail)
         {
-            var dalModel = Mapper.Map<DALModel.SaveResourceCostDetail>(resourceCostDetail);
+            var dalModel = Mapper.Map<DALModel.ResourceCostDetailList>(resourceCostDetail);
             _resourceCostRepository.SaveChangesResourceCostDetail(dalModel);
         }
+
         public Dictionary<string, string> GetGMDefaults()
         {
             return _resourceCostRepository.GetGMDefaults();

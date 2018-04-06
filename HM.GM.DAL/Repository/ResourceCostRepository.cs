@@ -20,7 +20,7 @@ namespace HM.GM.DAL.Repository
 
         public List<ResourceCostDetail> GetResourceDetails()
         {
-            var query = "Select Id,Practice, Skill ,Competency, CreatedDate, CreatedBy, OffshoreCost, OnsiteCost, IsActive from tbl_ResourceCost";
+            var query = "Select Id, Practice, Skill ,Competency, CreatedDate, CreatedBy, OffshoreCost, OnsiteCost, IsActive from tbl_ResourceCost order by Practice";
             var connectionString = _configuration.GetConnectionString("DefaultConnection");
             var resourceCostDetailList = new List<ResourceCostDetail>();
             using (var connection = new MySqlConnection(connectionString))
@@ -50,12 +50,8 @@ namespace HM.GM.DAL.Repository
             return resourceCostDetailList;
         }
 
-        public void SaveChangesResourceCostDetail(SaveResourceCostDetail resourceCostDetail)
+        public void SaveChangesResourceCostDetail(ResourceCostDetailList resourceCostDetail)
         {
-            SaveResourceCostDetail ResourceCost = new SaveResourceCostDetail();
-            ResourceCost.DeleteResourceCostDetail = resourceCostDetail.DeleteResourceCostDetail;
-            ResourceCost.UpdateResourceCostDetail = resourceCostDetail.UpdateResourceCostDetail;
-            ResourceCost.InsertResourceCostDetail = resourceCostDetail.InsertResourceCostDetail;
             var connectionString = _configuration.GetConnectionString("DefaultConnection");
             using (var connection = new MySqlConnection(connectionString))
             {
@@ -63,11 +59,11 @@ namespace HM.GM.DAL.Repository
                 var transaction = connection.BeginTransaction();
                 try
                 {
-                    if (resourceCostDetail.UpdateResourceCostDetail != null || resourceCostDetail.UpdateResourceCostDetail.Count() > 0)
+                    if (resourceCostDetail?.UpdateCostDetailList?.Count > 0)
                     {
-                        foreach (var UpdatedResource in resourceCostDetail.InsertResourceCostDetail)
+                        foreach (var UpdatedResource in resourceCostDetail.UpdateCostDetailList)
                         {
-                            var sCommand = "Update tbl_ResourceCost set  OnsiteCost=@OnsiteCost, OffshoreCost=@OffshoreCost, CreatedBy=@CreatedBy, IsActive=@IsActive where id=" + UpdatedResource.Id;
+                            var sCommand = "Update tbl_ResourceCost set  OnsiteCost=@OnsiteCost, OffshoreCost=@OffshoreCost, CreatedBy=@CreatedBy where id=" + UpdatedResource.Id;
                             using (var cmd = new MySqlCommand(sCommand.ToString(), connection))
                             {
                                 cmd.Parameters.AddRange(new MySqlParameter[]
@@ -75,7 +71,6 @@ namespace HM.GM.DAL.Repository
                                     new MySqlParameter{ ParameterName = "@OnsiteCost", Value = UpdatedResource.OnsiteCost},
                                     new MySqlParameter{ ParameterName = "@OffshoreCost", Value = UpdatedResource.OffshoreCost},
                                     new MySqlParameter{ ParameterName = "@CreatedBy", Value = UpdatedResource.CreatedBy.ToUpper()},
-                                    new MySqlParameter{ ParameterName = "@IsActive", Value = 1}
                                      });
                                 cmd.CommandType = CommandType.Text;
                                 cmd.ExecuteNonQuery();
@@ -83,11 +78,11 @@ namespace HM.GM.DAL.Repository
                         }
 
                     }
-                    if (resourceCostDetail.InsertResourceCostDetail != null || resourceCostDetail.InsertResourceCostDetail.Count() > 0)
+                    if (resourceCostDetail?.InsertCostDetailList?.Count > 0)
                     {
                         var sCommand = new StringBuilder("INSERT INTO tbl_ResourceCost (Practice, Skill ,Competency, OnsiteCost, OffshoreCost, CreatedDate, CreatedBy, IsActive ) VALUES ");
                         List<string> Rows = new List<string>();
-                        foreach (var resourceInsertCostDetail in resourceCostDetail.InsertResourceCostDetail)
+                        foreach (var resourceInsertCostDetail in resourceCostDetail.InsertCostDetailList)
                         {
                             Rows.Add(string.Format("('{0}','{1}','{2}','{3}','{4}','{5}','{6}', {7})",
                                         MySqlHelper.EscapeString(resourceInsertCostDetail.Practice.ToUpper()),
@@ -108,9 +103,9 @@ namespace HM.GM.DAL.Repository
                             cmd.ExecuteNonQuery();
                         }
                     }
-                    if (resourceCostDetail.DeleteResourceCostDetail != null || resourceCostDetail.DeleteResourceCostDetail.Count() > 0)
+                    if (resourceCostDetail?.DeleteCostDetailList?.Count > 0)
                     {
-                        var records = resourceCostDetail.DeleteResourceCostDetail.Select(o => o.Id).ToList();
+                        var records = resourceCostDetail.DeleteCostDetailList.Select(o => o.Id).ToList();
                         var sCommand = new StringBuilder("DELETE FROM tbl_ResourceCost WHERE ID IN (" + String.Join(",", records) + ")");
 
                         using (var cmd = new MySqlCommand(sCommand.ToString(), connection))
@@ -130,11 +125,9 @@ namespace HM.GM.DAL.Repository
                 {
                     connection.Close();
                 }
-                
             }
         }
-       
- 
+
         public void InsertResourceCostDetails(List<ResourceCostDetail> resourceCostDetails)
         {
             var connectionString = _configuration.GetConnectionString("DefaultConnection");
@@ -144,7 +137,7 @@ namespace HM.GM.DAL.Repository
                 var transaction = connection.BeginTransaction();
                 try
                 {
-                                       
+
                     //*********************************************//
                     //  Insert new record in resource cost table   //
                     //********************************************//
@@ -266,6 +259,7 @@ namespace HM.GM.DAL.Repository
             }
             return userAccess;
         }
+
         public string GetCompetencyMatrix()
         {
             ResourceGroup rs = new ResourceGroup();
@@ -324,6 +318,4 @@ namespace HM.GM.DAL.Repository
 
         }
     }
-
-
 }

@@ -1,7 +1,7 @@
 import { Component, ViewContainerRef, OnInit } from '@angular/core';
 import * as XLSX from 'ts-xlsx';
 import { BehaviorSubject } from 'rxjs';
-import { ResourceCostDetail, SaveResourceCostDetail } from '../../model';
+import { ResourceCostDetail, ResourceCostDetailList } from '../../model';
 import { HttpClient } from '@angular/common/http';
 import { UploadDataService, AlertService, PagerService } from '../../services';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
@@ -14,7 +14,7 @@ import { forEach } from '@angular/router/src/utils/collection';
   templateUrl: './data-uploader.component.html',
   styleUrls: ['./data-uploader.component.css']
 })
-export class DataUploaderComponent implements OnInit{
+export class DataUploaderComponent implements OnInit {
 
   private arrayBuffer: any;
   public isDisabled: boolean = false;
@@ -22,8 +22,8 @@ export class DataUploaderComponent implements OnInit{
   public file: File;
   public uploadFile: boolean = true;
   public Isdeleted: Array<number>;
-  public savedisabled: boolean = true;
-  public SaveResourceCostDetailVal: SaveResourceCostDetail = new SaveResourceCostDetail();
+  public saveDisabled: boolean = true;
+  public resourceCostDetailList: ResourceCostDetailList = new ResourceCostDetailList();
   constructor(private http: HttpClient, private _uploadservice: UploadDataService, private alertService: AlertService, vcr: ViewContainerRef, private _spinner: Ng4LoadingSpinnerService, private pagerService: PagerService) {
     this.gridData = [];
   }
@@ -59,20 +59,22 @@ export class DataUploaderComponent implements OnInit{
     this.alertService.clear();
   }
 
-   public validate(): boolean {
+  public validate(): boolean {
     for (var i = 0; i < this.gridData.length; i++) {
-      if (( this.gridData[i].Practice) && (this.gridData[i].Skill) &&  (this.gridData[i].Competency)
-        && (this.gridData[i].OffshoreCost >= 0)
-        && (this.gridData[i].OnsiteCost >= 0))
-      {
-        this.savedisabled = false;
-        return false;
+      if ((!this.gridData[i].Practice
+        || !this.gridData[i].Skill
+        || !this.gridData[i].Competency
+        || this.gridData[i].OffshoreCost <= 0
+        || this.gridData[i].OnsiteCost <= 0)
+        && !this.gridData[i].IsDeleted) {
+        this.saveDisabled = true;
+        return;
       }
     }
-    this.savedisabled = true;
+    this.saveDisabled = false;
   }
 
-  public Upload() {
+  public importToLocal() {
     this.clear();
     this._spinner.show();
     this.isDisabled = true;
@@ -121,15 +123,18 @@ export class DataUploaderComponent implements OnInit{
 
   public addFieldValue() {
     this.gridData.unshift(new ResourceCostDetail(0, "", "", "", 0, 0, false, false, true, "", false));
+    this.validate();
   }
 
   public deleteFieldValue(index) {
     if (this.gridData[index].Id != 0) {
       this.gridData[index].IsDeleted = true;
+      this.saveDisabled = false;
       this.gridData[index].IsUpdated = false;
     } else {
       this.gridData.splice(index, 1);
     }
+    this.validate();
   }
 
   public updateColIndex(index) {
@@ -142,15 +147,15 @@ export class DataUploaderComponent implements OnInit{
     this._spinner.show();
     this._uploadservice.GetData()
       .subscribe(
-        (data) => {
-          this.gridData = data;
-          this._spinner.hide();
-        },
-        (error) => {
-          this.error("Oops! Somethings went wrong. Please try again later.");
-          this._spinner.hide();
-          this.isDisabled = true;
-        });
+      (data) => {
+        this.gridData = data;
+        this._spinner.hide();
+      },
+      (error) => {
+        this.error("Oops! Somethings went wrong. Please try again later.");
+        this._spinner.hide();
+        this.isDisabled = true;
+      });
 
   }
 
@@ -158,7 +163,7 @@ export class DataUploaderComponent implements OnInit{
     var requestNew: Array<ResourceCostDetail> = new Array<ResourceCostDetail>();
     var requestUpdate: Array<ResourceCostDetail> = new Array<ResourceCostDetail>();
     var requestDelete: Array<ResourceCostDetail> = new Array<ResourceCostDetail>();
-   
+
     this.gridData.forEach(function (item) {
       if (item.IsNew)
         requestNew.push(item);
@@ -168,18 +173,18 @@ export class DataUploaderComponent implements OnInit{
         requestDelete.push(item);
     });
     if (requestDelete.length > 0) {
-      this.SaveResourceCostDetailVal.DeleteResourceCostDetail = requestDelete;
+      this.resourceCostDetailList.DeleteCostDetailList = requestDelete;
     }
-     
+
     if (requestUpdate.length > 0) {
-      this.SaveResourceCostDetailVal.UpdateResourceCostDetail = requestUpdate;
+      this.resourceCostDetailList.UpdateCostDetailList = requestUpdate;
     }
-    
+
     if (requestNew.length > 0) {
-      this.SaveResourceCostDetailVal.InsertResourceCostDetail = requestNew;
+      this.resourceCostDetailList.InsertCostDetailList = requestNew;
     }
     if (requestNew.length > 0 || requestUpdate.length > 0 || requestDelete.length > 0) {
-      this._uploadservice.SaveResource(this.SaveResourceCostDetailVal).subscribe
+      this._uploadservice.SaveResource(this.resourceCostDetailList).subscribe
         (
         (success) => {
           this.success("Data Saved Successfully");
@@ -192,7 +197,5 @@ export class DataUploaderComponent implements OnInit{
         }
         );
     }
-    
-
   }
 }
