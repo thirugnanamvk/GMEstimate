@@ -24,6 +24,9 @@ export class DataUploaderComponent implements OnInit {
   public Isdeleted: Array<number>;
   public saveDisabled: boolean = true;
   public showUploadDiv: boolean = false;
+  public queryStringPractice: any;
+  public queryStringCompetency: any;
+  public queryStringSkill: any;
   public resourceCostDetailList: ResourceCostDetailList = new ResourceCostDetailList();
   constructor(private http: HttpClient, private _uploadservice: UploadDataService, private alertService: AlertService, vcr: ViewContainerRef, private _spinner: Ng4LoadingSpinnerService, private pagerService: PagerService) {
     this.gridData = [];
@@ -91,9 +94,7 @@ export class DataUploaderComponent implements OnInit {
       var bstr = arr.join("");
       var workbook = XLSX.read(bstr, { type: "binary" });
       var worksheet = workbook.Sheets['Cost Sheet Data - Master'];
-
-      this.gridData = XLSX.utils.sheet_to_json(worksheet);
-      // this.setPage(1);
+      this.gridData = XLSX.utils.sheet_to_json<ResourceCostDetail>(worksheet);
       this._spinner.hide();
     }
     fileReader.readAsArrayBuffer(this.file);
