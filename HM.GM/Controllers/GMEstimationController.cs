@@ -27,9 +27,9 @@ namespace HM.GM.Controllers
 
         [HttpGet]
         [Route("GMDefaults")]
-        public List<ResourceCostDetail> GetGMDefaults()
+        public Dictionary<string,string> GetGMDefaults()
         {
-            return _resourceCostProcessor.GetResourceCostDetails();
+            return _resourceCostProcessor.GetGMDefaults();
         }
 
         [HttpPost]
@@ -61,16 +61,12 @@ namespace HM.GM.Controllers
             return _resourceCostProcessor.GetUserAccess(user.UserName);
         }
 
-
-
-
-       
         [HttpPost]
         [Route("SaveResourceCostChanges")]
-        public void SaveResourceCostChanges([FromBody] ResourceCostDetailList saveResourceCostDetail)
+        public List<ResourceCostDetail> SaveResourceCostChanges([FromBody] ResourceCostDetailList saveResourceCostDetail)
         {
             _resourceCostProcessor.SaveChangesResourceCostDetail(saveResourceCostDetail);
-           
+            return _resourceCostProcessor.GetResourceCostDetails();
         }
 
     }

@@ -1,5 +1,9 @@
 
 <div class="container-fluid">
+  <div class="row">
+    <alert></alert>
+    <router-outlet></router-outlet>
+  </div>
   <div class="row item-padding">
     <div class="col-md-1 no-padding">
       <button type="button" class="btn btn-success" autofocus (click)="addFieldValue()">Add Row</button>
@@ -32,7 +36,7 @@
           <th width="5%">Rate Card/Hr<span class="text-danger">*</span></th>
           <th width="5%">Weeks(Actual Loading)<span class="text-danger">*</span></th>
           <th width="5%">OnSite  Perdim({{currency}}) </th>
-          <th width="5%">Onsite Cost({{currency}})</th>
+          <th width="5%">OnSite Cost({{currency}})</th>
           <th class="th-inverse" width="5%">Total Loading</th>
           <th class="th-inverse" width="5%">Month Loading + Contengency</th>
           <th class="th-inverse" width="6%">Total Billing({{currency}})</th>
@@ -138,15 +142,16 @@
           <th>% Loading<span class="text-danger">*</span></th>
           <th>Rate Card/Hr<span class="text-danger">*</span></th>
           <th>Weeks(Actual Loading)<span class="text-danger">*</span></th>
+          <th>OnSite Perdim</th>
           <th>Total Loading</th>
           <th>Month Loading + Contengency</th>
+          <th>OnSite Cost</th>
           <th>Total Billing</th>
-          <th>Onsite Cost</th>
           <th>Total GM%</th>
         </tr>
       </thead>
-      <tbody>
-        <tr style="border:solid  .5pt #000" *ngFor="let field of gridData; let i = index">
+      <tbody style="border:solid  .5pt #000">
+        <tr *ngFor="let field of gridData; let i = index">
           <td>{{field.Location}}</td>
           <td>{{field.Practice}}</td>
           <td>{{field.Skill}}</td>
@@ -155,18 +160,18 @@
           <td>{{field.PercentageLoading}}</td>
           <td>{{field.RatePerHour}}</td>
           <td>{{field.WeeksActualLoading}}</td>
+          <td>{{field.OnsitePerdim}}</td>
           <td>{{field.NoOfMinds * field.WeeksActualLoading}}</td>
           <td>{{field.MonthLoadingWithContengency}}</td>
-          <td>{{field.TotalBilling}}</td>
           <td>{{field.OnsiteCost}}</td>
+          <td>{{field.TotalBilling}}</td>
           <td>{{field.TotalGMInPercentage}}</td>
         </tr>
-        <tr><td colspan="13">&nbsp;</td></tr>
         <tr>
-          <td colspan="10"></td>
-          <td style="border:solid  .5pt #000; background:#000; color:white;"><span>{{TotalBilling | number : '1.2-2'}}</span></td>
-          <td style="border:solid  .5pt #000; background:#000; color:white;"><span>{{TotalOnSiteCost | number : '1.2-2'}}</span></td>
-          <td style="border:solid  .5pt #000; background:#000; color:white;"><span>{{TotalGMPercentage | number : '1.2-2'}}%</span></td>
+          <td colspan="11" style="border:solid .5pt #000;"></td>
+          <td style="border:solid .5pt #000; background:#000; color:white;"><span>{{TotalOnSiteCost | number : '1.2-2'}}</span></td>
+          <td style="border:solid .5pt #000; background:#000; color:white;"><span>{{TotalBilling | number : '1.2-2'}}</span></td>
+          <td style="border:solid .5pt #000; background:#000; color:white;"><span>{{TotalGMPercentage | number : '1.2-2'}}%</span></td>
         </tr>
       <tbody>
     </table>

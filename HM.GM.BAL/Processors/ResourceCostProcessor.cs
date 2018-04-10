@@ -41,7 +41,7 @@ namespace HM.GM.BAL.Processors
 
         public BALModel.GMInput CalculateGM(BALModel.GMInput gmInput)
         {
-            if (gmInput.GMCalculationParams != null && gmInput.GMDefaults != null)
+            if (gmInput?.GMCalculationParams != null && gmInput?.GMDefaults != null)
             {
                 var gmDefaults = gmInput.GMDefaults;
                 foreach (var param in gmInput.GMCalculationParams)
@@ -64,7 +64,7 @@ namespace HM.GM.BAL.Processors
                     }
                     else
                     {
-                        gmInput.ErrorMessage = $"Billing detail is not avaliable for Competency {param.Competency} in {param.Practice} with {param.Skill} skill ";
+                        gmInput.ErrorMessage = $"Billing detail is not avaliable for Competency {param.Competency} in {param.Practice} with {param.Skill} skill.";
                         break;
                     }
                 }

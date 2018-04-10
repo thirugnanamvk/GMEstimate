@@ -192,18 +192,18 @@ export class DataUploaderComponent implements OnInit {
     }
     if (requestNew.length > 0 || requestUpdate.length > 0 || requestDelete.length > 0) {
       this._spinner.show();
-      this._uploadservice.SaveResource(this.resourceCostDetailList).subscribe
-        (
-        (success) => {
-          this.success("Data Saved Successfully");
-          this.saveDisabled = true;
-          this._spinner.hide();
-        },
-        (error) => {
-          this.error("Oops! Somethings went wrong. Please try again later.");
-          this._spinner.hide();
-          this.isUploadDataDisabled = true;
-        }
+      this._uploadservice.SaveResource(this.resourceCostDetailList).subscribe(
+          (success) => {
+            this.success("Data Saved Successfully");
+            this.saveDisabled = true;
+            this.gridData = success;
+            this._spinner.hide();
+          },
+          (error) => {
+            this.error("Oops! Somethings went wrong. Please try again later.");
+            this._spinner.hide();
+            this.isUploadDataDisabled = true;
+          }
         );
     }
   }

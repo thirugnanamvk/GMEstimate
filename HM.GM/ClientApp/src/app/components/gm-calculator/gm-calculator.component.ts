@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Http } from '@angular/http';
-import { GmCalculatorService } from '../../services';
+import { GmCalculatorService, AlertService } from '../../services';
 import { GMDefaultModel, ResourceCostDetail, GMCalculationParams, ResourceGroup, SKillCompentency } from "../../model";
 import { NgModule } from '@angular/core';
 declare function unescape(s: string): string;
@@ -33,10 +33,9 @@ export class GmCalculatorComponent implements OnInit {
   public filteredCompetencies: SKillCompentency[] = [];
   public isApiCalled: boolean = false;
 
-  constructor(protected service: GmCalculatorService, protected _spinner: Ng4LoadingSpinnerService) {
+  constructor(protected service: GmCalculatorService, protected _spinner: Ng4LoadingSpinnerService, protected _alertService: AlertService) {
     this.gridData = [];
   }
-
 
   public addFieldValue() {
     this.gridData.unshift(this.newAttribute)
@@ -104,10 +103,8 @@ export class GmCalculatorComponent implements OnInit {
         (this.gridData[i].WeeksActualLoading?parseFloat(this.gridData[i].WeeksActualLoading.toString()):0), 0, parseFloat(this.gridData[i].OnsiteCost.toString()),
         parseFloat(this.gridData[i].MonthLoadingWithContengency.toString()), 0, 0, parseInt(this.gridData[i].NoOfMinds.toString())));
     }
-
-    this.service.UploadData(objList, this.gmdefaults).subscribe
-      (
-      (defaults) => {
+    this.service.UploadData(objList, this.gmdefaults).subscribe(
+        (defaults) => {
         var data = defaults;
         if (data.ErrorMessage == '') {
           this.excelData = data.GMCalculationParams;
@@ -118,14 +115,19 @@ export class GmCalculatorComponent implements OnInit {
           this.isApiCalled = true;
         }
         else {
-          alert(data.ErrorMessage);
+          this._alertService.error(data.ErrorMessage);
           this.savedisabled = true;
           this.enableExport = false;
           this._spinner.hide();
         }
-      }
+      },
+        (error) => {
+          this._alertService.error("Opps...Something went wrong, please provide correct input or try again later.");
+          this._spinner.hide();
+        }
       );
   }
+
   public exportToExcel(table: any, name: any) {
     this._spinner.show();
     var uri = 'data:application/vnd.ms-excel;base64,'
@@ -154,7 +156,6 @@ export class GmCalculatorComponent implements OnInit {
     if (!this.isApiCalled) {
       this.gridData[index].Skill = "";
       this.gridData[index].Competency = "";
-      
     }
   }
 
@@ -174,7 +175,6 @@ export class GmCalculatorComponent implements OnInit {
         item => item.parent.value == modelSkill.toString() + '-' + modelPractice.toString())
       
     }
-    
   }
 
   private calculateTotal() {
