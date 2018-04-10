@@ -57,8 +57,8 @@
               <td><input (keyup)="validate()" (click)="validate()" [disabled]="!field.IsNew" [(ngModel)]="field.Practice" class="form-control" (ngModelChange)="updateColIndex(i)" type="text" name="{{field.Practice}}" /></td>
               <td><input (keyup)="validate()" (click)="validate()" [disabled]="!field.IsNew" [(ngModel)]="field.Skill" class="form-control" type="text" (ngModelChange)="updateColIndex(i)" name="{{field.Skill}}" /></td>
               <td><input (keyup)="validate()" (click)="validate()" [disabled]="!field.IsNew" [(ngModel)]="field.Competency" class="form-control" type="text" (ngModelChange)="updateColIndex(i)" name="{{field.Competency}}" /> </td>
-              <td><input (keyup)="validate()" (click)="validate()" [(ngModel)]="field.OffshoreCost" class="form-control" type="number" (ngModelChange)="updateColIndex(i)" name="{{field.OffshoreCost}}" /> </td>
-              <td><input (keyup)="validate()" (click)="validate()" [(ngModel)]="field.OnsiteCost" class="form-control" type="number" (ngModelChange)="updateColIndex(i)" name="{{field.OnsiteCost}}" /> </td>
+              <td><input appNumberType (keyup)="validate()" (click)="validate()" [(ngModel)]="field.OffshoreCost" class="form-control" type="number" (ngModelChange)="updateColIndex(i)" name="{{field.OffshoreCost}}" /> </td>
+              <td><input appNumberType (keyup)="validate()" (click)="validate()" [(ngModel)]="field.OnsiteCost" class="form-control" type="number" (ngModelChange)="updateColIndex(i)" name="{{field.OnsiteCost}}" /> </td>
             </tr>
           </ng-container>
         <tbody>

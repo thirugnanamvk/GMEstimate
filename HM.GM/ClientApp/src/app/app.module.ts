@@ -12,6 +12,7 @@ import { ToastModule } from 'ng2-toastr/ng2-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
 import { GmFilterPipe } from './components/gm-filter/gm-filter.pipe';
+import { NumberTypeDirective } from './directives/number-type.directive';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { GmFilterPipe } from './components/gm-filter/gm-filter.pipe';
     components.AlertComponent,
     components.GmCalculatorContainerComponent,
     components.GmCalculatorComponent,
-    GmFilterPipe
+    GmFilterPipe,
+    NumberTypeDirective
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

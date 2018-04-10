@@ -133,6 +133,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="ClientApp\src\app\directives\" />
     <Folder Include="Properties\PublishProfiles\" />
   </ItemGroup>
 
