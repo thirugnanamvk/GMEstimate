@@ -13,7 +13,6 @@ export class AuthenticationService {
   ) { }
 
   getUser(): Observable<string> {
-    console.log('Calling getUser');
     let serviceUrl: string = 'api/WinAuth/getuser';
     return this.http.get(serviceUrl, { responseType: 'text' })
       .map((rslt: string) => {

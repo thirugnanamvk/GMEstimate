@@ -7,10 +7,12 @@ export class WinauthInterceptorService {
 
   constructor() { }
 
-  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    req = req.clone({
-      withCredentials: true
-    });
-    return next.handle(req);
-  }
+  //TODO: Fix for autnetication
+
+  //intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+  //  req = req.clone({
+  //    withCredentials: true
+  //  });
+  //  return next.handle(req);
+  //}
 }

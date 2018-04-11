@@ -3,19 +3,12 @@ import { Directive, ElementRef, OnInit, HostListener } from '@angular/core';
 @Directive({
   selector: '[appNumberType]'
 })
-export class NumberTypeDirective implements OnInit {
+export class NumberTypeDirective {
 
-  constructor(
-    private element: ElementRef
-  ) { }
+  constructor(public el: ElementRef) {
 
-  ngOnInit() {
-    
-  }
-
-  @HostListener('keydown', ['$event'])
-  private keyDown(evt: KeyboardEvent): void {
-    if ((evt.which < 48 || evt.which > 57)
+    this.el.nativeElement.onkeypress = (evt) => {
+      if ((evt.which < 48 || evt.which > 57)
       && evt.which != 8
       && evt.which != 190
       && evt.which != 46
@@ -24,9 +17,8 @@ export class NumberTypeDirective implements OnInit {
       && evt.which != 39
       && evt.which != 40
       && evt.which != 9) {
-      //console.log(evt.which);
-      evt.preventDefault();
-    }
+        evt.preventDefault();
+      }
+    };
   }
-
 }
