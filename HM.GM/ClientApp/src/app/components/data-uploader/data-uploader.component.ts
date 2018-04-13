@@ -8,6 +8,8 @@ import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 import { error } from 'protractor';
 import { GmFilterPipe } from '../gm-filter/gm-filter.pipe';
 import { forEach } from '@angular/router/src/utils/collection';
+declare function unescape(s: string): string;
+const sheetName = 'Cost Sheet Data';
 
 @Component({
   selector: 'app-data-uploader',
@@ -23,7 +25,6 @@ export class DataUploaderComponent implements OnInit {
   public uploadFile: boolean = true;
   public Isdeleted: Array<number>;
   public saveDisabled: boolean = true;
-  public showUploadDiv: boolean = false;
   public queryStringPractice: any;
   public queryStringCompetency: any;
   public queryStringSkill: any;
@@ -93,7 +94,7 @@ export class DataUploaderComponent implements OnInit {
       }
       var bstr = arr.join("");
       var workbook = XLSX.read(bstr, { type: "binary" });
-      var worksheet = workbook.Sheets['Cost Sheet Data - Master'];
+      var worksheet = workbook.Sheets[sheetName];
       this.gridData = XLSX.utils.sheet_to_json<ResourceCostDetail>(worksheet);
       this._spinner.hide();
     }
@@ -150,12 +151,7 @@ export class DataUploaderComponent implements OnInit {
     this._uploadservice.GetData()
       .subscribe(
       (data) => {
-        if (data.length <= 0) {
-          this.showUploadDiv = true
-        }
-        else {
-          this.gridData = data;
-        }
+        this.gridData = data;
         this._spinner.hide();
       },
       (error) => {
@@ -193,18 +189,30 @@ export class DataUploaderComponent implements OnInit {
     if (requestNew.length > 0 || requestUpdate.length > 0 || requestDelete.length > 0) {
       this._spinner.show();
       this._uploadservice.SaveResource(this.resourceCostDetailList).subscribe(
-          (success) => {
-            this.success("Data Saved Successfully");
-            this.saveDisabled = true;
-            this.gridData = success;
-            this._spinner.hide();
-          },
-          (error) => {
-            this.error("Oops! Somethings went wrong. Please try again later.");
-            this._spinner.hide();
-            this.isUploadDataDisabled = true;
-          }
-        );
+        (success) => {
+          this.success("Data Saved Successfully");
+          this.saveDisabled = true;
+          this.gridData = success;
+          this._spinner.hide();
+        },
+        (error) => {
+          this.error("Oops! Somethings went wrong. Please try again later.");
+          this._spinner.hide();
+          this.isUploadDataDisabled = true;
+        }
+      );
     }
+  }
+
+  public downloadSampleExcel(table: any) {
+    this._spinner.show();
+    var uri = 'data:application/vnd.ms-excel;base64,'
+      , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
+      , base64 = function (s) { return window.btoa(unescape(encodeURIComponent(s))) }
+      , format = function (s, c) { return s.replace(/{(\w+)}/g, function (m, p) { return c[p]; }) }
+    if (!table.nodeType) table = document.getElementById(table)
+    var ctx = { worksheet: sheetName || 'Worksheet', table: table.innerHTML }
+    window.location.href = uri + base64(format(template, ctx))
+    this._spinner.hide();
   }
 }

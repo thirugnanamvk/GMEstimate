@@ -70,7 +70,7 @@ namespace HM.GM.DAL.Repository
                                     {
                                     new MySqlParameter{ ParameterName = "@OnsiteCost", Value = UpdatedResource.OnsiteCost},
                                     new MySqlParameter{ ParameterName = "@OffshoreCost", Value = UpdatedResource.OffshoreCost},
-                                    new MySqlParameter{ ParameterName = "@CreatedBy", Value = UpdatedResource.CreatedBy.ToUpper()},
+                                    new MySqlParameter{ ParameterName = "@CreatedBy", Value = UpdatedResource.CreatedBy != null ? UpdatedResource.CreatedBy.ToUpper() : "ADMIN"},
                                      });
                                 cmd.CommandType = CommandType.Text;
                                 cmd.ExecuteNonQuery();
@@ -91,7 +91,7 @@ namespace HM.GM.DAL.Repository
                                         resourceInsertCostDetail.OnsiteCost,
                                         resourceInsertCostDetail.OffshoreCost,
                                         String.Format("{0:s}", resourceInsertCostDetail.CreatedDate),
-                                        MySqlHelper.EscapeString(resourceInsertCostDetail.CreatedBy.ToUpper()),
+                                        MySqlHelper.EscapeString(resourceInsertCostDetail.CreatedBy != null ? resourceInsertCostDetail.CreatedBy.ToUpper() : "ADMIN"),
                                         resourceInsertCostDetail.IsActive
                             ));
                         }
@@ -137,6 +137,15 @@ namespace HM.GM.DAL.Repository
                 var transaction = connection.BeginTransaction();
                 try
                 {
+
+                    //*************************//
+                    //  Update History Table   //
+                    //*************************//
+                    string sp = "SP_UpdateResourceCostHistory";
+                    var sp_cmd = new MySqlCommand(sp, connection);
+                    sp_cmd.CommandType = CommandType.StoredProcedure;
+                    sp_cmd.Parameters.AddWithValue("@UpdatedBy", resourceCostDetails[0].CreatedBy.ToUpper());
+                    sp_cmd.ExecuteNonQuery();
 
                     //*********************************************//
                     //  Insert new record in resource cost table   //

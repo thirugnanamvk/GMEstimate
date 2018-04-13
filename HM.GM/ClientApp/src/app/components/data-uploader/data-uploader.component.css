@@ -6,3 +6,7 @@
   -webkit-box-shadow: grey 0px 0px 1px;
   box-shadow: grey 0px 0px 1px;
 }
+
+.top-buffer {
+  margin-top: 20px;
+}
