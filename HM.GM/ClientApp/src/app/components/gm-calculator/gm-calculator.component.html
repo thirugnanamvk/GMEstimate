@@ -50,7 +50,7 @@
           </td>
           <td><input (keyup)="validate()" (click)="validate()" [(ngModel)]="field.Location" class="form-control" type="text" auto-complete [source]="location" name="{{field.Location}}" /></td>
           <td><input (keyup)="validate()" [(ngModel)]="field.Practice" class="form-control" type="text" auto-complete [source]="filteredPractices" name="{{field.Practice}}" list-formatter="value" (valueChanged)="filterPractices(  i)" /></td>
-          <td><input (keyup)="validate()" [(ngModel)]="field.Skill" class="form-control" type="text" auto-complete [source]="filteredSkills" name="{{field.Skill}}" list-formatter="value" open-on-focus="false" (focus)="filterSkills(field.Practice, i)" /> </td>
+          <td><input (keyup)="validate()" [(ngModel)]="field.Skill" class="form-control" type="text" auto-complete [source]="filteredSkills" name="{{field.Skill}}" list-formatter="value" open-on-focus="false" (focus)="filterSkills(field.Practice, field)" /> </td>
           <td><input (keyup)="validate()" [(ngModel)]="field.Competency" class="form-control" type="text" auto-complete [source]="filteredCompetencies" name="{{field.Competency}}" open-on-focus="false" (focus)="filterCompetency(field.Skill,field.Practice)" list-formatter="value" /> </td>
           <td><input (keyup)="validate()" appNumberType (click)="validate()" [(ngModel)]="field.NoOfMinds" class="form-control" min="1" type="number" name="{{field.NoOfMinds}}" /> </td>
           <td><input (keyup)="validate()" appNumberType (click)="validate()" [(ngModel)]="field.PercentageLoading" class="form-control" max="100" min="0" type="number" name="{{field.PercentageLoading}}" /> </td>

@@ -1,5 +1,5 @@
 import { Component, ViewContainerRef, OnInit } from '@angular/core';
-import * as XLSX from 'ts-xlsx';
+import * as XLSX from 'xlsx';
 import { BehaviorSubject } from 'rxjs';
 import { ResourceCostDetail, ResourceCostDetailList } from '../../model';
 import { HttpClient } from '@angular/common/http';
@@ -10,7 +10,7 @@ import { GmFilterPipe } from '../gm-filter/gm-filter.pipe';
 import { forEach } from '@angular/router/src/utils/collection';
 declare function unescape(s: string): string;
 const sheetName = 'Cost Sheet Data';
-
+const fileName = 'CostDetails.xlsx'
 @Component({
   selector: 'app-data-uploader',
   templateUrl: './data-uploader.component.html',
@@ -77,11 +77,31 @@ export class DataUploaderComponent implements OnInit {
       }
     }
     this.saveDisabled = false;
+
+
   }
+  public populateFilters(key, value) {
+    switch (key) {
+      case 'P':
+        this.queryStringPractice = value;
+        break;
+      case 'S':
+        this.queryStringSkill = value;
+        break;
+      case 'C':
+        this.queryStringCompetency = value;
+        break;
+      default:
+        this.queryStringPractice = "";
+        this.queryStringSkill = "";
+        this.queryStringCompetency = "";
+        break;
+    }
+  }
+
 
   public importToLocal() {
     this.clear();
-    this._spinner.show();
     this.isUploadDataDisabled = true;
     let fileReader = new FileReader();
     fileReader.onload = (e) => {
@@ -96,23 +116,18 @@ export class DataUploaderComponent implements OnInit {
       var workbook = XLSX.read(bstr, { type: "binary" });
       var worksheet = workbook.Sheets[sheetName];
       this.gridData = XLSX.utils.sheet_to_json<ResourceCostDetail>(worksheet);
-      this._spinner.hide();
+      this.uploadData();
     }
     fileReader.readAsArrayBuffer(this.file);
   }
 
   public uploadData() {
     this._spinner.show();
-    var objList = new Array<ResourceCostDetail>();
-    for (var i = 0; i < this.gridData.length; i++) {
-      objList.push(this.gridData[i]);
-    }
-
-    this._uploadservice.UploadData(objList).subscribe
+    this._uploadservice.UploadData(this.gridData).subscribe
       (
       (success) => {
         this.success("Data Uploaded Successfully");
-        this._spinner.hide();
+        this.getDataFromDb();
       },
       (error) => {
         this.error("Oops! Somethings went wrong. Please try again later.");
@@ -127,22 +142,23 @@ export class DataUploaderComponent implements OnInit {
   public addFieldValue() {
     this.gridData.unshift(new ResourceCostDetail(0, "", "", "", 0, 0, false, false, true, "", false));
     this.validate();
+    this.populateFilters(null, null);
   }
 
-  public deleteFieldValue(index) {
-    if (this.gridData[index].Id != 0) {
-      this.gridData[index].IsDeleted = true;
+  public deleteFieldValue(row) {
+    if (row.Id != 0) {
+      row.IsDeleted = true;
       this.saveDisabled = false;
-      this.gridData[index].IsUpdated = false;
+      row.IsUpdated = false;
     } else {
-      this.gridData.splice(index, 1);
+      this.gridData.splice(row,1);
     }
     this.validate();
   }
 
-  public updateColIndex(index) {
-    if (this.gridData[index].Id != 0) {
-      this.gridData[index].IsUpdated = true;
+  public updateColIndex(row: ResourceCostDetail) {
+    if (row.Id != 0) {
+      row.IsUpdated = true;
     }
   }
 
@@ -205,14 +221,12 @@ export class DataUploaderComponent implements OnInit {
   }
 
   public downloadSampleExcel(table: any) {
+
     this._spinner.show();
-    var uri = 'data:application/vnd.ms-excel;base64,'
-      , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
-      , base64 = function (s) { return window.btoa(unescape(encodeURIComponent(s))) }
-      , format = function (s, c) { return s.replace(/{(\w+)}/g, function (m, p) { return c[p]; }) }
-    if (!table.nodeType) table = document.getElementById(table)
-    var ctx = { worksheet: sheetName || 'Worksheet', table: table.innerHTML }
-    window.location.href = uri + base64(format(template, ctx))
+    var wb = XLSX.utils.book_new();
+    var ws = XLSX.utils.table_to_sheet(document.getElementById(table));
+    XLSX.utils.book_append_sheet(wb, ws, sheetName);
+    XLSX.writeFile(wb, fileName);
     this._spinner.hide();
   }
 }

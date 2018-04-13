@@ -13,17 +13,17 @@
     </div>
     <div class="row">
         <div class="col-sm-9 col-md-9" role="alert"><label class="text-danger"><span class ="glyphicon glyphicon-warning-sign"></span> Uploading excel will delete exsisting data !!!</label></div>
-        <div class="col-sm-3 col-md-3"><button type="button" class="btn btn-info btn-block" (click)="downloadSampleExcel('gridTable')"><span class ="glyphicon glyphicon-download"></span> Download Sample Excel</button></div>
+        <div class="col-sm-3 col-md-3"></div>
       </div>
     <div class="row top-buffer">
-      <div class="col-xs-12 col-sm-6 col-md-4">
+      <div class="col-xs-12 col-sm-6 col-md-7">
         <input type="file" style="display: inline-block;" id="btnuploadfile" #btnuploadfile (change)="incomingfile($event)" placeholder="Upload file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
       </div>
-      <div class="col-xs-12 col-sm-3 col-md-2 col-md-offset-4">
+      <div class="col-xs-12 col-sm-3 col-md-2">
         <button type="button" id="btnUpload" [disabled]="uploadfile" class="btn btn-success btn-block" (click)="importToLocal()"><span class ="glyphicon glyphicon-import"></span> Import</button>
       </div>
-      <div class="col-xs-12 col-sm-3 col-md-2">
-        <button type="button" class="btn btn-success btn-block" (click)="uploadData()" [disabled]="!isUploadDataDisabled"><span class ="glyphicon glyphicon-upload"></span> Upload</button>
+      <div class="col-xs-12 col-sm-3 col-md-3">
+        <button type="button" class="btn btn-info btn-block" (click)="downloadSampleExcel('gridTable')"><span class ="glyphicon glyphicon-download"></span> Download Sample Excel</button>
       </div>
     </div>
     <hr/>
@@ -45,42 +45,41 @@
         </thead>
         <thead>
           <tr>
-            <th></th>
-            <th>Practice</th>
-            <th>Skill</th>
-            <th>Competency</th>
-            <th>Cost/Hr (Offshore)</th>
-            <th>Cost/Hr (Onsite)</th>
-            <th><button type="button" class="btn btn-success btn-block" (click)="addFieldValue()">Add Row</button></th>
+            <th><button type="button" class="btn btn-success btn-block " (click)="addFieldValue()"><span class ="glyphicon glyphicon-plus-sign"></span></button></th>
+            <th>Practice<span class="text text-danger">*</span></th>
+            <th>Skill<span class="text text-danger">*</span></th>
+            <th>Competency<span class="text text-danger">*</span></th>
+            <th>Cost/Hr (Offshore)<span class="text text-danger">*</span></th>
+            <th>Cost/Hr (Onsite)<span class="text text-danger">*</span></th>
           </tr>
         </thead>
         <tbody>
           <ng-container *ngFor="let field of gridData | gmFilter: queryStringPractice : 'Practice'  | gmFilter: queryStringSkill : 'Skill' | gmFilter: queryStringCompetency : 'Competency'; let i = index">
             <tr *ngIf="!field.IsDeleted">
-              <td><button type="button"  class="btn btn-danger" (ngModelChange)="updateColIndex(i)" (click)="deleteFieldValue(i)"><span class ="glyphicon glyphicon-trash"></span></button></td>
-              <td><input (keyup)="validate()" (click)="validate()" [disabled]="!field.IsNew" [(ngModel)]="field.Practice" class="form-control" (ngModelChange)="updateColIndex(i)" type="text" name="{{field.Practice}}" /></td>
-              <td><input (keyup)="validate()" (click)="validate()" [disabled]="!field.IsNew" [(ngModel)]="field.Skill" class="form-control" type="text" (ngModelChange)="updateColIndex(i)" name="{{field.Skill}}" /></td>
-              <td><input (keyup)="validate()" (click)="validate()" [disabled]="!field.IsNew" [(ngModel)]="field.Competency" class="form-control" type="text" (ngModelChange)="updateColIndex(i)" name="{{field.Competency}}" /> </td>
-              <td><input appNumberType (keyup)="validate()" (click)="validate()" [(ngModel)]="field.OffshoreCost" class="form-control" type="number" (ngModelChange)="updateColIndex(i)" name="{{field.OffshoreCost}}" /> </td>
-              <td><input appNumberType (keyup)="validate()" (click)="validate()" [(ngModel)]="field.OnsiteCost" class="form-control" type="number" (ngModelChange)="updateColIndex(i)" name="{{field.OnsiteCost}}" /> </td>
+              <td><button type="button"  class="btn btn-danger" (ngModelChange)="updateColIndex(i)" (click)="deleteFieldValue(field)"><span class ="glyphicon glyphicon-trash"></span></button></td>
+              <td><input (keyup)="validate();populateFilters('P',field.Practice);" (click)="validate()" [disabled]="!field.IsNew" [(ngModel)]="field.Practice" class="form-control" (ngModelChange)="updateColIndex(field)" type="text" name="{{field.Practice}}" /></td>
+              <td><input (keyup)="validate();populateFilters('S',field.Skill);" (click)="validate()" [disabled]="!field.IsNew" [(ngModel)]="field.Skill" class="form-control" type="text" (ngModelChange)="updateColIndex(field)" name="{{field.Skill}}" /></td>
+              <td><input (keyup)="validate();populateFilters('C',field.Competency);" (click)="validate()" [disabled]="!field.IsNew" [(ngModel)]="field.Competency" class="form-control" type="text" (ngModelChange)="updateColIndex(field)" name="{{field.Competency}}" /> </td>
+              <td><input appNumberType (keyup)="validate()" (click)="validate()" [(ngModel)]="field.OffshoreCost" class="form-control" type="number" (ngModelChange)="updateColIndex(field)" name="{{field.OffshoreCost}}" /> </td>
+              <td><input appNumberType (keyup)="validate()" (click)="validate()" [(ngModel)]="field.OnsiteCost" class="form-control" type="number" (ngModelChange)="updateColIndex(field)" name="{{field.OnsiteCost}}" /> </td>
             </tr>
           </ng-container>
         <tbody>
       </table>
     </div>
 
-    <div class="row" id="gridTable" [hidden]="true">
-      <table class="table table-responsive" style="border:solid  .5pt #000">
+    <div [hidden]="true">
+      <table  id="gridTable">
         <thead>
-          <tr style="background:#eee; border:solid  .5pt #000">
-            <th>Practice<span class="text-danger">*</span></th>
-            <th>Skill<span class="text-danger">*</span></th>
-            <th>Competency<span class="text-danger">*</span></th>
-            <th>OnsiteCost<span class="text-danger">*</span></th>
-            <th>OffshoreCost<span class="text-danger">*</span></th>
+          <tr>
+            <th>Practice</th>
+            <th>Skill</th>
+            <th>Competency</th>
+            <th>OnsiteCost</th>
+            <th>OffshoreCost</th>
           </tr>
         </thead>
-        <tbody style="border:solid  .5pt #000">
+        <tbody>
           <tr *ngFor="let field of gridData; let i = index">
             <td>{{field.Practice}}</td>
             <td>{{field.Skill}}</td>

@@ -44,7 +44,7 @@ export class GmCalculatorComponent implements OnInit {
     this.enableExport = false;
   }
 
-  public deleteFieldValue(index) {
+  public deleteFieldValue(index:number) {
     this.gridData.splice(index, 1);
     this.calculateTotal();
     this.enableExport = false;
@@ -159,12 +159,12 @@ export class GmCalculatorComponent implements OnInit {
     }
   }
 
-  public filterSkills(modelPractice: string, index: number) {
+  public filterSkills(modelPractice: string, row: GMCalculationParams) {
     if (modelPractice) {
       this.filteredSkills = this.orgMatrix.Skills.filter(
         item => item.parent.value == modelPractice.toString());
       if (!this.isApiCalled) {
-        this.gridData[index].Competency = "";
+        row.Competency = "";
       }
     }
   }
