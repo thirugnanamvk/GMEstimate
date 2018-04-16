@@ -20,7 +20,7 @@ namespace HM.GM.DAL.Repository
 
         public List<ResourceCostDetail> GetResourceDetails()
         {
-            var query = "Select Id, Practice, Skill ,Competency, CreatedDate, CreatedBy, OffshoreCost, OnsiteCost, IsActive from tbl_ResourceCost order by Practice";
+            var query = "Select Id, Practice, Skill ,Competency, CreatedDate, CreatedBy, OffshoreCost, OnsiteCost, IsActive from tbl_ResourceCost order by Practice, Skill, Competency";
             var connectionString = _configuration.GetConnectionString("DefaultConnection");
             var resourceCostDetailList = new List<ResourceCostDetail>();
             using (var connection = new MySqlConnection(connectionString))

@@ -20,7 +20,7 @@
         <input type="file" style="display: inline-block;" id="btnuploadfile" #btnuploadfile (change)="incomingfile($event)" placeholder="Upload file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
       </div>
       <div class="col-xs-12 col-sm-2 col-md-2">
-        <button type="button" id="btnUpload" [disabled]="uploadfile" class="btn btn-warning btn-block" (click)="importToLocal()"><span class ="glyphicon glyphicon-import"></span> Import</button>
+        <button type="button" id="btnUpload" [disabled]="uploadFile" class="btn btn-warning btn-block" (click)="importToLocal()"><span class ="glyphicon glyphicon-import"></span> Import</button>
       </div>
       <div class="col-xs-12 col-sm-3 col-md-2">
         <button type="button" class="btn btn-info btn-block" (click)="downloadSampleExcel('gridTable')"><span class ="glyphicon glyphicon-download"></span> Export</button>
