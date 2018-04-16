@@ -26,7 +26,7 @@
     <table class="table table-responsive">
       <thead>
         <tr style="vertical-align:central">
-          <th width="3%"><button type="button" class="btn btn-success" autofocus (click)="addFieldValue()"><span class ="glyphicon glyphicon-plus-sign"></span></button></th>
+          <th width="3%"><button type="button" class="btn custom-button" autofocus (click)="addFieldValue()"><span class ="glyphicon glyphicon-plus-sign"></span></button></th>
           <th width="6%">Location<span class="text-danger">*</span></th>
           <th width="9%">Practice<span class="text-danger">*</span></th>
           <th width="9%">Skill<span class="text-danger">*</span></th>
@@ -46,7 +46,7 @@
       <tbody>
         <tr *ngFor="let field of gridData; let i = index">
           <td>
-            <button type ="button"  class="btn btn-danger" (click)="deleteFieldValue(i)"><span class ="glyphicon glyphicon-trash"></span></button>
+            <button type ="button" class="btn custom-button" (click)="deleteFieldValue(i)"><span class ="glyphicon glyphicon-trash"></span></button>
           </td>
           <td><input (keyup)="validate()" (click)="validate()" [(ngModel)]="field.Location" class="form-control" type="text" auto-complete [source]="location" name="{{field.Location}}" /></td>
           <td><input (keyup)="validate()" [(ngModel)]="field.Practice" class="form-control" type="text" auto-complete [source]="filteredPractices" name="{{field.Practice}}" list-formatter="value" (valueChanged)="filterPractices(  i)" /></td>
@@ -83,14 +83,12 @@
     <form #f="ngForm">
       <table class="table">
         <thead class="thead-inverse">
-          <tr>
-            <th class="text-center">Avergae Billing Rate</th>
-            <th class="text-center">Value</th>
-            <th class="text-center">Avergae Billing Rate</th>
-            <th class="text-center">Value</th>
-            <th class="text-center">Avergae Billing Rate</th>
-            <th class="text-center">Value</th>
-          </tr>
+            <th class="padding-5x text-center">Avergae Billing Rate</th>
+            <th class="padding-5x text-center">Value</th>
+            <th class="padding-5x text-center">Avergae Billing Rate</th>
+            <th class="padding-5x text-center">Value</th>
+            <th class="padding-5x text-center">Avergae Billing Rate</th>
+            <th class="padding-5x text-center">Value</th>
         </thead>
         <tbody>
           <tr>

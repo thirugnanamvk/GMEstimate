@@ -37,7 +37,7 @@ body {
   border-radius: 5px;
   box-shadow: grey 0px 0px 1px;
 }
-/*.form-control {
+.form-control {
   border-radius: 0 !important;
   line-height: 0 !important;
   height: 30px !important;
@@ -47,6 +47,25 @@ body {
   border:none !important;
 }
 .table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th {
-  padding: 4px !important;
-  border-right: solid 1px #c8c8c8;
-}*/
+  padding: 0px !important;
+  border-right: solid 1px #D4D4D4;
+}
+.custom-button {
+  background: none;
+  border: none;
+}
+.table-border {
+  border: 1px solid #d4d4d4 !important;
+}
+.form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
+  background: transparent !important;
+}
+.background-gray {
+  background: #f6f6f6;
+}
+.table > thead > tr > th{
+  vertical-align:middle !important; 
+}
+.padding-5x{
+  padding:5px !important;
+}

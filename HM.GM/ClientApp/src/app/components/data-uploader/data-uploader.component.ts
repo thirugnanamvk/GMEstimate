@@ -145,6 +145,11 @@ export class DataUploaderComponent implements OnInit {
     this.populateFilters(null, null);
   }
 
+  public resetData() {
+    this.populateFilters(null, null);
+    this.getDataFromDb();
+  }
+
   public deleteFieldValue(row,index) {
     if (row.Id != 0) {
       row.IsDeleted = true;
