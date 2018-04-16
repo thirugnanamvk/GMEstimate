@@ -31,6 +31,7 @@ export class AlertService {
 
   success(message: string, keepAfterRouteChange = false) {
     this.alert(AlertType.Success, message, keepAfterRouteChange);
+
   }
 
   error(message: string, keepAfterRouteChange = false) {
@@ -45,9 +46,12 @@ export class AlertService {
     this.alert(AlertType.Warning, message, keepAfterRouteChange);
   }
 
-  alert(type: AlertType, message: string, keepAfterRouteChange = false) {
+  alert(type: AlertType, message: string, keepAfterRouteChange = false, timeOut: number = 5000) {
     this.keepAfterRouteChange = keepAfterRouteChange;
-    this.subject.next(<Alert>{ type: type, message: message });
+    this.subject.next(<Alert>{ type: type, message: message});
+    setTimeout(() => {
+      this.clear();
+    }, timeOut)
   }
 
   clear() {

@@ -37,3 +37,16 @@ body {
   border-radius: 5px;
   box-shadow: grey 0px 0px 1px;
 }
+/*.form-control {
+  border-radius: 0 !important;
+  line-height: 0 !important;
+  height: 30px !important;
+  padding: 6px 6px !important;
+  -webkit-box-shadow: inherit !important;
+  box-shadow: inherit !important;
+  border:none !important;
+}
+.table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th {
+  padding: 4px !important;
+  border-right: solid 1px #c8c8c8;
+}*/

@@ -54,9 +54,9 @@
           </tr>
         </thead>
         <tbody>
-          <ng-container *ngFor="let field of gridData | gmFilter: queryStringPractice : 'Practice'  | gmFilter: queryStringSkill : 'Skill' | gmFilter: queryStringCompetency : 'Competency'; let i = index">
+          <ng-container *ngFor="let field of gridData | gmFilter: queryStringPractice : 'Practice'  | gmFilter: queryStringSkill : 'Skill' | gmFilter: queryStringCompetency : 'Competency'; let in = index">
             <tr *ngIf="!field.IsDeleted">
-              <td><button type="button"  class="btn btn-danger" (ngModelChange)="updateColIndex(i)" (click)="deleteFieldValue(field)"><span class ="glyphicon glyphicon-trash"></span></button></td>
+              <td><button type="button"  class="btn btn-danger" (ngModelChange)="updateColIndex(i)" (click)="deleteFieldValue(field,in)"><span class ="glyphicon glyphicon-trash"></span></button></td>
               <td><input (keyup)="validate();populateFilters('P',field.Practice);" (click)="validate()" [disabled]="!field.IsNew" [(ngModel)]="field.Practice" class="form-control" (ngModelChange)="updateColIndex(field)" type="text" name="{{field.Practice}}" /></td>
               <td><input (keyup)="validate();populateFilters('S',field.Skill);" (click)="validate()" [disabled]="!field.IsNew" [(ngModel)]="field.Skill" class="form-control" type="text" (ngModelChange)="updateColIndex(field)" name="{{field.Skill}}" /></td>
               <td><input (keyup)="validate();populateFilters('C',field.Competency);" (click)="validate()" [disabled]="!field.IsNew" [(ngModel)]="field.Competency" class="form-control" type="text" (ngModelChange)="updateColIndex(field)" name="{{field.Competency}}" /> </td>
