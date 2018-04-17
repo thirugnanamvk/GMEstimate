@@ -10,17 +10,17 @@
     <div class="col-md-5">
       &nbsp;
     </div>
-    <div class="col-md-2 col-xs-4 no-padding-right">
+    <div class="col-xs-12 col-sm-4 col-md-2 no-padding-right">
       <button #btncalculate type="button" class="btn btn-success btn-block" [disabled]="savedisabled" (click)="calculateGM()">
-        <i class ="fa fa-hourglass-half"></i> Calculate GM
+        <i class="fa fa-hourglass-half"></i> Calculate GM
       </button>
     </div>
-    <div class="col-md-2 col-xs-4 no-padding-right">
+    <div class="col-xs-12 col-sm-4 col-md-2 no-padding-right">
       <button type="button" class="btn btn-info btn-block" [disabled]="!enableExport" (click)="exportToExcel('gridTable', 'GM Table')">
         <i class="fa fa-download"></i> Export To Excel
       </button>
     </div>
-    <div class="col-md-2 col-xs-4 no-padding-right">
+    <div class="col-xs-12 col-sm-4 col-md-2 no-padding-right">
       <button type="button" class="btn btn-danger btn-block" [disabled]="!enableExport" (click)="resetAll()">
         <i class="fa fa-sync-alt fa-spin"></i> Reset All
       </button>
