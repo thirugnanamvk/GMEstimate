@@ -44,7 +44,7 @@ export class GmCalculatorComponent implements OnInit {
     this.enableExport = false;
   }
 
-  public deleteFieldValue(index:number) {
+  public deleteFieldValue(index: number) {
     this.gridData.splice(index, 1);
     this.calculateTotal();
     this.enableExport = false;
@@ -64,7 +64,7 @@ export class GmCalculatorComponent implements OnInit {
             this.orgMatrix = success_orgdata;
             this.filteredPractices = this.orgMatrix.Practice;
             this._spinner.hide();
-            
+
           },
           (error) => {
             this._spinner.hide();
@@ -100,11 +100,11 @@ export class GmCalculatorComponent implements OnInit {
       objList.push(new GMCalculationParams(this.gridData[i].Competency.toString(), this.gridData[i].Location,
         this.gridData[i].Practice.toString(), this.gridData[i].Skill.toString(),
         parseFloat(this.gridData[i].PercentageLoading.toString()), parseFloat(this.gridData[i].RatePerHour.toString()),
-        (this.gridData[i].WeeksActualLoading?parseFloat(this.gridData[i].WeeksActualLoading.toString()):0), 0, parseFloat(this.gridData[i].OnsiteCost.toString()),
+        (this.gridData[i].WeeksActualLoading ? parseFloat(this.gridData[i].WeeksActualLoading.toString()) : 0), 0, parseFloat(this.gridData[i].OnsiteCost.toString()),
         parseFloat(this.gridData[i].MonthLoadingWithContengency.toString()), 0, 0, parseInt(this.gridData[i].NoOfMinds.toString())));
     }
     this.service.UploadData(objList, this.gmdefaults).subscribe(
-        (defaults) => {
+      (defaults) => {
         var data = defaults;
         if (data.ErrorMessage == '') {
           this.excelData = data.GMCalculationParams;
@@ -121,23 +121,28 @@ export class GmCalculatorComponent implements OnInit {
           this._spinner.hide();
         }
       },
-        (error) => {
-          this._alertService.error("Opps...Something went wrong, please provide correct input or try again later.");
-          this._spinner.hide();
-        }
-      );
+      (error) => {
+        this._alertService.error("Opps...Something went wrong, please provide correct input or try again later.");
+        this._spinner.hide();
+      }
+    );
   }
 
   public exportToExcel(table: any, name: any) {
-    this._spinner.show();
-    var uri = 'data:application/vnd.ms-excel;base64,'
-      , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
-      , base64 = function (s) { return window.btoa(unescape(encodeURIComponent(s))) }
-      , format = function (s, c) { return s.replace(/{(\w+)}/g, function (m, p) { return c[p]; }) }
-    if (!table.nodeType) table = document.getElementById(table)
-    var ctx = { worksheet: name || 'Worksheet', table: table.innerHTML }
-    window.location.href = uri + base64(format(template, ctx))
-    this._spinner.hide();
+    if (!this.detectIE()) {
+
+      this._spinner.show();
+      var uri = 'data:application/vnd.ms-excel;base64,'
+        , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
+        , base64 = function (s) { return window.btoa(unescape(encodeURIComponent(s))) }
+        , format = function (s, c) { return s.replace(/{(\w+)}/g, function (m, p) { return c[p]; }) }
+      if (!table.nodeType) table = document.getElementById(table)
+      var ctx = { worksheet: name || 'Worksheet', table: table.innerHTML }
+      window.location.href = uri + base64(format(template, ctx))
+      this._spinner.hide();
+    } else {
+      alert('Download option is not available for this version of browser. Please use other than IE/Edge');
+    }
   }
 
   public rowKeys(row: any): Array<string> {
@@ -173,7 +178,7 @@ export class GmCalculatorComponent implements OnInit {
     if (modelSkill) {
       this.filteredCompetencies = this.orgMatrix.Compentency.filter(
         item => item.parent.value == modelSkill.toString() + '-' + modelPractice.toString())
-      
+
     }
   }
 
@@ -196,4 +201,29 @@ export class GmCalculatorComponent implements OnInit {
   private GetDefaultGMCalculationParams(): GMCalculationParams {
     return new GMCalculationParams("", "", "", "", undefined, undefined, undefined, 0, 0, 0, undefined, undefined, 1);
   }
+
+  private detectIE() {
+    var ua = window.navigator.userAgent;
+    var msie = ua.indexOf('MSIE ');
+    if (msie > 0) {
+      // IE 10 or older => return version number
+      return parseInt(ua.substring(msie + 5, ua.indexOf('.', msie)), 10);
+    }
+
+    var trident = ua.indexOf('Trident/');
+    if (trident > 0) {
+      // IE 11 => return version number
+      var rv = ua.indexOf('rv:');
+      return parseInt(ua.substring(rv + 3, ua.indexOf('.', rv)), 10);
+    }
+
+    var edge = ua.indexOf('Edge/');
+    if (edge > 0) {
+      // Edge (IE 12+) => return version number
+      return parseInt(ua.substring(edge + 5, ua.indexOf('.', edge)), 10);
+    }
+
+    // other browser
+    return false;
+  };
 }

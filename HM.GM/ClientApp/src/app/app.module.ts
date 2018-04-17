@@ -13,7 +13,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
 import { GmFilterPipe } from './components/gm-filter/gm-filter.pipe';
 import { NumberTypeDirective } from './directives/number-type.directive';
-import { AngularFontAwesomeModule } from 'angular-font-awesome';
 
 @NgModule({
   declarations: [
@@ -40,8 +39,7 @@ import { AngularFontAwesomeModule } from 'angular-font-awesome';
       { path: 'gmcalculator', component: components.GmCalculatorContainerComponent, pathMatch: 'full' },
       { path: 'dataUploader', component: components.DataUploaderComponent },
       { path: '', component: components.GmCalculatorContainerComponent }
-    ]),
-    AngularFontAwesomeModule
+    ])
   ],
   providers: [
     {

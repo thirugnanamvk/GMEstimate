@@ -6,27 +6,35 @@
   </div>
   <div class="row item-padding">
     <div class="col-md-1 no-padding">
-      
     </div>
     <div class="col-md-5">
       &nbsp;
     </div>
     <div class="col-md-2 col-xs-4 no-padding-right">
-      <button type="button" class="btn btn-info btn-block" [disabled]="!enableExport" (click)="exportToExcel('gridTable', 'GM Table')"><i class ="glyphicon glyphicon-arrow-down"></i> Export To Excel</button>
+      <button #btncalculate type="button" class="btn btn-success btn-block" [disabled]="savedisabled" (click)="calculateGM()">
+        <i class ="fa fa-hourglass-half"></i> Calculate GM
+      </button>
     </div>
     <div class="col-md-2 col-xs-4 no-padding-right">
-      <button type="button" class="btn btn-danger btn-block" [disabled]="!enableExport" (click)="resetAll()"><i class ="glyphicon glyphicon-refresh"></i> Reset All</button>
+      <button type="button" class="btn btn-info btn-block" [disabled]="!enableExport" (click)="exportToExcel('gridTable', 'GM Table')">
+        <i class="fa fa-download"></i> Export To Excel
+      </button>
     </div>
     <div class="col-md-2 col-xs-4 no-padding-right">
-      <button #btncalculate type="button" class="btn btn-success btn-block" [disabled]="savedisabled" (click)="calculateGM()"><i class ="glyphicon glyphicon-hourglass"></i>Calculate GM</button>
+      <button type="button" class="btn btn-danger btn-block" [disabled]="!enableExport" (click)="resetAll()">
+        <i class="fa fa-sync-alt fa-spin"></i> Reset All
+      </button>
     </div>
-
   </div>
   <div class="row">
     <table class="table table-responsive">
       <thead>
         <tr style="vertical-align:central">
-          <th width="3%"><button type="button" class="btn custom-button" autofocus (click)="addFieldValue()"><span class ="glyphicon glyphicon-plus-sign"></span></button></th>
+          <th width="3%">
+            <button type="button" class="btn custom-button" autofocus (click)="addFieldValue()">
+              <i class="fa fa-user-plus fa-2x"></i>
+            </button>
+          </th>
           <th width="6%">Location<span class="text-danger">*</span></th>
           <th width="9%">Practice<span class="text-danger">*</span></th>
           <th width="9%">Skill<span class="text-danger">*</span></th>
@@ -73,22 +81,20 @@
       <tbody>
     </table>
   </div>
-
   <div class="animationload">
     <ng4-loading-spinner [threshold]="01" [template]="" [loadingText]="'Please wait...'" [zIndex]="9999"></ng4-loading-spinner>
     <div class="osahanloading"></div>
   </div>
-
   <div class="row">
     <form #f="ngForm">
       <table class="table">
         <thead class="thead-inverse">
-            <th class="padding-5x text-center">Avergae Billing Rate</th>
-            <th class="padding-5x text-center">Value</th>
-            <th class="padding-5x text-center">Avergae Billing Rate</th>
-            <th class="padding-5x text-center">Value</th>
-            <th class="padding-5x text-center">Avergae Billing Rate</th>
-            <th class="padding-5x text-center">Value</th>
+        <th class="padding-5x text-center">Avergae Billing Rate</th>
+        <th class="padding-5x text-center">Value</th>
+        <th class="padding-5x text-center">Avergae Billing Rate</th>
+        <th class="padding-5x text-center">Value</th>
+        <th class="padding-5x text-center">Avergae Billing Rate</th>
+        <th class="padding-5x text-center">Value</th>
         </thead>
         <tbody>
           <tr>
@@ -126,8 +132,6 @@
       </table>
     </form>
   </div>
-
-
   <div class="row" id="gridTable" [hidden]="true">
     <table class="table table-responsive" style="border:solid  .5pt #000">
       <thead>
@@ -220,5 +224,4 @@
       </tbody>
     </table>
   </div>
-
 </div>

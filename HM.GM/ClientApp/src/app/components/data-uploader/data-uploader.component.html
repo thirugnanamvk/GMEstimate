@@ -12,27 +12,39 @@
       <router-outlet></router-outlet>
     </div>
     <div class="row">
-        <div class="col-sm-9 col-md-9" role="alert"><label class="text-danger"><span class ="glyphicon glyphicon-warning-sign"></span> Uploading excel will delete exsisting data !!!</label></div>
-        <div class="col-sm-3 col-md-3"></div>
+      <div class="col-sm-9 col-md-9" role="alert">
+        <label class="text-danger">
+          <i class="fas fa-exclamation-triangle"></i> Uploading excel will delete exsisting data !!!
+        </label>
       </div>
+      <div class="col-sm-3 col-md-3"></div>
+    </div>
     <div class="row top-buffer">
       <div class="col-xs-12 col-sm-3 col-md-4">
-        <input type="file" style="display: inline-block;" id="btnuploadfile" #btnuploadfile (change)="incomingfile($event)" placeholder="Upload file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+        <input type="file" style="display: inline-block;" id="btnuploadfile" class="btn btn-info" #btnuploadfile (change)="incomingfile($event)" placeholder="Upload file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
       </div>
       <div class="col-xs-12 col-sm-2 col-md-2">
-        <button type="button" id="btnUpload" [disabled]="uploadFile" class="btn btn-warning btn-block" (click)="importToLocal()"><span class ="glyphicon glyphicon-import"></span> Import</button>
+        <button type="button" id="btnUpload" [disabled]="uploadFile" class="btn btn-warning btn-block" (click)="importToLocal()">
+          <i class="fa fa-upload"></i> Import
+        </button>
       </div>
       <div class="col-xs-12 col-sm-3 col-md-2">
-        <button type="button" class="btn btn-info btn-block" (click)="downloadSampleExcel('gridTable')"><span class ="glyphicon glyphicon-download"></span> Export</button>
+        <button type="button" class="btn btn-info btn-block" (click)="downloadSampleExcel('gridTable')">
+          <i class="fa fa-download"></i> Export
+        </button>
       </div>
       <div class="col-xs-12 col-sm-2 col-md-2">
-        <button type="button" class="btn btn-danger btn-block" (click)="resetData()"><span class ="glyphicon glyphicon-refresh"></span> Reset</button>
+        <button type="button" [disabled]="saveDisabled" class="btn btn-success btn-block" (click)="saveData()">
+          <i class="fa fa-check-circle"></i> Save
+        </button>
       </div>
       <div class="col-xs-12 col-sm-2 col-md-2">
-        <button type="button" [disabled]="saveDisabled" class="btn btn-success btn-block" (click)="saveData()"><span class ="glyphicon glyphicon-saved"></span> Save</button>
+        <button type="button" class="btn btn-danger btn-block" (click)="resetData()">
+          <i class="fa fa-sync-alt fa-spin"></i> Reset
+        </button>
       </div>
     </div>
-    <br/><br />
+    <br /><br />
     <div class="animationload">
       <ng4-loading-spinner [threshold]="01" [template]="" [loadingText]="'Please wait...'" [zIndex]="9999"></ng4-loading-spinner>
       <div class="osahanloading"></div>
@@ -44,13 +56,17 @@
             <th></th>
             <th><input type="text" [(ngModel)]="queryStringPractice" placeholder="Search Practice..." class="form-control" /></th>
             <th><input type="text" [(ngModel)]="queryStringSkill" placeholder="Search Skill..." class="form-control" /></th>
-            <th ><input type="text" [(ngModel)]="queryStringCompetency" placeholder="Search Competency..." class="form-control" /></th>
+            <th><input type="text" [(ngModel)]="queryStringCompetency" placeholder="Search Competency..." class="form-control" /></th>
             <th colspan="2">&nbsp;</th>
           </tr>
         </thead>
         <thead>
           <tr class="background-gray">
-            <th><button type="button" class="btn custom-button" (click)="addFieldValue()"><span class ="glyphicon glyphicon-plus-sign"></span></button></th>
+            <th>
+              <button type="button" class="btn custom-button" (click)="addFieldValue()">
+                <i class="fa fa-plus-circle fa-2x"></i>
+              </button>
+            </th>
             <th>Practice<span class="text text-danger">*</span></th>
             <th>Skill<span class="text text-danger">*</span></th>
             <th>Competency<span class="text text-danger">*</span></th>
@@ -74,7 +90,7 @@
     </div>
 
     <div [hidden]="true">
-      <table  id="gridTable">
+      <table id="gridTable">
         <thead>
           <tr>
             <th>Practice</th>
